@@ -47,9 +47,6 @@ class CategoryController extends Controller
         if($request->hasFile('image'))
         {
             $imageService->setExclusiveDirectory('images' . DIRECTORY_SEPARATOR . 'post-category');
-            // $result = $imageService->save($request->file('image'));
-            // $result = $imageService->fitAndSave($request->file('image'), 600, 150);
-            // exit;
             $result = $imageService->createIndexAndSave($request->file('image'));
         }
         if($result === false)
