@@ -115,7 +115,7 @@ class PostController extends Controller
             }
         }
         $post->update($inputs);
-        return redirect()->route('admin.content.post.index')->with('swal-success', 'پست  شما با موفقیت ویرایش شد');;
+        return redirect()->route('admin.content.post.index')->with('swal-success', 'پست  شما با موفقیت ویرایش شد');
     }
 
     /**

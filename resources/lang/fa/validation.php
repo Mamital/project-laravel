@@ -166,6 +166,13 @@ return [
         'keywords' => 'کلمات کلمات کلیدی سایت',
         'logo' => 'لوگو',
         'icon' => 'آیکون',
+        'brand_id' => 'برند',
+        'weight' => 'وزن',
+        'length' => 'طول',
+        'height' => 'ارتفاع',
+        'width' => 'عرض',
+        'introduction' => 'توضیحات',
+        'price' => 'قیمت',
 
     ],
 ];
