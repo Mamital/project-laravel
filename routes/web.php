@@ -27,6 +27,7 @@ use App\Http\Controllers\admin\setting\SettingController;
 use App\Http\Controllers\admin\user\PermissionController;
 use App\Http\Controllers\Admin\Notify\EmailFileController;
 use App\Http\Controllers\Admin\Ticket\TicketAdminController;
+use App\Http\Controllers\Admin\Market\ProductColorController;
 use App\Http\Controllers\Admin\Ticket\TicketCategoryController;
 use App\Http\Controllers\Admin\Ticket\TicketPriorityController;
 use App\Http\Controllers\Admin\Content\CommentController as ContentCommentController;
@@ -66,6 +67,15 @@ Route::prefix('admin')->namespace('Admin')->group(function () {
             Route::delete('/destroy/{productCategory}', [CategoryController::class, 'destroy'])->name('admin.market.category.destroy');
             Route::get('/status/{productCategory}', [CategoryController::class, 'status'])->name('admin.market.category.status');
             Route::get('/show-in-menu/{productCategory}', [CategoryController::class, 'showInMenu'])->name('admin.market.category.show-in-menu');
+        });
+
+        Route::prefix('color')->group(function () {
+            //color
+            Route::get('/{product}', [ProductColorController::class, 'index'])->name('admin.market.color.index');
+            Route::get('/create/{product}', [ProductColorController::class, 'create'])->name('admin.market.color.create');
+            Route::post('/store/{product}', [ProductColorController::class, 'store'])->name('admin.market.color.store');
+            Route::delete('/destroy/{product}/{productColor}', [ProductColorController::class, 'destroy'])->name('admin.market.color.destroy');
+            Route::get('/status/{productColor}', [ProductColorController::class, 'status'])->name('admin.market.color.status');
         });
 
         //brand
