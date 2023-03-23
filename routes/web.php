@@ -28,6 +28,7 @@ use App\Http\Controllers\admin\user\PermissionController;
 use App\Http\Controllers\Admin\Notify\EmailFileController;
 use App\Http\Controllers\Admin\Ticket\TicketAdminController;
 use App\Http\Controllers\Admin\Market\ProductColorController;
+use App\Http\Controllers\Admin\Market\CategoryValueController;
 use App\Http\Controllers\Admin\Ticket\TicketCategoryController;
 use App\Http\Controllers\Admin\Ticket\TicketPriorityController;
 use App\Http\Controllers\Admin\Content\CommentController as ContentCommentController;
@@ -167,9 +168,20 @@ Route::prefix('admin')->namespace('Admin')->group(function () {
             Route::get('/', [PropertyController::class, 'index'])->name('admin.market.property.index');
             Route::get('/create', [PropertyController::class, 'create'])->name('admin.market.property.create');
             Route::post('/store', [PropertyController::class, 'store'])->name('admin.market.property.store');
-            Route::get('/edit/{id}', [PropertyController::class, 'edit'])->name('admin.market.property.edit');
-            Route::put('/update/{id}', [PropertyController::class, 'update'])->name('admin.market.property.update');
-            Route::delete('/destroy/{id}', [PropertyController::class, 'destroy'])->name('admin.market.property.destroy');
+            Route::get('/edit/{property}', [PropertyController::class, 'edit'])->name('admin.market.property.edit');
+            Route::put('/update/{property}', [PropertyController::class, 'update'])->name('admin.market.property.update');
+            Route::delete('/destroy/{property}', [PropertyController::class, 'destroy'])->name('admin.market.property.destroy');
+
+            Route::prefix('value')->group(function () {
+                //color
+                Route::get('/{property}', [CategoryValueController::class, 'index'])->name('admin.market.value.index');
+                Route::get('/create/{property}', [CategoryValueController::class, 'create'])->name('admin.market.value.create');
+                Route::post('/store/{property}', [CategoryValueController::class, 'store'])->name('admin.market.value.store');
+                Route::get('/edit/{property}/{categoryValue}', [CategoryValueController::class, 'edit'])->name('admin.market.value.edit');
+                Route::put('/update/{property}/{categoryValue}', [CategoryValueController::class, 'update'])->name('admin.market.value.update');
+                Route::delete('/destroy/{property}/{categoryValue}', [CategoryValueController::class, 'destroy'])->name('admin.market.value.destroy');
+                Route::get('/status/{categoryValue}', [CategoryValueController::class, 'status'])->name('admin.market.value.status');
+            });
         });
 
         //store

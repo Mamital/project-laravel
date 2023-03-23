@@ -3,6 +3,10 @@
 namespace App\Http\Controllers\Admin\Market;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\Admin\Market\CategoryAttributeRequest;
+use App\Models\Market\CategoryAttribute;
+use App\Models\Market\ProductCategory;
+use App\Models\Market\Property;
 use Illuminate\Http\Request;
 
 class PropertyController extends Controller
@@ -14,7 +18,8 @@ class PropertyController extends Controller
      */
     public function index()
     {
-        return view('admin.market.property.index');
+        $categories = Property::all();
+        return view('admin.market.property.index', compact('categories'));
     }
 
     /**
@@ -24,7 +29,8 @@ class PropertyController extends Controller
      */
     public function create()
     {
-        return view('admin.market.property.create');
+        $categories = ProductCategory::all();
+        return view('admin.market.property.create', compact('categories'));
     }
 
     /**
@@ -33,9 +39,10 @@ class PropertyController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(CategoryAttributeRequest $request)
     {
-        //
+        $result = Property::create($request->all());
+        return redirect()->route('admin.market.property.index')->with('swal-success', 'فرم جدید با موفقیت ثبت شد');
     }
 
     /**
@@ -55,9 +62,10 @@ class PropertyController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function edit($id)
+    public function edit(Property $property)
     {
-        //
+        $categories = ProductCategory::all();
+        return view('admin.market.property.edit', compact(['property', 'categories']));
     }
 
     /**
@@ -67,9 +75,11 @@ class PropertyController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(CategoryAttributeRequest $request, Property $property)
     {
-        //
+        $inputs = $request->all();
+        $result = $property->update($inputs);
+        return redirect()->route('admin.market.property.index')->with('swal-success', 'فرم جدید با موفقیت ویرایش شد');
     }
 
     /**
@@ -78,8 +88,9 @@ class PropertyController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function destroy(Property $property)
     {
-        //
+        $property->delete();
+        return redirect()->route('admin.market.property.index')->with('swal-success', 'فرم جدید با موفقیت حذف شد');
     }
 }

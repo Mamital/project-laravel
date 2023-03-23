@@ -173,6 +173,9 @@ return [
         'width' => 'عرض',
         'introduction' => 'توضیحات',
         'price' => 'قیمت',
+        'unit' => 'واحد',
+        'value' => 'مقدار',
+        'price_increase' => 'افزایش قیمت',
 
     ],
 ];
