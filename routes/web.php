@@ -155,9 +155,11 @@ Route::prefix('admin')->namespace('Admin')->group(function () {
             Route::get('/status/{product}', [ProductController::class, 'status'])->name('admin.market.product.status');
             Route::get('/marketable/{product}', [ProductController::class, 'marketable'])->name('admin.market.product.marketable');
             //gallery
-            Route::get('/gallery', [GalleryController::class, 'index'])->name('admin.market.gallery.index');
-            Route::post('/gallery/store', [GalleryController::class, 'store'])->name('admin.market.gallery.store');
-            Route::delete('/gallery/destroy/{id}', [GalleryController::class, 'destroy'])->name('admin.market.gallery.destroy');
+            Route::get('/gallery/{product}', [GalleryController::class, 'index'])->name('admin.market.gallery.index');
+            Route::get('/create/{product}', [GalleryController::class, 'create'])->name('admin.market.gallery.create');
+            Route::post('/gallery/store/{product}', [GalleryController::class, 'store'])->name('admin.market.gallery.store');
+            Route::delete('/gallery/destroy{product}/{gallery}', [GalleryController::class, 'destroy'])->name('admin.market.gallery.destroy');
+            Route::get('/status/{gallery}', [GalleryController::class, 'status'])->name('admin.market.gallery.status');
         });
 
         //property
