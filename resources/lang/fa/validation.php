@@ -179,7 +179,11 @@ return [
         'frozen_number' => 'تعداد رزرو شده',
         'marketable_number' => 'وجودی',
         'receiver' => 'دریافت کننده',
-        'sender' => 'ارسال کننده',
+        'percentage' => 'درصد',
+        'discount_ceiling' => 'حداکثر تخفیف',
+        'minimal_order_amount' => 'حداقل مقدار خرید',
+        'start_date' => 'تاریخ شروع',
+        'end_date' => 'تاریخ پایان',
 
     ],
 ];

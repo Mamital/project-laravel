@@ -1,7 +1,7 @@
 @extends('admin.layouts.master')
 
 @section('head-tag')
-<title>ایجاد تخفیف عمومی</title>
+<title>ویرایش تخفیف عمومی</title>
 <link rel="stylesheet" href="{{ asset('admin-assets/jalalidatepicker/persian-datepicker.min.css') }}">
 @endsection
 
@@ -12,7 +12,7 @@
       <li class="breadcrumb-item font-size-12"> <a href="#">خانه</a></li>
       <li class="breadcrumb-item font-size-12"> <a href="#">بخش فروش</a></li>
       <li class="breadcrumb-item font-size-12"> <a href="#">برند</a></li>
-      <li class="breadcrumb-item font-size-12 active" aria-current="page"> ایجاد تخفیف عمومی</li>
+      <li class="breadcrumb-item font-size-12 active" aria-current="page"> ویرایش تخفیف عمومی</li>
     </ol>
   </nav>
 
@@ -22,7 +22,7 @@
         <section class="main-body-container">
             <section class="main-body-container-header">
                 <h5>
-                  ایجاد تخفیف عمومی
+                  ویرایش تخفیف عمومی
                 </h5>
             </section>
 
@@ -31,13 +31,14 @@
             </section>
 
             <section>
-                <form action="{{route('admin.market.discount.commonDiscount.store')}}" method="POST">
+                <form action="{{route('admin.market.discount.commonDiscount.update', $commonDiscount->id)}}" method="POST">
                     @csrf
+                    @method('PUT')
                     <section class="row">
                         <section class="col-12 col-md-6 my-2">
                             <div class="form-group">
                                 <label for="">درصد تخفیف</label>
-                                <input type="text" class="form-control form-control-sm" name="percentage" value="{{old('percentage')}}">
+                                <input type="text" class="form-control form-control-sm" name="percentage" value="{{old('percentage', $commonDiscount->percentage)}}">
                             </div>
                             @error('percentage')
                                 <span class="alert_required bg-danger text-white p-1 rounded" role="alert">
@@ -50,7 +51,7 @@
                         <section class="col-12 col-md-6 my-2">
                             <div class="form-group">
                                 <label for="">حداکثر تخفیف</label>
-                                <input type="text" class="form-control form-control-sm" name="discount_ceiling" value="{{old('discount_ceiling')}}">
+                                <input type="text" class="form-control form-control-sm" name="discount_ceiling" value="{{old('discount_ceiling', $commonDiscount->discount_ceiling)}}">
                             </div>
                             @error('discount_ceiling')
                                 <span class="alert_required bg-danger text-white p-1 rounded" role="alert">
@@ -63,8 +64,8 @@
                          <section class="col-12 col-md-6 my-2">
                             <div class="form-group">
                                 <label for="">تاریخ شروع</label>
-                                <input type="text" name="start_date" id="start_date" class="form-control form-control-sm d-none">
-                                <input type="text" id="start_date_view" class="form-control form-control-sm">
+                                <input type="text" name="start_date" id="start_date" class="form-control form-control-sm d-none"  />
+                                <input type="text" id="start_date_view" class="form-control form-control-sm" value="{{ $commonDiscount->start_date}}">
                             </div>
                             @error('start_date')
                             <span class="alert_required bg-danger text-white p-1 rounded" role="alert">
@@ -77,8 +78,8 @@
                          <section class="col-12 col-md-6 my-2">
                             <div class="form-group">
                                 <label for="">تاریخ پایان</label>
-                                <input type="text" name="end_date" id="end_date" class="form-control form-control-sm d-none">
-                                <input type="text" id="end_date_view" class="form-control form-control-sm">
+                                <input type="text" name="end_date" id="end_date" class="form-control form-control-sm d-none" >
+                                <input type="text" id="end_date_view" class="form-control form-control-sm" value="{{ $commonDiscount->end_date }}">
                             </div>
                             @error('end_date')
                             <span class="alert_required bg-danger text-white p-1 rounded" role="alert">
@@ -92,7 +93,7 @@
                            <section class="col-12 col-md-6 my-2">
                             <div class="form-group">
                                 <label for="">حداقل تخفیف</label>
-                                <input type="text" class="form-control form-control-sm" name="minimal_order_amount" value="{{old('minimal_order_amount')}}">
+                                <input type="text" class="form-control form-control-sm" name="minimal_order_amount" value="{{old('minimal_order_amount', $commonDiscount->minimal_order_amount)}}">
                             </div>
                             @error('minimal_order_amount')
                                 <span class="alert_required bg-danger text-white p-1 rounded" role="alert">
@@ -105,7 +106,7 @@
                         <section class="col-12 col-md-6 my-2">
                             <div class="form-group">
                                 <label for="">عنوان مناسبت</label>
-                                <input type="text" class="form-control form-control-sm" name="title" value="{{old('title')}}">
+                                <input type="text" class="form-control form-control-sm" name="title" value="{{old('title',$commonDiscount->title)}}">
                             </div>
                             @error('title')
                                 <span class="alert_required bg-danger text-white p-1 rounded" role="alert">
