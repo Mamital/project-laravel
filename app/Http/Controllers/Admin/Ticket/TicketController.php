@@ -129,6 +129,6 @@ class TicketController extends Controller
     public function change(Ticket $ticket){
         $ticket->status = $ticket->status == 0 ? 1 : 0;
         $result = $ticket->save();
-        return redirect()->route('admin.ticket.index')->with('swal-success', 'تغییر شما با موفقیت حذف شد');
+        return redirect()->route('admin.ticket.index')->with('swal-success', 'تغییر شما با موفقیت انجام شد');
     }
 }

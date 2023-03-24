@@ -3,28 +3,51 @@
 namespace App\Http\Controllers\Admin\Market;
 
 use App\Http\Controllers\Controller;
+use App\Models\Market\Payment;
 use Illuminate\Http\Request;
 
 class PaymentController extends Controller
 {
     public function index()
     {
-        return view('admin.market.payment.index');
+        $payments = Payment::all();
+        // dd(Payment::find(1)->paymentable);
+        return view('admin.market.payment.index', compact('payments'));
     }
     public function offline()
     {
-        return view('admin.market.payment.index');
+        $payments = Payment::where('type', 1)->get();
+        return view('admin.market.payment.index', compact('payments'));
     }
     public function online()
     {
-        return view('admin.market.payment.index');
+        $payments = Payment::where('type', 0)->get();
+        return view('admin.market.payment.index', compact('payments'));
     }
     public function attendance()
     {
-        return view('admin.market.payment.index');
+        $payments = Payment::where('type', 2)->get();
+        return view('admin.market.payment.index', compact('payments'));
     }
     public function confirm()
     {
-        return view('admin.market.payment.index');
+        return view('admin.market.payment.index', compact('payments'));
+    }
+
+    public function show(Payment $payment)
+    {
+        return view('admin.market.payment.show', compact('payment'));
+    }
+    public function cancel(Payment $payment)
+    {
+        $payment->status = 2;
+        $result = $payment->save();
+        return redirect()->back()->with('swal-success', 'تغییر شما با موفقیت انجام شد');
+    }
+    public function return(Payment $payment)
+    {
+        $payment->status = 3;
+        $result = $payment->save();
+        return redirect()->back()->with('swal-success', 'تغییر شما با موفقیت انجام شد');
     }
 }
