@@ -175,7 +175,11 @@ return [
         'price' => 'قیمت',
         'unit' => 'واحد',
         'value' => 'مقدار',
-        'price_increase' => 'افزایش قیمت',
+        'sold_number' => 'تعداد فروخته شده',
+        'frozen_number' => 'تعداد رزرو شده',
+        'marketable_number' => 'وجودی',
+        'receiver' => 'دریافت کننده',
+        'sender' => 'ارسال کننده',
 
     ],
 ];

@@ -2,8 +2,11 @@
 
 namespace App\Http\Controllers\Admin\Market;
 
-use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
+use App\Models\Market\Product;
+use App\Http\Controllers\Controller;
+use App\Http\Requests\Admin\Market\StoreRequest;
+use Illuminate\Support\Facades\Log;
 
 class StoreController extends Controller
 {
@@ -14,7 +17,8 @@ class StoreController extends Controller
      */
     public function index()
     {
-        return view('admin.market.store.index');
+        $products = Product::orderby('created_at')->simplepaginate(15);
+        return view('admin.market.store.index', compact('products'));
     }
 
     /**
@@ -22,9 +26,9 @@ class StoreController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function addToStore()
+    public function addToStore(Product $product)
     {
-        return view('admin.market.store.add-to-store');
+        return view('admin.market.store.add-to-store', compact('product'));
     }
 
     /**
@@ -33,9 +37,20 @@ class StoreController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(StoreRequest $request, Product $product)
     {
-        //
+        $marketableNumber = $request->marketable_number + $product->marketable_number;
+        $product->update(['marketable_number' => $marketableNumber]);
+        if ($product) {
+            Log::info('new product stored', [
+
+                'add' => $request->marketable_number,
+                'exist' => $marketableNumber,
+                'sender' => $request->sender,
+                'receiver' => $request->receiver
+            ]);
+        }
+        return redirect()->route('admin.market.store.index')->with('swal-success', 'مقدار اضافه شده با موفقیت ثبت شد');
     }
 
     /**
@@ -55,9 +70,9 @@ class StoreController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function edit($id)
+    public function edit(Product $product)
     {
-        //
+        return view('admin.market.store.edit', compact('product'));
     }
 
     /**
@@ -67,9 +82,14 @@ class StoreController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(StoreRequest $request, Product $product)
     {
-        //
+        $product->update([
+            'frozen_number' => $request->frozen_number,
+            'sold_number' => $request->sold_number,
+            'marketable_number' => $request->marketable_number
+        ]);
+        return redirect()->route('admin.market.store.index')->with('swal-success', 'موجودی های محصول با موفقیت اصلاح شد');
     }
 
     /**

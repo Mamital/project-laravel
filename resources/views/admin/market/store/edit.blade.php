@@ -1,7 +1,7 @@
 @extends('admin.layouts.master')
 
 @section('head-tag')
-<title>اضافه کردن به انبار</title>
+<title>اصلاح موجودی</title>
 @endsection
 
 @section('content')
@@ -11,7 +11,7 @@
       <li class="breadcrumb-item font-size-12"> <a href="#">خانه</a></li>
       <li class="breadcrumb-item font-size-12"> <a href="#">بخش فروش</a></li>
       <li class="breadcrumb-item font-size-12"> <a href="#">انبار</a></li>
-      <li class="breadcrumb-item font-size-12 active" aria-current="page"> اضافه کردن به انبار</li>
+      <li class="breadcrumb-item font-size-12 active" aria-current="page"> اصلاح موجودی</li>
     </ol>
   </nav>
 
@@ -21,7 +21,7 @@
         <section class="main-body-container">
             <section class="main-body-container-header">
                 <h5>
-                  اضافه کردن به انبار
+                  اصلاح موجودی
                 </h5>
             </section>
 
@@ -30,40 +30,15 @@
             </section>
 
             <section>
-                <form action="{{route('admin.market.store.store', $product->id)}}" method="POST">
+                <form action="{{route('admin.market.store.update', $product->id)}}" method="POST">
                     @csrf
-                    <section class="row">
-
+                    @method('PUT')
+                    <section class="row">     
+                       
                         <section class="col-12 col-md-6 my-2">
                             <div class="form-group">
-                                <label for="">نام تحویل گیرنده</label>
-                                <input type="text" class="form-control form-control-sm" name="receiver" value="{{old('receiver')}}">
-                            </div>
-                            @error('receiver')
-                                <span class="alert_required bg-danger text-white p-1 rounded" role="alert">
-                                    <strong>
-                                        {{ $message }}
-                                    </strong>
-                                </span>
-                            @enderror
-                        </section>
-                        <section class="col-12 col-md-6 my-2">
-                            <div class="form-group">
-                                <label for="">نام ارسال کننده</label>
-                                <input type="text" class="form-control form-control-sm" name="sender" value="{{old('sender')}}">
-                            </div>
-                            @error('sender')
-                                <span class="alert_required bg-danger text-white p-1 rounded" role="alert">
-                                    <strong>
-                                        {{ $message }}
-                                    </strong>
-                                </span>
-                            @enderror
-                        </section>
-                        <section class="col-12 col-md-6 my-2">
-                            <div class="form-group">
-                                <label for="">تعداد</label>
-                                <input type="text" class="form-control form-control-sm" name="marketable_number" value="{{old('marketable_number')}}">
+                                <label for="">موجود</label>
+                                <input type="text" class="form-control form-control-sm" name="marketable_number" value="{{old('marketable_number', $product->marketable_number)}}">
                             </div>
                             @error('marketable_number')
                                 <span class="alert_required bg-danger text-white p-1 rounded" role="alert">
@@ -73,13 +48,12 @@
                                 </span>
                             @enderror
                         </section>
-
-                        <section class="col-12 my-2">
+                        <section class="col-12 col-md-6 my-2">
                             <div class="form-group">
-                                <label for="">توضیحات</label>
-                               <textarea name="description" rows="4" class="form-control form-control-sm">{{old('description')}}</textarea>
+                                <label for="">رزرو شده</label>
+                                <input type="text" class="form-control form-control-sm" name="frozen_number" value="{{old('frozen_number', $product->frozen_number)}}">
                             </div>
-                            @error('description')
+                            @error('frozen_number')
                                 <span class="alert_required bg-danger text-white p-1 rounded" role="alert">
                                     <strong>
                                         {{ $message }}
@@ -87,7 +61,19 @@
                                 </span>
                             @enderror
                         </section>
-
+                        <section class="col-12 col-md-6 my-2">
+                            <div class="form-group">
+                                <label for="">فروخته شده</label>
+                                <input type="text" class="form-control form-control-sm" name="sold_number" value="{{old('sold_number', $product->sold_number)}}">
+                            </div>
+                            @error('sold_number')
+                                <span class="alert_required bg-danger text-white p-1 rounded" role="alert">
+                                    <strong>
+                                        {{ $message }}
+                                    </strong>
+                                </span>
+                            @enderror
+                        </section>
 
                         <section class="col-12">
                             <button class="btn btn-primary btn-sm">ثبت</button>
