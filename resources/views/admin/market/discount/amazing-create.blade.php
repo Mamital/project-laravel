@@ -111,9 +111,6 @@
     <script src="{{ asset('admin-assets/jalalidatepicker/persian-date.min.js') }}"></script>
     <script src="{{ asset('admin-assets/jalalidatepicker/persian-datepicker.min.js') }}"></script>
     <script>
-        CKEDITOR.replace('introduction');
-    </script>
-    <script>
         $(document).ready(function() {
             $('#start_date_view').persianDatepicker({
                 format: 'YYYY/MM/DD',

@@ -9,28 +9,91 @@ use App\Models\Market\CommenDiscount;
 use App\Models\Market\CommonDiscount;
 use App\Http\Requests\Admin\Market\CommenDiscountRequest;
 use App\Http\Requests\Admin\Market\CommonDiscountRequest;
+use App\Http\Requests\Admin\Market\CopanRequest;
 use App\Models\Market\AmazingSale;
+use App\Models\Market\Copan;
 use App\Models\Market\Product;
+use App\Models\User;
 
 class DiscountController extends Controller
 {
+
+    //copan
+
+
     public function copan()
     {
-        return view('admin.market.discount.copan');
+        $copans = Copan::all();
+        return view('admin.market.discount.copan', compact('copans'));
     }
     public function copanCreate()
     {
-        return view('admin.market.discount.copan-create');
+        $users = User::all();
+        return view('admin.market.discount.copan-create', compact('users'));
     }
+    public function copanEdit(Copan $copan)
+    {
+        $users = User::all();
+        return view('admin.market.discount.copan-edit', compact(['users', 'copan']));
+    }
+    public function copanStore(CopanRequest $request)
+    {
+        $inputs = $request->all();
+        //date fixed
+        $realTimestampStart = substr($request->start_date, 0, 10);
+        $inputs['start_date'] = date("Y-m-d H:i:s", (int)$realTimestampStart);
+
+        $realTimestampStart = substr($request->end_date, 0, 10);
+        $inputs['end_date'] = date("Y-m-d H:i:s", (int)$realTimestampStart);
+
+        if($inputs['type'] == 0)
+        {
+            $inputs['user_id'] = null;
+        }
+        Copan::create($inputs);
+        return redirect()->route('admin.market.discount.copan')->with('swal-success', 'تخفیف عمومی  جدید شما با موفقیت ثبت شد');
+    }
+    public function copanUpdate(CopanRequest $request, Copan $copan)
+    {
+        $inputs = $request->all();
+        //date fixed
+        $realTimestampStart = substr($request->start_date, 0, 10);
+        $inputs['start_date'] = date("Y-m-d H:i:s", (int)$realTimestampStart);
+
+        $realTimestampStart = substr($request->end_date, 0, 10);
+        $inputs['end_date'] = date("Y-m-d H:i:s", (int)$realTimestampStart);
+
+        if($inputs['type'] == 0)
+        {
+            $inputs['user_id'] = null;
+        }
+        // dd($inputs);
+        $copan->update($inputs);
+        return redirect()->route('admin.market.discount.copan')->with('swal-success', 'تخفیف عمومی  جدید شما با موفقیت ویرایش شد');
+    }
+
+    public function copanDestroy(Copan $copan)
+    {
+        $copan->delete();
+        return redirect()->route('admin.market.discount.copan')->with('swal-success', 'تخفیف عمومی  جدید شما با موفقیت حذف شد');
+    }
+
+
+    //common discount
+
+
+
     public function commonDiscount()
     {
         $discounts = CommonDiscount::all();
         return view('admin.market.discount.common',compact('discounts'));
     }
+
     public function commonDiscountCreate()
     {
         return view('admin.market.discount.common-create');
     }
+
     public function commonDiscountStore(CommonDiscountRequest $request)
     {
         $inputs = $request->all();
@@ -43,10 +106,12 @@ class DiscountController extends Controller
         CommonDiscount::create($inputs);
         return redirect()->route('admin.market.discount.commonDiscount')->with('swal-success', 'تخفیف عمومی  جدید شما با موفقیت ثبت شد');
     }
+
     public function commonDiscountEdit(CommonDiscount $commonDiscount)
     {
         return view('admin.market.discount.common-edit', compact('commonDiscount'));
     }
+
     public function commonDiscountUpdate(CommonDiscountRequest $request, CommonDiscount $commonDiscount)
     {
         $inputs = $request->all();
@@ -62,11 +127,17 @@ class DiscountController extends Controller
         $commonDiscount->update($inputs);
         return redirect()->route('admin.market.discount.commonDiscount')->with('swal-success', 'تخفیف عمومی  جدید شما با موفقیت ویرایش شد');
     }
+
     public function commonDiscountDestroy(CommonDiscount $commonDiscount)
     {
         $commonDiscount->delete();
         return redirect()->route('admin.market.discount.commonDiscount')->with('swal-success', 'تخفیف عمومی  جدید شما با موفقیت حذف شد');
     }
+
+
+    //amazing sale
+
+
     public function amazingSale()
     {
         $discounts = AmazingSale::all();
