@@ -4,10 +4,13 @@ namespace App\Http\Controllers\Admin\Market;
 
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use App\Http\Requests\Admin\Market\AmazingSaleRequest;
 use App\Models\Market\CommenDiscount;
 use App\Models\Market\CommonDiscount;
 use App\Http\Requests\Admin\Market\CommenDiscountRequest;
 use App\Http\Requests\Admin\Market\CommonDiscountRequest;
+use App\Models\Market\AmazingSale;
+use App\Models\Market\Product;
 
 class DiscountController extends Controller
 {
@@ -66,10 +69,52 @@ class DiscountController extends Controller
     }
     public function amazingSale()
     {
-        return view('admin.market.discount.amazing');
+        $discounts = AmazingSale::all();
+        return view('admin.market.discount.amazing',compact('discounts'));
     }
     public function amazingSaleCreate()
     {
-        return view('admin.market.discount.amazing-create');
+        $products = Product::all();
+        return view('admin.market.discount.amazing-create',compact('products'));
+    }
+    public function amazingSaleStore(AmazingSaleRequest $request)
+    {
+        $inputs = $request->all();
+        
+
+        //date fixed
+        $realTimestampStart = substr($request->start_date, 0, 10);
+        $inputs['start_date'] = date("Y-m-d H:i:s", (int)$realTimestampStart);
+
+        $realTimestampStart = substr($request->end_date, 0, 10);
+        $inputs['end_date'] = date("Y-m-d H:i:s", (int)$realTimestampStart);
+
+        AmazingSale::create($inputs);
+        return redirect()->route('admin.market.discount.amazingSale')->with('swal-success', 'تخفیف شگفت انگیز جدید با موفقیت ثبت شد');
+    }
+    public function amazingSaleEdit(AmazingSale $amazingSale)
+    {
+        $products = Product::all();
+        return view('admin.market.discount.amazing-edit', compact(['amazingSale', 'products']));
+    }
+    public function amazingSaleUpdate(AmazingSaleRequest $request, AmazingSale $amazingSale)
+    {
+        $inputs = $request->all();
+        
+
+        //date fixed
+        $realTimestampStart = substr($request->start_date, 0, 10);
+        $inputs['start_date'] = date("Y-m-d H:i:s", (int)$realTimestampStart);
+
+        $realTimestampStart = substr($request->end_date, 0, 10);
+        $inputs['end_date'] = date("Y-m-d H:i:s", (int)$realTimestampStart);
+
+        $amazingSale->update($inputs);
+        return redirect()->route('admin.market.discount.amazingSale')->with('swal-success', 'تخفیف شگفت انگیز جدید با موفقیت ویرایش شد');
+    }
+    public function amazingSaleDestroy(AmazingSale $amazingSale)
+    {
+        $amazingSale->delete();
+        return redirect()->route('admin.market.discount.amazingSale')->with('swal-success', 'تخفیف شگفت انگیز جدید با موفقیت حذف شد');
     }
 }

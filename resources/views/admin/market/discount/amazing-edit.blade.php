@@ -31,8 +31,9 @@
             </section>
 
             <section>
-                 <form action="{{route('admin.market.discount.amazingSale.store')}}" method="POST">
+                 <form action="{{route('admin.market.discount.amazingSale.update', $amazingSale->id)}}" method="POST">
                     @csrf
+                    @method('PUT')
                     <section class="row">
                         
                         <section class="col-12 col-md-6">
@@ -41,7 +42,7 @@
                                 <select name="product_id" id="" class="form-control form-control-sm">
                                     <option value="">محصول را انتخاب کنید</option>
                                     @foreach ($products as $product)
-                                    <option value="{{ $product->id }}" @if(old('product_id') == $product->id) selected @endif>{{ $product->name }}</option>
+                                    <option value="{{ $product->id }}" @if(old('product_id', $amazingSale->product_id) == $product->id) selected @endif>{{ $product->name }}</option>
                                     @endforeach
 
                                 </select>
@@ -57,7 +58,7 @@
                         <section class="col-12 col-md-6 my-2">
                             <div class="form-group">
                                 <label for="">درصد تخفیف</label>
-                                <input type="text" class="form-control form-control-sm" name="percentage" value="{{old('percentage')}}">
+                                <input type="text" class="form-control form-control-sm" name="percentage" value="{{old('percentage', $amazingSale->percentage)}}">
                             </div>
                             @error('percentage')
                                 <span class="alert_required bg-danger text-white p-1 rounded" role="alert">
@@ -71,7 +72,7 @@
                             <div class="form-group">
                                 <label for="">تاریخ شروع</label>
                                 <input type="text" name="start_date" id="start_date" class="form-control form-control-sm d-none">
-                                <input type="text" id="start_date_view" class="form-control form-control-sm">
+                                <input type="text" id="start_date_view" class="form-control form-control-sm" value="{{$amazingSale->start_date}}">
                             </div>
                             @error('start_date')
                             <span class="alert_required bg-danger text-white p-1 rounded" role="alert">
@@ -85,7 +86,7 @@
                             <div class="form-group">
                                 <label for="">تاریخ پایان</label>
                                 <input type="text" name="end_date" id="end_date" class="form-control form-control-sm d-none">
-                                <input type="text" id="end_date_view" class="form-control form-control-sm">
+                                <input type="text" id="end_date_view" class="form-control form-control-sm" value="{{$amazingSale->end_date}}">
                             </div>
                             @error('end_date')
                             <span class="alert_required bg-danger text-white p-1 rounded" role="alert">

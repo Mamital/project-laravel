@@ -45,4 +45,8 @@ class Product extends Model
     {
         return $this->hasMany(CategoryValue::class, 'product_id');
     }
+    public function AmazingSale()
+    {
+        return $this->hasMany(AmazingSale::class, 'product_id');
+    }
 }

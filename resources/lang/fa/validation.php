@@ -184,6 +184,7 @@ return [
         'minimal_order_amount' => 'حداقل مقدار خرید',
         'start_date' => 'تاریخ شروع',
         'end_date' => 'تاریخ پایان',
+        'product_id' => 'محصول',
 
     ],
 ];
