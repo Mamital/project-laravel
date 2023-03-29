@@ -53,6 +53,9 @@ class AdminUserController extends Controller
         }
         $inputs['password'] = Hash::make($request->password);
         $inputs['user_type'] = 1;
+
+        
+
         $user = User::create($inputs);
         return redirect()->route('admin.user.admin-user.index')->with('swal-success', 'ادمین جدید با موفقیت ثبت شد');
     }

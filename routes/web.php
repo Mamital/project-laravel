@@ -10,6 +10,7 @@ use App\Http\Controllers\admin\content\PostController;
 use App\Http\Controllers\Admin\Market\BrandController;
 use App\Http\Controllers\Admin\Market\OrderController;
 use App\Http\Controllers\Admin\Market\StoreController;
+use App\Http\Controllers\Admin\NotificationController;
 use App\Http\Controllers\admin\notify\EmailController;
 use App\Http\Controllers\admin\ticket\TicketController;
 use App\Http\Controllers\Admin\User\CustomerController;
@@ -31,6 +32,7 @@ use App\Http\Controllers\Admin\Market\ProductColorController;
 use App\Http\Controllers\Admin\Market\CategoryValueController;
 use App\Http\Controllers\Admin\Ticket\TicketCategoryController;
 use App\Http\Controllers\Admin\Ticket\TicketPriorityController;
+use App\Http\Controllers\Admin\Market\CommentController as MarketCommentController;
 use App\Http\Controllers\Admin\Content\CommentController as ContentCommentController;
 use App\Http\Controllers\Admin\Content\CategoryController as ContentCategoryController;
 
@@ -92,12 +94,12 @@ Route::prefix('admin')->namespace('Admin')->group(function () {
 
         //comment
         Route::prefix('comment')->group(function () {
-            Route::get('/', [CommentController::class, 'index'])->name('admin.market.comment.index');
-            Route::get('/show', [CommentController::class, 'show'])->name('admin.market.comment.show');
-            Route::post('/store', [CommentController::class, 'store'])->name('admin.market.comment.store');
-            Route::get('/edit/{id}', [CommentController::class, 'edit'])->name('admin.market.comment.edit');
-            Route::put('/update/{id}', [CommentController::class, 'update'])->name('admin.market.comment.update');
-            Route::delete('/destroy/{id}', [CommentController::class, 'destroy'])->name('admin.market.comment.destroy');
+            Route::get('/', [MarketCommentController::class, 'index'])->name('admin.market.comment.index');
+            Route::get('/show/{comment}', [MarketCommentController::class, 'show'])->name('admin.market.comment.show');
+            Route::delete('/destroy/{comment}', [MarketCommentController::class, 'destroy'])->name('admin.market.comment.destroy');
+            Route::get('/approved/{comment}', [MarketCommentController::class, 'approved'])->name('admin.market.comment.approved');
+            Route::get('/status/{comment}', [MarketCommentController::class, 'status'])->name('admin.market.comment.status');
+            Route::post('/answer/{comment}', [MarketCommentController::class, 'answer'])->name('admin.market.comment.answer');
         });
 
         //delivery
@@ -425,6 +427,7 @@ Route::prefix('admin')->namespace('Admin')->group(function () {
         Route::put('/update/{setting}', [SettingController::class, 'update'])->name('admin.setting.update');
         Route::delete('/destroy/{setting}', [SettingController::class, 'destroy'])->name('admin.setting.destroy');
     });
+    Route::post('/notification/read-all', [NotificationController::class, 'readAll'])->name('admin.notification.read-all');
 });
 
 Route::middleware(['auth:sanctum', 'verified'])->get('/dashboard', function () {
