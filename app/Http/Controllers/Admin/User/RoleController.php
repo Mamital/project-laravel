@@ -41,6 +41,7 @@ class RoleController extends Controller
     public function store(RoleRequest $request)
     {
         $inputs = $request->all();
+        // dd($inputs);
         $role = Role::create($inputs);
         $inputs['permission'] = $inputs['permission'] ?? [];
         $role->permissions()->sync($inputs['permission']);
@@ -103,8 +104,9 @@ class RoleController extends Controller
     public function permissionUpdate(Role $role, RoleRequest $request)
     {
         $inputs = $request->all();
-        $inputs['permissions'] = $inputs['permissions'] ?? [];
-        $role->permissions()->sync($inputs['permissions']);
+        $inputs['permission'] = $inputs['permission'] ?? [];
+        // dd($inputs);
+        $role->permissions()->sync($inputs['permission']);
         return redirect()->route('admin.user.role.index')->with('swal-success', 'نقش جدید با موفقیت ویرایش شد');
     }
 }

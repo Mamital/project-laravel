@@ -49,7 +49,7 @@
                         <tr>
                             <th>{{ $key + 1 }}</th>
                             <td>{{ $email->subject }}</td>
-                            <td>{{ $email->body }}</td>
+                            <td>{!! $email->body !!}</td>
                             <td>{{ jalaliDate($email->published_at, 'H:i:s Y-m-d') }}</td>
                             <td>
                                 <label>

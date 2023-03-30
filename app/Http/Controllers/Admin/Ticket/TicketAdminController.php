@@ -19,6 +19,6 @@ class TicketAdminController extends Controller
     public function set(User $admin)
     {
         TicketAdmin::where('user_id', $admin->id)->first() ? TicketAdmin::where(['user_id' => $admin->id])->forceDelete() : TicketAdmin::create(['user_id' => $admin->id]);
-        return redirect()->route('admin.ticket.admin.index')->with('swal-success', 'تغییر شما با موفقیت حذف شد');
+        return redirect()->route('admin.ticket.admin.index')->with('swal-success', 'تغییر شما با موفقیت انجام شد');
     }
 }

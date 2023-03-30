@@ -29,12 +29,12 @@ class OrderController extends Controller
     }
     public function canceled()
     {
-        $orders = Order::where('delivery_status', 2)->get();
+        $orders = Order::where('order_status', 4)->get();
         return view('admin.market.order.index', compact('orders'));
     }
     public function returned()
     {
-        $orders = Order::where('delivery_status', 3)->get();
+        $orders = Order::where('order_status', 5)->get();
         return view('admin.market.order.index', compact('orders'));
     }
     public function all()
@@ -81,6 +81,12 @@ class OrderController extends Controller
                 break;
             case 3:
                 $order->order_status = 4;
+                break;
+            case 4:
+                $order->order_status = 5;
+                break;
+            case 5:
+                $order->order_status = 6;
                 break;
 
             default:
