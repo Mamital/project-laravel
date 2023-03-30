@@ -35,6 +35,7 @@ use App\Http\Controllers\Admin\Ticket\TicketPriorityController;
 use App\Http\Controllers\Admin\Market\CommentController as MarketCommentController;
 use App\Http\Controllers\Admin\Content\CommentController as ContentCommentController;
 use App\Http\Controllers\Admin\Content\CategoryController as ContentCategoryController;
+use App\Http\Controllers\Auth\LoginRegisterController;
 
 /*
 |--------------------------------------------------------------------------
@@ -428,6 +429,15 @@ Route::prefix('admin')->namespace('Admin')->group(function () {
         Route::delete('/destroy/{setting}', [SettingController::class, 'destroy'])->name('admin.setting.destroy');
     });
     Route::post('/notification/read-all', [NotificationController::class, 'readAll'])->name('admin.notification.read-all');
+});
+
+Route::namespace('Auth')->group(function()
+{
+    Route::get('login-register-form', [LoginRegisterController::class, 'loginRegisterForm'])->name('customer.auth.login-register-form');
+});
+
+Route::get('/', function(){
+    return view('customer.home');
 });
 
 Route::middleware(['auth:sanctum', 'verified'])->get('/dashboard', function () {
