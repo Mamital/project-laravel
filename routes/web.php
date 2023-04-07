@@ -433,12 +433,17 @@ Route::prefix('admin')->namespace('Admin')->group(function () {
 
 Route::namespace('Auth')->group(function()
 {
-    Route::get('login-register-form', [LoginRegisterController::class, 'loginRegisterForm'])->name('customer.auth.login-register-form');
+    Route::get('login-register-form', [LoginRegisterController::class, 'loginRegisterForm'])->name('auth.customer.login-register-form');
+    Route::middleware('throttle:login-register-limiter')->post('login-register', [LoginRegisterController::class, 'loginRegister'])->name('auth.customer.login-register');
+    Route::get('login-confirm-form/{token}', [LoginRegisterController::class, 'logiConfirmForm'])->name('auth.customer.login-confirm-form');
+    Route::middleware('throttle:login-confirm-limiter')->post('login-confirm/{token}', [LoginRegisterController::class, 'loginConfirm'])->name('auth.customer.login-confirm');
+    Route::middleware('throttle:login-resend-confirm-limiter')->get('login-resend-confirm/{token}', [LoginRegisterController::class, 'loginResendConfirm'])->name('auth.customer.login-resend-confirm');
+    Route::get('logout', [LoginRegisterController::class, 'logout'])->name('auth.customer.logout');
 });
 
 Route::get('/', function(){
     return view('customer.home');
-});
+})->name('home');
 
 Route::middleware(['auth:sanctum', 'verified'])->get('/dashboard', function () {
     return view('dashboard');
