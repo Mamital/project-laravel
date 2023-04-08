@@ -7,11 +7,13 @@ use App\Http\Controllers\Admin\Content\FAQController;
 use App\Http\Controllers\Admin\Content\MenuController;
 use App\Http\Controllers\admin\content\PageController;
 use App\Http\Controllers\admin\content\PostController;
+use App\Http\Controllers\Admin\Market\BanerController;
 use App\Http\Controllers\Admin\Market\BrandController;
 use App\Http\Controllers\Admin\Market\OrderController;
 use App\Http\Controllers\Admin\Market\StoreController;
 use App\Http\Controllers\Admin\NotificationController;
 use App\Http\Controllers\admin\notify\EmailController;
+use App\Http\Controllers\Auth\LoginRegisterController;
 use App\Http\Controllers\admin\ticket\TicketController;
 use App\Http\Controllers\Admin\User\CustomerController;
 use App\Http\Controllers\Admin\AdminDashboardController;
@@ -35,7 +37,6 @@ use App\Http\Controllers\Admin\Ticket\TicketPriorityController;
 use App\Http\Controllers\Admin\Market\CommentController as MarketCommentController;
 use App\Http\Controllers\Admin\Content\CommentController as ContentCommentController;
 use App\Http\Controllers\Admin\Content\CategoryController as ContentCategoryController;
-use App\Http\Controllers\Auth\LoginRegisterController;
 
 /*
 |--------------------------------------------------------------------------
@@ -72,6 +73,17 @@ Route::prefix('admin')->namespace('Admin')->group(function () {
             Route::get('/status/{productCategory}', [CategoryController::class, 'status'])->name('admin.market.category.status');
             Route::get('/show-in-menu/{productCategory}', [CategoryController::class, 'showInMenu'])->name('admin.market.category.show-in-menu');
         });
+
+        //baners
+        Route::prefix('baner')->group(function () {
+        Route::get('/', [BanerController::class, 'index'])->name('admin.market.baner.index');
+        Route::get('/create', [BanerController::class, 'create'])->name('admin.market.baner.create');
+        Route::post('/store', [BanerController::class, 'store'])->name('admin.market.baner.store');
+        Route::get('/edit/{baner}', [BanerController::class, 'edit'])->name('admin.market.baner.edit');
+        Route::put('/update/{baner}', [BanerController::class, 'update'])->name('admin.market.baner.update');
+        Route::delete('/destroy/{baner}', [BanerController::class, 'destroy'])->name('admin.market.baner.destroy');
+        Route::get('/status/{baner}', [BanerController::class, 'status'])->name('admin.market.baner.status');
+    });
 
         Route::prefix('color')->group(function () {
             //color

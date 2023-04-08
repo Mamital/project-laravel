@@ -17,6 +17,7 @@
                 </section>
                 <section class="sidebar-dropdown">
                     <a href="{{ route('admin.market.category.index') }}">دسته بندی</a>
+                    <a href="{{ route('admin.market.baner.index') }}">بنر ها</a>
                     <a href="{{ route('admin.market.property.index') }}">فرم کالا</a>
                     <a href="{{ route('admin.market.brand.index') }}">برندها</a>
                     <a href="{{ route('admin.market.product.index') }}">کالاها</a>
