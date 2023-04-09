@@ -29,6 +29,7 @@ use App\Http\Controllers\Admin\Market\DiscountController;
 use App\Http\Controllers\Admin\Market\PropertyController;
 use App\Http\Controllers\admin\setting\SettingController;
 use App\Http\Controllers\admin\user\PermissionController;
+use App\Http\Controllers\Admin\Market\GuaranteeController;
 use App\Http\Controllers\Admin\Notify\EmailFileController;
 use App\Http\Controllers\Admin\Ticket\TicketAdminController;
 use App\Http\Controllers\Admin\Market\ProductColorController;
@@ -77,14 +78,14 @@ Route::prefix('admin')->namespace('Admin')->group(function () {
 
         //baners
         Route::prefix('baner')->group(function () {
-        Route::get('/', [BanerController::class, 'index'])->name('admin.market.baner.index');
-        Route::get('/create', [BanerController::class, 'create'])->name('admin.market.baner.create');
-        Route::post('/store', [BanerController::class, 'store'])->name('admin.market.baner.store');
-        Route::get('/edit/{baner}', [BanerController::class, 'edit'])->name('admin.market.baner.edit');
-        Route::put('/update/{baner}', [BanerController::class, 'update'])->name('admin.market.baner.update');
-        Route::delete('/destroy/{baner}', [BanerController::class, 'destroy'])->name('admin.market.baner.destroy');
-        Route::get('/status/{baner}', [BanerController::class, 'status'])->name('admin.market.baner.status');
-    });
+            Route::get('/', [BanerController::class, 'index'])->name('admin.market.baner.index');
+            Route::get('/create', [BanerController::class, 'create'])->name('admin.market.baner.create');
+            Route::post('/store', [BanerController::class, 'store'])->name('admin.market.baner.store');
+            Route::get('/edit/{baner}', [BanerController::class, 'edit'])->name('admin.market.baner.edit');
+            Route::put('/update/{baner}', [BanerController::class, 'update'])->name('admin.market.baner.update');
+            Route::delete('/destroy/{baner}', [BanerController::class, 'destroy'])->name('admin.market.baner.destroy');
+            Route::get('/status/{baner}', [BanerController::class, 'status'])->name('admin.market.baner.status');
+        });
 
         Route::prefix('color')->group(function () {
             //color
@@ -93,6 +94,15 @@ Route::prefix('admin')->namespace('Admin')->group(function () {
             Route::post('/store/{product}', [ProductColorController::class, 'store'])->name('admin.market.color.store');
             Route::delete('/destroy/{product}/{productColor}', [ProductColorController::class, 'destroy'])->name('admin.market.color.destroy');
             Route::get('/status/{productColor}', [ProductColorController::class, 'status'])->name('admin.market.color.status');
+        });
+
+        //Guarantee
+        Route::prefix('guarantee')->group(function () {
+            Route::get('/{product}', [GuaranteeController::class, 'index'])->name('admin.market.guarantee.index');
+            Route::get('/create/{product}', [GuaranteeController::class, 'create'])->name('admin.market.guarantee.create');
+            Route::post('/store/{product}', [GuaranteeController::class, 'store'])->name('admin.market.guarantee.store');
+            Route::delete('/destroy/{guarantee}/{product}', [GuaranteeController::class, 'destroy'])->name('admin.market.guarantee.destroy');
+            Route::get('/status/{guarantee}', [GuaranteeController::class, 'status'])->name('admin.market.guarantee.status');
         });
 
         //brand
@@ -156,7 +166,6 @@ Route::prefix('admin')->namespace('Admin')->group(function () {
             Route::get('/amazing-sale/edit/{amazingSale}', [DiscountController::class, 'amazingSaleEdit'])->name('admin.market.discount.amazingSale.edit');
             Route::put('/amazing-sale/update/{amazingSale}', [DiscountController::class, 'amazingSaleUpdate'])->name('admin.market.discount.amazingSale.update');
             Route::delete('/amazing-sale/destroy/{amazingSale}', [DiscountController::class, 'amazingSaleDestroy'])->name('admin.market.discount.amazingSale.destroy');
-            
         });
 
         //order
@@ -215,7 +224,7 @@ Route::prefix('admin')->namespace('Admin')->group(function () {
             Route::delete('/destroy/{property}', [PropertyController::class, 'destroy'])->name('admin.market.property.destroy');
 
             Route::prefix('value')->group(function () {
-                //color
+                //value
                 Route::get('/{property}', [CategoryValueController::class, 'index'])->name('admin.market.value.index');
                 Route::get('/create/{property}', [CategoryValueController::class, 'create'])->name('admin.market.value.create');
                 Route::post('/store/{property}', [CategoryValueController::class, 'store'])->name('admin.market.value.store');
@@ -444,8 +453,7 @@ Route::prefix('admin')->namespace('Admin')->group(function () {
     Route::post('/notification/read-all', [NotificationController::class, 'readAll'])->name('admin.notification.read-all');
 });
 
-Route::namespace('Auth')->group(function()
-{
+Route::namespace('Auth')->group(function () {
     Route::get('login-register-form', [LoginRegisterController::class, 'loginRegisterForm'])->name('auth.customer.login-register-form');
     Route::middleware('throttle:login-register-limiter')->post('login-register', [LoginRegisterController::class, 'loginRegister'])->name('auth.customer.login-register');
     Route::get('login-confirm-form/{token}', [LoginRegisterController::class, 'logiConfirmForm'])->name('auth.customer.login-confirm-form');
