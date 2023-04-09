@@ -1,6 +1,7 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\Customer\HomeController;
 use App\Http\Controllers\admin\user\RoleController;
 use App\Http\Controllers\admin\notify\SMSController;
 use App\Http\Controllers\Admin\Content\FAQController;
@@ -453,9 +454,7 @@ Route::namespace('Auth')->group(function()
     Route::get('logout', [LoginRegisterController::class, 'logout'])->name('auth.customer.logout');
 });
 
-Route::get('/', function(){
-    return view('customer.home');
-})->name('home');
+Route::get('/', [HomeController::class, 'home'])->name('home');
 
 Route::middleware(['auth:sanctum', 'verified'])->get('/dashboard', function () {
     return view('dashboard');
