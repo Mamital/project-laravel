@@ -26,18 +26,18 @@ class BanerRequest extends FormRequest
         if ($this->isMethod('post')) {
             return [
                 'title' => 'required|max:120|min:2|regex:/^[ا-یa-zA-Z0-9\-۰-۹ء-ي., ]+$/u',
-                'url' => 'required|max:120|min:2|regex:/^[ا-یa-zA-Z0-9\-۰-۹ء-ي., -]+$/u',
+                'url' => 'required|max:120|min:2',
                 'image' => 'required|image|mimes:png,jpg,jpeg,gif',
                 'status' => 'required|numeric|in:0,1',
-                'position' => 'required|numeric|in:0,1,2',
+                'position' => 'required|numeric|in:0,1,2,3,4',
             ];
         } else {
             return [
                 'title' => 'required|max:120|min:2|regex:/^[ا-یa-zA-Z0-9\-۰-۹ء-ي., ]+$/u',
-                'url' => 'required|max:120|min:2|regex:/^[ا-یa-zA-Z0-9\-۰-۹ء-ي., -]+$/u',
+                'url' => 'required|max:120|min:2',
                 'image' => 'image|mimes:png,jpg,jpeg,gif',
                 'status' => 'required|numeric|in:0,1',
-                'position' => 'required|numeric|in:0,1,2',
+                'position' => 'required|numeric|in:0,1,2,3,4',
             ];
         }
     }

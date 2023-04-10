@@ -88,11 +88,15 @@
                                     <label for="position">جایگاه</label>
                                     <select name="position" id="" class="form-control form-control-sm"
                                         id="status">
-                                        <option value="0" @if (old('position', $baner->position) == 0) selected @endif>اصلی
+                                        <option value="0" @if (old('position', $baner->position) == 0) selected @endif> اسلاید
                                         </option>
-                                        <option value="1" @if (old('position', $baner->position) == 1) selected @endif>کنار بالا
+                                        <option value="1" @if (old('position', $baner->position) == 1) selected @endif> کنار بالا (اصلی) 
                                         </option>
-                                        <option value="2" @if (old('position', $baner->position) == 1) selected @endif>کنار پایین
+                                        <option value="2" @if (old('position', $baner->position) == 2) selected @endif> کنار پایین (اصلی) 
+                                        </option>
+                                        <option value="3" @if (old('position', $baner->position) == 3) selected @endif>  وسط (اصلی)   
+                                        </option>
+                                        <option value="4" @if (old('position', $baner->position) == 4) selected @endif> پایین (اصلی)
                                         </option>
                                     </select>
                                 </div>

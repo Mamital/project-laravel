@@ -16,13 +16,19 @@ class Baner extends Model
     {
         switch ($this->position) {
             case 0:
-                $result = 'اصلی';
+                $result = 'اسلاید';
                 break;
             case 1:
-                $result = 'کنار بالا';
+                $result = 'کنار بالا (اصلی)';
                 break;
             case 2:
-                $result = 'کنار پایین';
+                $result = 'کنار پایین(اصلی)';
+                break;
+            case 3:
+                $result = 'تبلیغالی وسط (اصلی)';
+                break;
+            case 4:
+                $result = 'تبلیغاتی پایین (اصلی)';
                 break;
         }
         return $result;
