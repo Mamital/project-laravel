@@ -17,7 +17,7 @@ class GuaranteeController extends Controller
      */
     public function index(Product $product)
     {
-        $guarantees = Guarantee::all();
+        $guarantees = Guarantee::where('product_id', $product->id)->get();
         return view('admin.market.product.guarantee.index', compact(['guarantees', 'product']));
     }
 

@@ -24,8 +24,8 @@ return [
             'height' => 600
         ],
          'medium' => [
-            'width' => 400,
-            'height' => 300
+            'width' => 350,
+            'height' => 350
         ],
          'small' => [
             'width' => 80,
@@ -37,7 +37,7 @@ return [
     'default-current-index-image' => 'medium',
 
 
- //index size
+ //cashe index size
     'cache-image-sizes' => [
         'large' => [
             'width' => 800,

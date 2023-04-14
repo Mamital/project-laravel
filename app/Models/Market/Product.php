@@ -3,6 +3,7 @@
 namespace App\Models\Market;
 
 use App\Models\Content\Comment;
+use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Model;
 use Cviebrock\EloquentSluggable\Sluggable;
 use Illuminate\Database\Eloquent\SoftDeletes;
@@ -37,6 +38,10 @@ class Product extends Model
     {
         return $this->hasMany(ProductMeta::class, 'product_id');
     }
+    public function galleries()
+    {
+        return $this->hasMany(Gallery::class, 'product_id');
+    }
 
     public function colors()
     {
@@ -46,13 +51,27 @@ class Product extends Model
     {
         return $this->hasMany(CategoryValue::class, 'product_id');
     }
-    public function AmazingSale()
+    public function amazingSales()
     {
         return $this->hasMany(AmazingSale::class, 'product_id');
+    }
+    public function guarantees()
+    {
+        return $this->hasMany(Guarantee::class, 'product_id');
     }
 
     public function comments()
     {
         return $this->morphMany(Comment::class, 'commentable');
+    }
+
+    public function activeAmazingSales()
+    {
+        return $this->amazingSales()->where('start_date', '<', Carbon::now())->where('end_date', '>', Carbon::now())->first();
+    }
+
+    public function activeComments()
+    {
+        return $this->comments()->where('approved', 1)->get();
     }
 }

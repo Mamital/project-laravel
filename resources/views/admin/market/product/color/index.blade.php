@@ -27,8 +27,7 @@
 
                 <section class="d-flex  align-items-center mt-4 mb-3 border-bottom pb-2">
                      <div class="p-2">
-                    <a href="{{ route('admin.market.color.create', $product->id) }}" class="btn btn-info btn-sm p-2">ایجاد رنگ
-                        جدید</a>
+                    <a href="{{ route('admin.market.color.create', $product->id) }}" class="btn btn-info btn-sm p-2">اضافه کردن</a>
                      </div>
                         <div class="p-2">
                     <a href="{{ route('admin.market.product.index') }}" class="btn btn-info btn-sm p-2">بازگشت</a>
@@ -55,7 +54,7 @@
                                 <tr>
                                     <th>{{ $loop->iteration }}</th>
                                     <td>{{ $color->color_name }}</td>
-                                    <td>{{ $color->price_increase }}</td>
+                                    <td>{{ round($color->price_increase) }}</td>
                                     <td>
                                         <label>
                                             <input id="{{ $color->id }}" onchange="changeStatus({{ $color->id }})"

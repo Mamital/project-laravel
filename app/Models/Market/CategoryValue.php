@@ -20,4 +20,8 @@ class CategoryValue extends Model
     {
         return $this->belongsTo(Product::class);
     }
+    public function attribute()
+    {
+        return $this->belongsTo(Property::class, 'category_attribute_id');
+    }
 }

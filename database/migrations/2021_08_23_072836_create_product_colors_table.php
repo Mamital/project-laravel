@@ -16,6 +16,7 @@ class CreateProductColorsTable extends Migration
         Schema::create('product_colors', function (Blueprint $table) {
             $table->id();
             $table->string('color_name');
+            $table->string('color');
             $table->foreignId('product_id')->constrained('products')->onUpdate('cascade')->onDelete('cascade');
             $table->decimal('price_increase', 20, 3)->default(0);
             $table->tinyInteger('status')->default(0);

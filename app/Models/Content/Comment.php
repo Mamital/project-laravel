@@ -35,5 +35,4 @@ class Comment extends Model
         return $this->hasMany($this, 'parent_id');
     }
 
-
 }

@@ -90,8 +90,7 @@ class BanerController extends Controller
             if(!empty($baner->image))
             {
                 $imageService->deleteImage($baner->image);
-            }
-            $imageService->deleteImage('images' . DIRECTORY_SEPARATOR . 'baners' . DIRECTORY_SEPARATOR .$inputs['image']);
+            }            
             $imageService->setExclusiveDirectory('images' . DIRECTORY_SEPARATOR . 'baners');
             $result = $imageService->save($request->file('image'));
             if ($result === false) {

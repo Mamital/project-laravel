@@ -26,8 +26,7 @@
 
             <section class="d-flex  align-items-center mt-4 mb-3 border-bottom pb-2">
                      <div class="p-2">
-                    <a href="{{ route('admin.market.gallery.create', $product->id) }}" class="btn btn-info btn-sm p-2">ایجاد رنگ
-                        جدید</a>
+                    <a href="{{ route('admin.market.gallery.create', $product->id) }}" class="btn btn-info btn-sm p-2">اضافه کردن</a>
                      </div>
                         <div class="p-2">
                     <a href="{{ route('admin.market.product.index') }}" class="btn btn-info btn-sm p-2">بازگشت</a>

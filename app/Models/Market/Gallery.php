@@ -12,4 +12,8 @@ class Gallery extends Model
     use HasFactory, SoftDeletes;
     protected $fillable = ['image', 'product_id'];
     protected $casts = ['image' => 'array'];
+    public function brand()
+    {
+        return $this->belongsTo(Product::class);
+    }
 }

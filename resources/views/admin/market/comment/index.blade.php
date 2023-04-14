@@ -55,7 +55,7 @@
                             <td>{{ Str::limit($comment->body, 10) }}</td>
                             <td>{{ $comment->parent_id ? Str::limit($comment->parent->body, 10) : '-' }}</td>
                             <td>{{ $comment->author_id }}</td>
-                            <td>{{ $comment->user->fullName  }}</td>
+                            <td>{{ $comment->user->fullName == ' ' ? 'ناشناس' : $comment->user->fullName }}</td>
                             <td>{{ $comment->commentable_id }}</td>
                             <td>{{ $comment->commentable->name }}</td>
                             <td>{{ $comment->approved == 1 ? 'تایید شده ' : 'تایید نشده'}} </td>

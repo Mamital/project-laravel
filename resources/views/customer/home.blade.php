@@ -52,9 +52,9 @@
                                             <section class="product">
                                                 {{-- <section class="product-add-to-cart"><a href="#" data-bs-toggle="tooltip" data-bs-placement="left" title="افزودن به سبد خرید"><i class="fa fa-cart-plus"></i></a></section>
                                                 <section class="product-add-to-favorite"><a href="#" data-bs-toggle="tooltip" data-bs-placement="left" title="افزودن به علاقه مندی"><i class="fa fa-heart"></i></a></section> --}}
-                                                {{-- <a class="product-link" href="{{ $mostViwedProduct->url}}"> --}}
+                                                <a class="product-link" href="{{ route('home.product.index', $mostViwedProduct) }}">
                                                     <section class="product-image">
-                                                        <img class="" src="{{$mostViwedProduct->image['indexArray'][$mostViwedProduct->image['currentImage']]}}" alt="">
+                                                        <img class="" src="{{asset($mostViwedProduct->image['indexArray'][$mostViwedProduct->image['currentImage']])}}" alt="">
                                                     </section>
                                                     <section class="product-colors"></section>
                                                     <section class="product-name">
@@ -134,9 +134,9 @@
                                             <section class="product">
                                                 {{-- <section class="product-add-to-cart"><a href="#" data-bs-toggle="tooltip" data-bs-placement="left" title="افزودن به سبد خرید"><i class="fa fa-cart-plus"></i></a></section>
                                                 <section class="product-add-to-favorite"><a href="#" data-bs-toggle="tooltip" data-bs-placement="left" title="افزودن به علاقه مندی"><i class="fa fa-heart"></i></a></section> --}}
-                                                {{-- <a class="product-link" href="{{ $mostViwedProduct->url}}"> --}}
+                                                <a class="product-link" href="{{ route('home.product.index', $offerProduct) }}">
                                                     <section class="product-image">
-                                                        <img class="" src="{{$offerProduct->image['indexArray'][$offerProduct->image['currentImage']]}}" alt="">
+                                                        <img class="" src="{{asset($offerProduct->image['indexArray'][$offerProduct->image['currentImage']])}}" alt="">
                                                     </section>
                                                     <section class="product-colors"></section>
                                                     <section class="product-name">

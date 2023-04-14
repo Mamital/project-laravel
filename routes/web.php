@@ -36,6 +36,7 @@ use App\Http\Controllers\Admin\Market\ProductColorController;
 use App\Http\Controllers\Admin\Market\CategoryValueController;
 use App\Http\Controllers\Admin\Ticket\TicketCategoryController;
 use App\Http\Controllers\Admin\Ticket\TicketPriorityController;
+use App\Http\Controllers\Customer\Market\ProductController as CustomerProductController;
 use App\Http\Controllers\Admin\Market\CommentController as MarketCommentController;
 use App\Http\Controllers\Admin\Content\CommentController as ContentCommentController;
 use App\Http\Controllers\Admin\Content\CategoryController as ContentCategoryController;
@@ -463,6 +464,13 @@ Route::namespace('Auth')->group(function () {
 });
 
 Route::get('/', [HomeController::class, 'home'])->name('home');
+
+Route::namespace('Market')->group(function () {
+
+Route::get('/product/{product:slug}', [CustomerProductController::class, 'index'])->name('home.product.index');
+Route::get('/add-comment/{product}', [CustomerProductController::class, 'AddComment'])->name('home.product.add-comment');
+
+});
 
 Route::middleware(['auth:sanctum', 'verified'])->get('/dashboard', function () {
     return view('dashboard');
