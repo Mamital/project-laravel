@@ -2,11 +2,12 @@
 
 namespace App\Http\Controllers\Customer;
 
-use App\Http\Controllers\Controller;
 use App\Models\Market\Baner;
 use App\Models\Market\Brand;
-use App\Models\Market\Product;
 use Illuminate\Http\Request;
+use App\Models\Market\Product;
+use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\Auth;
 
 class HomeController extends Controller
 {
@@ -18,9 +19,9 @@ class HomeController extends Controller
         $middleBanners = Baner::where('position', 3)->where('status', 1)->take(2)->get();
         $bottomBanner = Baner::where('position', 4)->where('status', 1)->first();
         $brands = Brand::all();
-        $mostViwedProducts = Product::latest()->where('status', 1)->take(5)->get();
+        $mostVisitedProducts = Product::latest()->where('status', 1)->take(5)->get();
         $offerProducts = Product::latest()->where('status', 1)->take(5)->get();
 
-        return view('customer.home', compact(['topBannerSliders', 'topBannerUp', 'topBannerBottom', 'middleBanners', 'bottomBanner', 'brands', 'mostViwedProducts', 'offerProducts']));
+        return view('customer.home', compact(['topBannerSliders', 'topBannerUp', 'topBannerBottom', 'middleBanners', 'bottomBanner', 'brands', 'mostVisitedProducts', 'offerProducts']));
     }
 }

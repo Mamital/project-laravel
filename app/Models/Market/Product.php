@@ -3,6 +3,7 @@
 namespace App\Models\Market;
 
 use App\Models\Content\Comment;
+use App\Models\User;
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Model;
 use Cviebrock\EloquentSluggable\Sluggable;
@@ -73,5 +74,10 @@ class Product extends Model
     public function activeComments()
     {
         return $this->comments()->where('approved', 1)->get();
+    }
+
+    public function users()
+    {
+        return $this->belongsToMany(User::class);
     }
 }
