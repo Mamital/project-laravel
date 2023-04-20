@@ -60,6 +60,8 @@
                                         </section>
                                     </section>
                                 </section>
+                                <form action="{{route('home.sales-proccess.add-to-cart', $product->slug)}}" method="POST">
+                                    @csrf
                                 <section class="product-info">
 
                                     @empty(!$product->colors()->first())
@@ -79,10 +81,9 @@
 
                                             <input class="d-none" type="radio" name="color"
                                                 data-color-name="{{ $color->color_name }}"
-                                                id="'color_ {{ $color->id }}"
-                                                data-color-name="{{ $color->color_name }}"
+                                                id="color_ {{ $color->id }}" value='{{$color->id}}'
                                                 data-color-price={{ $color->price_increase }}
-                                                @if ($loop->iteration == 1) checked @endif>
+                                                @if ($loop->iteration == 1) checked @endif >
                                         @endforeach
                                     </p>
                                     @if ($product->guarantees->count() != 0)
@@ -108,7 +109,7 @@
                                     @endif
                                     @guest
                                         <section class="product-add-to-favorite position-relative my-2" style="top:0">
-                                            <button class="btn btn-light btn-sm text-decoration-none" data-bs-toggle="tooltip"
+                                            <button type="button" class="btn btn-light btn-sm text-decoration-none" data-bs-toggle="tooltip"
                                                 data-bs-placement="left"
                                                 data-url="{{ route('home.product.add-favorite', $product) }}"
                                                 title="افزودن به علاقه مندی">
@@ -119,7 +120,7 @@
                                     @auth
                                         @if ($product->users->contains(auth()->user()->id))
                                             <section class="product-add-to-favorite position-relative my-2" style="top:0">
-                                                <button class="add-to-favorite btn btn-light btn-sm text-decoration-none"
+                                                <button type="button" class="add-to-favorite btn btn-light btn-sm text-decoration-none"
                                                     data-bs-toggle="tooltip" data-bs-placement="left"
                                                     data-url="{{ route('home.product.add-favorite', $product) }}"
                                                     title="حذف از علاقه مندی">
@@ -128,7 +129,7 @@
                                             </section>
                                         @else
                                          <section class="product-add-to-favorite position-relative my-2" style="top:0">
-                                                <button class="add-to-favorite btn btn-light btn-sm text-decoration-none"
+                                                <button type="button" class="add-to-favorite btn btn-light btn-sm text-decoration-none"
                                                     data-bs-toggle="tooltip" data-bs-placement="left"
                                                     data-url="{{ route('home.product.add-favorite', $product) }}"
                                                     title="افزودن به علاقه مندی">
@@ -141,7 +142,7 @@
                                         <section class="cart-product-number d-inline-block ">
                                             <button class="cart-number cart-number-down" type="button">-</button>
                                             <input class="" id="number" type="number" min="1"
-                                                max="5" step="1" value="1" readonly="readonly">
+                                                max="5" step="1" value="1" readonly="readonly" name="number">
                                             <button class="cart-number cart-number-up" type="button">+</button>
                                         </section>
                                     </section>
@@ -185,14 +186,16 @@
                                 </section>
                                 <section class="">
                                     @if ($product->marketable_number > 0)
-                                        <a id="next-level" href="#" class="btn btn-danger d-block">افزودن به سبد
-                                            خرید</a>
+                                        <button id="next-level" class="btn btn-danger d-block">افزودن به سبد
+                                            خرید</button>
                                     @else
                                         <a id="next-level" href="#"
                                             class="btn btn-secondary disabled d-block">محصول
                                             موجود نمیباشد</a>
                                     @endif
                                 </section>
+
+                                </form>
 
                             </section>
                         </section>
@@ -502,6 +505,26 @@
         </section>
     </section>
     <!-- end description, features and comments -->
+
+     <section class="position-fixed p-4 flex-row-reverse"
+        style="right: 0; top: 3rem; width: 26rem; max-width: 80%;">
+        <div class="toast" role="alert" aria-live="assertive" aria-atomic="true">
+            <div class="toast-header">
+                <strong class="me-auto">فروشگاه</strong>
+                <button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Close"></button>
+            </div>
+            <div class="toast-body">
+                <strong class="ml-auto">
+                    برای افزودن کالا به لیست علاقه مندی ها باید ابتدا وارد حساب کاربری خود شوید
+                    <br>
+                    <a href="{{ route('auth.customer.login-register-form') }}" class="text-dark">
+                        ثبت نام / ورود
+                    </a>
+                </strong>
+            </div>
+        </section>
+        
+
 @endsection
 
 @section('script')
@@ -588,4 +611,24 @@
             })
         })
     </script>
+@endsection
+@section('script')
+<script>
+    //start product introduction, features and comment
+$(document).ready(function() {
+    var s = $("#introduction-features-comments");
+    var pos = s.position();
+    $(window).scroll(function() {
+        var windowpos = $(window).scrollTop();
+
+        if (windowpos >= pos.top) {
+            s.addClass("stick");
+        } else {
+            s.removeClass("stick");
+        }
+    });
+});
+//end product introduction, features and comment
+
+</script>
 @endsection

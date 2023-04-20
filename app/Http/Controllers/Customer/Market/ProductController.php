@@ -12,7 +12,6 @@ class ProductController extends Controller
 {
     public function index(Product $product)
     {
-        Auth::loginUsingId(6);
         $reletedProducts = Product::take(7)->get();
         $amazingSale = $product->activeAmazingSales();
         return view('customer.market.product.product', compact(['product', 'reletedProducts', 'amazingSale']));

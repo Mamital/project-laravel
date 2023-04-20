@@ -36,10 +36,11 @@ use App\Http\Controllers\Admin\Market\ProductColorController;
 use App\Http\Controllers\Admin\Market\CategoryValueController;
 use App\Http\Controllers\Admin\Ticket\TicketCategoryController;
 use App\Http\Controllers\Admin\Ticket\TicketPriorityController;
-use App\Http\Controllers\Customer\Market\ProductController as CustomerProductController;
+use App\Http\Controllers\Customer\SalesProccess\CartController;
 use App\Http\Controllers\Admin\Market\CommentController as MarketCommentController;
 use App\Http\Controllers\Admin\Content\CommentController as ContentCommentController;
 use App\Http\Controllers\Admin\Content\CategoryController as ContentCategoryController;
+use App\Http\Controllers\Customer\Market\ProductController as CustomerProductController;
 
 /*
 |--------------------------------------------------------------------------
@@ -470,6 +471,19 @@ Route::namespace('Market')->group(function () {
 Route::get('/product/{product:slug}', [CustomerProductController::class, 'index'])->name('home.product.index');
 Route::get('/add-comment/{product}', [CustomerProductController::class, 'addComment'])->name('home.product.add-comment');
 Route::get('/add-favorite/{product}', [CustomerProductController::class, 'addFavorite'])->name('home.product.add-favorite');
+
+});
+
+Route::namespace('SalesProccess')->group(function () {
+//cart
+Route::get('/cart', [CartController::class, 'cart'])->name('home.sales-proccess.cart');
+Route::post('/cart', [CartController::class, 'updateCart'])->name('home.sales-proccess.update-cart');
+Route::post('/add-to-cart/{product:slug}', [CartController::class, 'addToCart'])->name('home.sales-proccess.add-to-cart');
+Route::get('/remove-from-cart/{cartItem}', [CartController::class, 'removeFromCart'])->name('home.sales-proccess.remove-from-cart');
+
+    //address
+    Route::get('/address-and-delivery', [AddressController::class, 'addressAndDelivery'])->name('home.sales-proccess.address-and-delivery');
+    Route::post('/add-address', [AddressController::class, 'addAddress'])->name('home.sales-proccess.add-address');
 
 });
 

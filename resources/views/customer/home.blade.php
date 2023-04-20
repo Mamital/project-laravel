@@ -300,7 +300,8 @@
     </section>
     <!-- end brand part-->
 
-    <div class="toast-container position-static">
+    <section class="position-fixed p-4 flex-row-reverse"
+        style="right: 0; top: 3rem; width: 26rem; max-width: 80%;">
         <div class="toast" role="alert" aria-live="assertive" aria-atomic="true">
             <div class="toast-header">
                 <strong class="me-auto">فروشگاه</strong>
@@ -315,25 +316,8 @@
                     </a>
                 </strong>
             </div>
-        </div>
-
-        {{-- <section class="position-fixed p-4 flex-row-reverse"
-        style="z-index: 909999999; left: 0; top: 3rem; width: 26rem; max-width: 80%;">
-        <section class="toast" data-delay="7000">
-            <section class="toast-body py-3 d-flex text-dark bg-info">
-                <strong class="ml-auto">
-                    برای افزودن کالا به لیست علاقه مندی ها باید ابتدا وارد حساب کاربری خود شوید
-                    <br>
-                    <a href="{{ route('auth.customer.login-register-form') }}" class="text-dark">
-                        ثبت نام / ورود
-                    </a>
-                </strong>
-                <button type="button" class="ml-2 mb-1 close btn btn-danger" data-dismiss="toast" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                </button>
-            </section>
         </section>
-    </section> --}}
+        
     @endsection
     @section('script')
         <script>
