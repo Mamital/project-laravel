@@ -27,7 +27,7 @@ class CartController extends Controller
                 }
             }
             return redirect()->route('home.sales-proccess.address-and-delivery');
-        }else{
+        } else {
             return redirect()->route('auth.customer.login-register-form');
         }
     }

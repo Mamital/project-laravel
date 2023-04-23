@@ -185,6 +185,11 @@ return [
         'start_date' => 'تاریخ شروع',
         'end_date' => 'تاریخ پایان',
         'product_id' => 'محصول',
-
+        'national_code' => 'کد ملی',
+        'province_id' => 'استان',
+        'city_id' => 'شهر',
+        'no' => 'پلاک',
+        'recipient_first_name' => 'نام گیرنده',
+        'recipient_last_name' => 'نام خانوادگی گیرنده',
     ],
 ];

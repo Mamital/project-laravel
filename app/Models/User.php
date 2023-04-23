@@ -7,6 +7,7 @@ use App\Models\Market\Product;
 use App\Models\Ticket\Ticket;
 use Laravel\Sanctum\HasApiTokens;
 use App\Models\Ticket\TicketAdmin;
+use App\Models\User\Address;
 use Laravel\Jetstream\HasProfilePhoto;
 use Illuminate\Notifications\Notifiable;
 use Laravel\Fortify\TwoFactorAuthenticatable;
@@ -38,7 +39,8 @@ class User extends Authenticatable
         'profile_photo_path',
         'password',
         'email_verified_at',
-        'mobile_verified_at'
+        'mobile_verified_at',
+        'national_code'
     ];
 
     /**
@@ -93,5 +95,9 @@ class User extends Authenticatable
     public function products()
     {
         return $this->belongsToMany(Product::class);
+    }
+    public function addresses()
+    {
+        return $this->hasMany(Address::class);
     }
 }

@@ -1,5 +1,6 @@
 <?php
 
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Customer\HomeController;
 use App\Http\Controllers\admin\user\RoleController;
@@ -37,10 +38,13 @@ use App\Http\Controllers\Admin\Market\CategoryValueController;
 use App\Http\Controllers\Admin\Ticket\TicketCategoryController;
 use App\Http\Controllers\Admin\Ticket\TicketPriorityController;
 use App\Http\Controllers\Customer\SalesProccess\CartController;
+use App\Http\Controllers\Customer\SalesProccess\AddressController;
+use App\Http\Controllers\Customer\SalesProccess\ProfileCompletionController;
 use App\Http\Controllers\Admin\Market\CommentController as MarketCommentController;
 use App\Http\Controllers\Admin\Content\CommentController as ContentCommentController;
 use App\Http\Controllers\Admin\Content\CategoryController as ContentCategoryController;
 use App\Http\Controllers\Customer\Market\ProductController as CustomerProductController;
+use App\Http\Controllers\Customer\SalesProccess\PaymentController as CustomerPaymentController;
 
 /*
 |--------------------------------------------------------------------------
@@ -468,25 +472,40 @@ Route::get('/', [HomeController::class, 'home'])->name('home');
 
 Route::namespace('Market')->group(function () {
 
-Route::get('/product/{product:slug}', [CustomerProductController::class, 'index'])->name('home.product.index');
-Route::get('/add-comment/{product}', [CustomerProductController::class, 'addComment'])->name('home.product.add-comment');
-Route::get('/add-favorite/{product}', [CustomerProductController::class, 'addFavorite'])->name('home.product.add-favorite');
-
+    Route::get('/product/{product:slug}', [CustomerProductController::class, 'index'])->name('home.product.index');
+    Route::get('/add-comment/{product}', [CustomerProductController::class, 'addComment'])->name('home.product.add-comment');
+    Route::get('/add-favorite/{product}', [CustomerProductController::class, 'addFavorite'])->name('home.product.add-favorite');
 });
 
 Route::namespace('SalesProccess')->group(function () {
-//cart
-Route::get('/cart', [CartController::class, 'cart'])->name('home.sales-proccess.cart');
-Route::post('/cart', [CartController::class, 'updateCart'])->name('home.sales-proccess.update-cart');
-Route::post('/add-to-cart/{product:slug}', [CartController::class, 'addToCart'])->name('home.sales-proccess.add-to-cart');
-Route::get('/remove-from-cart/{cartItem}', [CartController::class, 'removeFromCart'])->name('home.sales-proccess.remove-from-cart');
+    //cart
+    Route::get('/cart', [CartController::class, 'cart'])->name('home.sales-proccess.cart');
+    Route::post('/cart', [CartController::class, 'updateCart'])->name('home.sales-proccess.update-cart');
+    Route::post('/add-to-cart/{product:slug}', [CartController::class, 'addToCart'])->name('home.sales-proccess.add-to-cart');
+    Route::get('/remove-from-cart/{cartItem}', [CartController::class, 'removeFromCart'])->name('home.sales-proccess.remove-from-cart');
 
-    //address
-    Route::get('/address-and-delivery', [AddressController::class, 'addressAndDelivery'])->name('home.sales-proccess.address-and-delivery');
-    Route::post('/add-address', [AddressController::class, 'addAddress'])->name('home.sales-proccess.add-address');
+    Route::middleware('profile.completion')->group(function () {
+        //address
+        Route::get('/address-and-delivery', [AddressController::class, 'addressAndDelivery'])->name('home.sales-proccess.address-and-delivery');
+        Route::post('/add-address', [AddressController::class, 'addAddress'])->name('home.sales-proccess.add-address');
+        Route::post('/update-address/{address}', [AddressController::class, 'updateAddress'])->name('home.sales-proccess.update-address');
+        Route::get('/get-cities/{province}', [AddressController::class, 'getCities'])->name('home.sales-proccess.get-cities');
+        Route::post('/choose-address-delivery', [AddressController::class, 'chooseAddressDelivery'])->name('home.sales-proccess.choose-address-delivery');
 
+        //payment
+        Route::get('/payment', [CustomerPaymentController::class, 'payment'])->name('home.sales-proccess.payment');
+    });
+
+    //profile completion
+    Route::post('/profile-completion', [ProfileCompletionController::class, 'update'])->name('home.sales-proccess.profile-update');
+    Route::get('/profile-completion', [ProfileCompletionController::class, 'profileCompletion'])->name('home.sales-proccess.profile-completion');
 });
 
 Route::middleware(['auth:sanctum', 'verified'])->get('/dashboard', function () {
     return view('dashboard');
 })->name('dashboard');
+
+Route::get('login', function(){
+    Auth::loginUsingId(6);
+    return back();
+});

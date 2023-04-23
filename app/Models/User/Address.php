@@ -10,6 +10,8 @@ class Address extends Model
 {
     use HasFactory, SoftDeletes;
 
+    protected $guarded = ['id'];
+
     public function city()
     {
 
