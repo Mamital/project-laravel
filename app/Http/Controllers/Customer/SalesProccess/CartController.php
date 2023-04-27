@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Customer\SalesProccess;
 
 use App\Http\Controllers\Controller;
 use App\Models\Market\CartItem;
+use App\Models\Market\CommonDiscount;
 use App\Models\Market\Product;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -13,7 +14,11 @@ class CartController extends Controller
     public function cart()
     {
         $cartItems = CartItem::where('user_id', Auth::user()->id)->get();
-        $reletedProducts = Product::all();
+        $reletedProducts = Product::all();        
+        if(empty($cartItems->first()))
+        {
+            return redirect()->route('home')->with('alert-info' , 'سبد خرید شما خالی میباشد');
+        }
         return view('customer.sales-proccess.cart', compact(['cartItems', 'reletedProducts']));
     }
     public function updateCart(Request $request)
@@ -48,7 +53,8 @@ class CartController extends Controller
             }
             if (empty($request->guarantee)) {
                 $request->guarantee = null;
-            }
+            }            
+
             foreach ($cartItems as $cartItem) {
                 if ($cartItem->color_id == $request->color && $cartItem->guarantee_id == $request->guarantee) {
                     if ($cartItem->number != $request->number) {
@@ -64,9 +70,10 @@ class CartController extends Controller
             $inputs['color_id'] = $request->color;
             $inputs['guarantee_id'] = $request->guarantee;
             $inputs['product_id'] = $product->id;
+            $inputs['number'] = $request->number;
             $inputs['user_id'] = Auth::user()->id;
             CartItem::create($inputs);
-            return back()->with('alert-section-success', 'محصول مورد نظر با موفقیت به سبد خرید اضافه شد');
+            return back()->with('alert-success', 'محصول مورد نظر با موفقیت به سبد خرید اضافه شد');
         } else {
             return redirect()->route('auth.customer.login-register-form');
         }

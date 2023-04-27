@@ -31,7 +31,7 @@ class AdminUserRequest extends FormRequest
             'last_name' => 'required|max:120|min:1|regex:/^[ا-یa-zA-Zء-ي ]+$/u',
             'mobile' => ['required','digits:11', 'unique:users'],
             'email' => ['required','string','email','unique:users'],
-            'password' => ['required','unique:users', Password::min(8)->letters()->mixedCase()->numbers()->symbols()->uncompromised(), 'confirmed'],
+            'password' => ['required','unique:users', Password::min(8)->letters()->mixedCase()->numbers(), 'confirmed'],
             'image' => 'nullable|image|mimes:png,jpg,jpeg,gif',
             'activation' => 'required|numeric|in:0,1',
         ];

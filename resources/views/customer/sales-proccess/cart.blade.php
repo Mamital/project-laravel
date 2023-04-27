@@ -87,11 +87,16 @@
                                     </p>
                                 </section>
 
+                                @if ($totalProductDiscount > 0)
+                                    
                                 <section class="d-flex justify-content-between align-items-center">
                                     <p class="text-muted">تخفیف کالاها</p>
                                     <p class="text-danger fw-bolder" id="total-product-discount">
                                         {{ priceFormat($totalProductDiscount) }}</p>
                                 </section>
+
+                                @endif
+
                                 <section class="border-bottom mb-3"></section>
                                 <section class="d-flex justify-content-between align-items-center">
                                     <p class="text-muted">جمع سبد خرید</p>

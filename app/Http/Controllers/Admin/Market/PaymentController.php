@@ -11,7 +11,6 @@ class PaymentController extends Controller
     public function index()
     {
         $payments = Payment::all();
-        // dd(Payment::find(1)->paymentable);
         return view('admin.market.payment.index', compact('payments'));
     }
     public function offline()
@@ -40,13 +39,13 @@ class PaymentController extends Controller
     }
     public function cancel(Payment $payment)
     {
-        $payment->status = 2;
+        $payment->payment_status = 2;
         $result = $payment->save();
         return redirect()->back()->with('swal-success', 'تغییر شما با موفقیت انجام شد');
     }
     public function return(Payment $payment)
     {
-        $payment->status = 3;
+        $payment->payment_status = 3;
         $result = $payment->save();
         return redirect()->back()->with('swal-success', 'تغییر شما با موفقیت انجام شد');
     }

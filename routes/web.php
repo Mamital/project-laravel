@@ -494,6 +494,9 @@ Route::namespace('SalesProccess')->group(function () {
 
         //payment
         Route::get('/payment', [CustomerPaymentController::class, 'payment'])->name('home.sales-proccess.payment');
+        Route::post('/copan-discount', [CustomerPaymentController::class, 'copanDiscount'])->name('home.sales-proccess.copan-discount');
+        Route::post('/payment-submit', [CustomerPaymentController::class, 'paymentSubmit'])->name('home.sales-proccess.payment-submit');
+        Route::any('/payment-callback/{order}/{onlinePayment}', [CustomerPaymentController::class, 'paymentCallback'])->name('home.sales-proccess.payment-callback');
     });
 
     //profile completion

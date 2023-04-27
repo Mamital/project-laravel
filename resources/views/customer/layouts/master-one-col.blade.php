@@ -8,8 +8,6 @@
 
 <body dir="rtl">
 
-    @include('admin.alerts.alert-section.success')
-
     <!-- start header -->
     @include('customer.layouts.header')
     <!-- end header -->

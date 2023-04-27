@@ -86,7 +86,7 @@ class OrderController extends Controller
                 $order->order_status = 5;
                 break;
             case 5:
-                $order->order_status = 6;
+                $order->order_status = 1;
                 break;
 
             default:

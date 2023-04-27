@@ -51,7 +51,7 @@
                             <td>{{$payment->paymentable->transaction_id ?? '-'}}</td>
                             <td>{{$payment->paymentable->gateway  ?? '-'}}</td>
                             <td>{{$payment->user->full_name}}</td>
-                            <td>@if ($payment->status == 0) پرداخت نشده @elseif ($payment->status == 1) پرداخت شده @elseif ($payment->status == 2) باطل شده @elseif ($payment->status == 3) برگشت داده شده @endif </td>
+                            <td>@if ($payment->payment_status == 0) پرداخت نشده @elseif ($payment->payment_status == 1) پرداخت شده @elseif ($payment->payment_status == 2) باطل شده @elseif ($payment->payment_status == 3) برگشت داده شده @endif </td>
                             <td>@if ($payment->type == 0) آنلاین @elseif ($payment->type == 1) آفلاین @else در محل @endif</td>
                             <td class="width-22-rem text-left">
                                 <a href="{{route('admin.market.payment.show', $payment->id)}}" class="btn btn-info btn-sm"><i class="fa fa-edit"></i> مشاهده</a>

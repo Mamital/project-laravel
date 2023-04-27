@@ -400,22 +400,26 @@
                                     <p class="text-muted">{{ priceFormat($totalProductPrice) }} تومان</p>
                                 </section>
 
+                                @if ($totalDiscount > 0)
+
                                 <section class="d-flex justify-content-between align-items-center">
                                     <p class="text-muted">تخفیف کالاها</p>
                                     <p class="text-danger fw-bolder">{{ priceFormat($totalDiscount) }} تومان</p>
                                 </section>
 
+                                @endif
+
                                 <section class="border-bottom mb-3"></section>
 
                                 <section class="d-flex justify-content-between align-items-center">
                                     <p class="text-muted">جمع سبد خرید</p>
-                                    <p class="fw-bolder">{{ priceFormat($totalProductPrice - $totalDiscount) }} تومان</p>
+                                    <p class="fw-bolder">{{ priceFormat($totalProductPrice) }} تومان</p>
                                 </section>
 
-                                <section class="d-flex justify-content-between align-items-center">
+                                {{-- <section class="d-flex justify-content-between align-items-center">
                                     <p class="text-muted">هزینه ارسال</p>
                                     <p class="text-warning">54,000 تومان</p>
-                                </section>
+                                </section> --}}
 
                                 <p class="my-3">
                                     <i class="fa fa-info-circle me-1"></i> کاربر گرامی کالاها بر اساس نوع ارسالی که انتخاب
@@ -426,7 +430,7 @@
 
                                 <section class="d-flex justify-content-between align-items-center">
                                     <p class="text-muted">مبلغ قابل پرداخت</p>
-                                    <p class="fw-bold">374,000 تومان</p>
+                                    <p class="fw-bold">{{priceFormat($totalProductPrice - $totalDiscount)}}</p>
                                 </section>
 
                                     <form action="{{route('home.sales-proccess.choose-address-delivery')}}" id="send" method="post">

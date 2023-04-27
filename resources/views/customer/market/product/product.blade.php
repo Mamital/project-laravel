@@ -5,6 +5,15 @@
     <section class="mb-4">
         <section class="container-xxl">
             <section class="row">
+                @if (session('alert-success'))
+                    <div class="alert-success m-2 p-3">
+                        {{session('alert-success')}}
+                    </div>
+                    @elseif (session('alert-error'))
+                    <div class="alert alert-danger">
+                        {{session('alert-error')}}
+                    </div>
+                @endif
                 <section class="col">
                     <!-- start vontent header -->
                     <section class="content-header">
@@ -74,14 +83,14 @@
                                     @endempty
                                     <p>
                                         @foreach ($product->colors as $key => $color)
-                                            <label for="'color_ {{ $color->id }}"
+                                            <label for="color-{{$color->id}}"
                                                 style="background-color: {{ $color->color }};"
                                                 class="product-info-colors me-1" data-bs-toggle="tooltip"
                                                 data-bs-placement="bottom" title="{{ $color->color_name }}"></label>
 
                                             <input class="d-none" type="radio" name="color"
                                                 data-color-name="{{ $color->color_name }}"
-                                                id="color_ {{ $color->id }}" value='{{$color->id}}'
+                                                id="color-{{$color->id}}" value='{{$color->id}}'
                                                 data-color-price={{ $color->price_increase }}
                                                 @if ($loop->iteration == 1) checked @endif >
                                         @endforeach

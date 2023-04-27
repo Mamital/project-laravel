@@ -108,8 +108,9 @@ class AddressController extends Controller
                 if($totalFinalprice >= $commonDiscount->minimal_order_amount)
                 {
                     $totalFinalprice = $totalFinalprice - $commonPercentageDiscountAmount;
+                $inputs['common_discount_id'] = $commonDiscount->id;
                 }else{
-                $commonPercentageDiscountAmount = 0 ;
+                $commonPercentageDiscountAmount = null ;
                 }
             }else{
             $commonPercentageDiscountAmount = null ;
@@ -118,13 +119,14 @@ class AddressController extends Controller
             
         $inputs['user_id'] = $user->id;
         $inputs['order_final_amount'] = $totalFinalprice;
+        $inputs['copan_id'] = null;
+        $inputs['order_copan_discount_amount'] = null;
         $inputs['order_discount_amount'] = $totalFinalDiscountPrice;
         $inputs['order_common_discount_amount'] = $commonPercentageDiscountAmount;
         $inputs['order_total_products_discount_amount'] = $inputs['order_common_discount_amount'] + $inputs['order_discount_amount'];
-        dd($inputs);
         $order = Order::updateOrCreate([
             'user_id' => $user->id,
-            'payment_status' => 0
+            'order_status' => 0
         ], $inputs);
         return redirect()->route('home.sales-proccess.payment');
     }
