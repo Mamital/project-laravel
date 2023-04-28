@@ -11,6 +11,7 @@ use App\Http\Services\Payment\PaymentService;
 use App\Models\Market\CashPayment;
 use App\Models\Market\OfflinePayment;
 use App\Models\Market\OnlinePayment;
+use App\Models\Market\OrderItem;
 use App\Models\Market\Payment;
 use Illuminate\Support\Facades\Auth;
 
@@ -147,19 +148,34 @@ class PaymentController extends Controller
             'paymentable_type' => $targetModel
         ]);
 
-        
+
         if ($type == 0) { //online
             if ($result['status']) {
+                
                 return redirect()->away('https://sandbox.zarinpal.com/pg/StartPay/' . $result['authority']);
             } else {
                 return redirect()->route('home')->with('alert-error', $result['message']);
             }
         } else { //offline and cash
             foreach ($cartItems as $cartItem) {
+                OrderItem::create([
+                    'order_id' => $order->id,
+                    'product_id' => $cartItem->product_id,
+                    'product' => $cartItem->product,
+                    'amazing_sale_id' => $cartItem->product->activeAmazingSales()->id ?? 0,
+                    'amazing_sale_object' => $cartItem->product->activeAmazingSales() ?? null,
+                    'amazing_sale_discount_amount' => $cartItem->cartItemProductDiscount(),
+                    'number' => $cartItem->number,
+                    'final_product_price' => $cartItem->cartItemProductDiscount(),
+                    'final_total_price' => $cartItem->cartItemFinalPrice(),
+                    'color_id' => $cartItem->color_id,
+                    'guarantee_id' => $cartItem->guarantee_id
+
+                ]);
                 $cartItem->delete();
             }
         }
-
+        $order->update(['order_status' => 1]);
         return redirect()->route('home')->with(['alert-success' => 'سفارش شما با موفقیت ثبت گردید']);
     }
 
@@ -168,19 +184,34 @@ class PaymentController extends Controller
         $cartItems = CartItem::where('user_id', Auth::user()->id)->get();
         $amount = $order->order_final_amount;
         $result = $paymentService->zarinpalVerify($amount, $onlinePayment);
-        $refID = $result['ref_id'] != 0 ? $result['ref_id'] : '-' ;
-        
+        $refID = $result['ref_id'] != 0 ? $result['ref_id'] : '-';
+
         if ($result['success']) {
 
             $payment = Payment::where('paymentable_id', $onlinePayment->id)->update(['payment_status' => 1]);
+            $order->update(['order_status' => 1, 'payment_status' => 1]);
 
             foreach ($cartItems as $cartItem) {
+                OrderItem::create([
+                    'order_id' => $order->id,
+                    'product_id' => $cartItem->product_id,
+                    'product' => $cartItem->product,
+                    'amazing_sale_id' => $cartItem->product->activeAmazingSales()->id ?? 0,
+                    'amazing_sale_object' => $cartItem->product->activeAmazingSales() ?? null,
+                    'amazing_sale_discount_amount' => $cartItem->cartItemProductDiscount(),
+                    'number' => $cartItem->number,
+                    'final_product_price' => $cartItem->cartItemProductDiscount(),
+                    'final_total_price' => $cartItem->cartItemFinalPrice(),
+                    'color_id' => $cartItem->color_id,
+                    'guarantee_id' => $cartItem->guarantee_id
+
+                ]);
                 $cartItem->delete();
             }
 
-            return redirect()->route('home')->with('alert-success', $result['message'] . ' - '. 'شناسه تراکنش : ' . $refID);
+            return redirect()->route('home')->with('alert-success', $result['message'] . ' - ' . 'شناسه تراکنش : ' . $refID);
         } else {
-            return redirect()->route('home')->with('alert-error',$result['message'] . ' - ' . 'شناسه تراکنش : '. $refID);
+            return redirect()->route('home')->with('alert-error', $result['message'] . ' - ' . 'شناسه تراکنش : ' . $refID);
         }
     }
 }

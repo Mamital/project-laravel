@@ -12,18 +12,27 @@
     <!-- start header -->
     @include('customer.layouts.header')
     <!-- end header -->
+    <!-- start body -->
+    <section class="">
+        <section id="main-body-two-col" class="container-xxl body-container">
+            <section class="row">
+                 @if (session('alert-success'))
+                        <div class="alert alert-success">
+                            {{session('alert-success')}}
+                        </div>
+                    @elseif (session('alert-error'))
+                        <div class="alert alert-danger">
+                            {{session('alert-error')}}
+                        </div>
+                    @endif
+                @yield('customer.layouts.sidebar')
 
-    <section class="container-xxl body-container">
-        @yield('customer.layouts.sidebar')
+                @yield('content')
+
+            </section>
+        </section>
     </section>
-
-    <!-- start main one col -->
-    <main id="main-body-one-col" class="main-body">
-
-        @yield('content')
-
-    </main>
-    <!-- end main one col -->
+    <!-- end body -->
 
 
     <!-- start footer -->

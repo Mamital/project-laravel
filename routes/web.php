@@ -33,7 +33,9 @@ use App\Http\Controllers\admin\user\PermissionController;
 use App\Http\Controllers\Admin\Market\GuaranteeController;
 use App\Http\Controllers\Admin\Notify\EmailFileController;
 use App\Http\Controllers\Admin\Ticket\TicketAdminController;
+use App\Http\Controllers\Customer\Profile\ProfileController;
 use App\Http\Controllers\Admin\Market\ProductColorController;
+use App\Http\Controllers\Customer\Profile\FavoriteController;
 use App\Http\Controllers\Admin\Market\CategoryValueController;
 use App\Http\Controllers\Admin\Ticket\TicketCategoryController;
 use App\Http\Controllers\Admin\Ticket\TicketPriorityController;
@@ -42,8 +44,10 @@ use App\Http\Controllers\Customer\SalesProccess\AddressController;
 use App\Http\Controllers\Customer\SalesProccess\ProfileCompletionController;
 use App\Http\Controllers\Admin\Market\CommentController as MarketCommentController;
 use App\Http\Controllers\Admin\Content\CommentController as ContentCommentController;
+use App\Http\Controllers\Customer\Profile\OrderController as CustomerOrderController;
 use App\Http\Controllers\Admin\Content\CategoryController as ContentCategoryController;
 use App\Http\Controllers\Customer\Market\ProductController as CustomerProductController;
+use App\Http\Controllers\Customer\Profile\AddressController as CustomerAddressController;
 use App\Http\Controllers\Customer\SalesProccess\PaymentController as CustomerPaymentController;
 
 /*
@@ -503,6 +507,17 @@ Route::namespace('SalesProccess')->group(function () {
     Route::post('/profile-completion', [ProfileCompletionController::class, 'update'])->name('home.sales-proccess.profile-update');
     Route::get('/profile-completion', [ProfileCompletionController::class, 'profileCompletion'])->name('home.sales-proccess.profile-completion');
 });
+
+Route::prefix('profile')->group(
+    function () {
+        Route::get('/my-order', [CustomerOrderController::class, 'orders'])->name('home.profile.my-order');
+        Route::get('/my-favorite', [FavoriteController::class, 'favorites'])->name('home.profile.my-favorite');
+        Route::get('/my-favorite/delete/{product}', [FavoriteController::class, 'deleteFavorite'])->name('home.profile.my-favorite.delete');
+        Route::get('/my-profile', [ProfileController::class, 'profile'])->name('home.profile.my-profile');
+        Route::put('/my-profile', [ProfileController::class, 'update'])->name('home.profile.my-profile.update');
+        Route::put('/my-profile', [ProfileController::class, 'update'])->name('home.profile.my-profile.update');
+        Route::get('/my-addresses', [CustomerAddressController::class, 'index'])->name('home.profile.my-address');
+    });
 
 Route::middleware(['auth:sanctum', 'verified'])->get('/dashboard', function () {
     return view('dashboard');

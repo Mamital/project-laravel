@@ -21,7 +21,7 @@ class CreateOrdersTable extends Migration
             $table->foreignId('payment_id')->nullable()->constrained('payments')->onUpdate('cascade')->onDelete('cascade');
             $table->longText('payment_object')->nullable();
             $table->tinyInteger('payment_type')->default(0);
-            $table->tinyInteger('payment_status')->default(0);
+            $table->tinyInteger('payment_status')->default(0)->comment('0 => not paid | 1 => paid | 2 => cancelled | 3 => returned');
             $table->foreignId('delivery_id')->nullable()->constrained('delivery')->onUpdate('cascade')->onDelete('cascade');
             $table->longText('delivery_object')->nullable();
             $table->decimal('delivery_amount',20, 3)->nullable();
