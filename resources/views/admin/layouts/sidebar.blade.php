@@ -113,10 +113,19 @@
                 <i class="fas fa-bars"></i>
                 <span>مشتریان</span>
             </a>
-            <a href="{{ route('admin.user.role.index') }}" class="sidebar-link">
-                <i class="fas fa-bars"></i>
-                <span>سطوح دسترسی</span>
-            </a>
+
+             <section class="sidebar-group-link">
+                <section class="sidebar-dropdown-toggle">
+                    <i class="fas fa-chart-bar icon"></i>
+                    <span>تخفیف ها</span>
+                    <i class="fas fa-angle-left angle"></i>
+                </section>
+                <section class="sidebar-dropdown">
+                    <a href="{{ route('admin.user.role.index') }}">سطوح دسترسی</a>
+                    <a href="{{ route('admin.user.permission.index') }}">مدیریت دسترسی ها</a>
+                    <a href="{{ route('admin.market.discount.amazingSale') }}">فروش شگفت انگیز</a>
+                </section>
+            </section>
 
 
 
