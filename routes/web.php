@@ -335,6 +335,10 @@ Route::prefix('admin')->namespace('Admin')->group(function () {
             Route::delete('/destroy/{admin}', [AdminUserController::class, 'destroy'])->name('admin.user.admin-user.destroy');
             Route::get('/status/{user}', [AdminUserController::class, 'status'])->name('admin.user.admin-user.status');
             Route::get('/activation/{user}', [AdminUserController::class, 'activation'])->name('admin.user.admin-user.activation');
+            Route::get('/role/{user}', [AdminUserController::class, 'showRole'])->name('admin.user.admin-user.role');
+            Route::post('/role/{user}', [AdminUserController::class, 'storeRole'])->name('admin.user.admin-user.role.store');
+            Route::get('/permission/{user}', [AdminUserController::class, 'showPermission'])->name('admin.user.admin-user.permission');
+            Route::post('/permission/{user}', [AdminUserController::class, 'storePermission'])->name('admin.user.admin-user.permission.store');
         });
 
         //customer

@@ -12,6 +12,7 @@ use App\Http\Services\Image\ImageCacheService;
 
 class CategoryController extends Controller
 {
+
     /**
      * Display a listing of the resource.
      *

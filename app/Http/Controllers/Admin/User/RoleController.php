@@ -90,9 +90,10 @@ class RoleController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function destroy(Role $role)
     {
-        //
+        $role->delete();
+        return redirect()->route('admin.user.role.index')->with('swal-success', 'نقش با موفقیت حذف  شد');
     }
 
     public function permissionForm(Role $role)

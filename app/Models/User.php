@@ -5,6 +5,7 @@ namespace App\Models;
 use App\Models\Market\Payment;
 use App\Models\Market\Product;
 use App\Models\Ticket\Ticket;
+use App\Traits\Permission\HasPermissionTrait;
 use Laravel\Sanctum\HasApiTokens;
 use App\Models\Ticket\TicketAdmin;
 use App\Models\User\Address;
@@ -24,6 +25,7 @@ class User extends Authenticatable
     use HasProfilePhoto;
     use Notifiable;
     use TwoFactorAuthenticatable;
+    use HasPermissionTrait;
 
     /**
      * The attributes that are mass assignable.

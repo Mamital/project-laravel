@@ -24,8 +24,8 @@ class PermissionRequest extends FormRequest
     public function rules()
     {
         return [
-            'name' => 'required|max:120|min:1|regex:/^[ا-یa-zA-Zء-ي ]+$/u',
-            'description' => 'required|max:120|min:1|regex:/^[ا-یa-zA-Zء-ي ]+$/u',
+            'name' => 'required|max:120|min:1|regex:/^[ا-یa-zA-Zء-ي -]+$/u',
+            'description' => 'required|max:120|min:1|regex:/^[ا-یa-zA-Zء-ي -]+$/u',
         ];
     }
 }

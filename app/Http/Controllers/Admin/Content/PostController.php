@@ -11,6 +11,12 @@ use App\Http\Requests\Admin\Content\PostRequest;
 
 class PostController extends Controller
 {
+
+    function __construct()
+    {
+        $this->middleware('can:delete-post')->only('destroye');
+    }
+
     /**
      * Display a listing of the resource.
      *

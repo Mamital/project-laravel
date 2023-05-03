@@ -7,6 +7,8 @@ use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Http\Services\Image\ImageService;
 use App\Http\Requests\Admin\User\AdminUserRequest;
+use App\Models\User\Permission;
+use App\Models\User\Role;
 use Illuminate\Support\Facades\Hash;
 
 class AdminUserController extends Controller
@@ -158,5 +160,32 @@ class AdminUserController extends Controller
             return response()->json(['status' => false]);
         }
 
+    }
+
+    public function showRole(User $user)
+    {
+        $roles = Role::all();
+        return view('admin.user.admin-user.role', compact('roles', 'user'));
+    }
+    public function storeRole(Request $request,User $user)
+    {
+        $request->validate([
+            'roles' => 'exists:roles,id|array'
+        ]);
+        $user->roles()->sync($request->roles);
+        return redirect()->route('admin.user.admin-user.index')->with('swal-success', 'نقش های کاربر با موفقیت ویرایش شد');
+    }
+    public function showPermission(User $user)
+    {
+        $permissions = Permission::all();
+        return view('admin.user.admin-user.permission', compact('permissions', 'user'));
+    }
+    public function storePermission(Request $request,User $user)
+    {
+        $request->validate([
+            'permissions' => 'exists:permissions,id|array'
+        ]);
+        $user->permissions()->sync($request->permissions);
+        return redirect()->route('admin.user.admin-user.index')->with('swal-success', 'دسترسی های کاربر با موفقیت ویرایش شد');
     }
 }
