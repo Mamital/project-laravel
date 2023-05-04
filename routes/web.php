@@ -46,6 +46,7 @@ use App\Http\Controllers\Admin\Market\CommentController as MarketCommentControll
 use App\Http\Controllers\Admin\Content\CommentController as ContentCommentController;
 use App\Http\Controllers\Customer\Profile\OrderController as CustomerOrderController;
 use App\Http\Controllers\Admin\Content\CategoryController as ContentCategoryController;
+use App\Http\Controllers\Customer\Profile\TicketController as CustomerTicketController;
 use App\Http\Controllers\Customer\Market\ProductController as CustomerProductController;
 use App\Http\Controllers\Customer\Profile\AddressController as CustomerAddressController;
 use App\Http\Controllers\Customer\SalesProccess\PaymentController as CustomerPaymentController;
@@ -520,6 +521,14 @@ Route::prefix('profile')->group(
         Route::put('/my-profile', [ProfileController::class, 'update'])->name('home.profile.my-profile.update');
         Route::put('/my-profile', [ProfileController::class, 'update'])->name('home.profile.my-profile.update');
         Route::get('/my-addresses', [CustomerAddressController::class, 'index'])->name('home.profile.my-address');
+        Route::get('/my-ticket', [CustomerTicketController::class, 'index'])->name('home.profile.my-ticket');
+        Route::get('my-ticket/show/{ticket}', [CustomerTicketController::class, 'show'])->name('home.profile.my-ticket.show');
+        Route::post('my-ticket/answer/{ticket}', [CustomerTicketController::class, 'answer'])->name('home.profile.my-ticket.answer');
+        Route::get('my-ticket/change/{ticket}', [CustomerTicketController::class, 'change'])->name('home.profile.my-ticket.change');
+        Route::get('my-ticket/create', [CustomerTicketController::class, 'create'])->name('home.profile.my-ticket.create');
+        Route::post('my-ticket/store', [CustomerTicketController::class, 'store'])->name('home.profile.my-ticket.store');
+        Route::get('my-ticket/download/{ticket}', [CustomerTicketController::class, 'download'])->name('home.profile.my-ticket.download');
+        
     });
 
 Route::middleware(['auth:sanctum', 'verified'])->get('/dashboard', function () {
@@ -527,6 +536,6 @@ Route::middleware(['auth:sanctum', 'verified'])->get('/dashboard', function () {
 })->name('dashboard');
 
 Route::get('login', function(){
-    Auth::loginUsingId(6);
+    Auth::loginUsingId(1);
     return back();
 });

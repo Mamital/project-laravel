@@ -41,7 +41,7 @@
                             <th>دسته تیکت</th>
                             <th>اولویت تیکت</th>
                             <th>ارجاع شده از</th>
-                            <th>تیکت مرجع</th>
+                            <th>وضعیت</th>
                             <th class="max-width-16-rem text-center"><i class="fa fa-cogs"></i> تنظیمات</th>
                         </tr>
                     </thead>
@@ -56,10 +56,10 @@
                             <td>{{ $ticket->category->name }}</td>
                             <td>{{ $ticket->priority->name }}</td>
                             <td>{{ $ticket->admin->user->first_name . ' ' . $ticket->admin->user->last_name }}</td>
-                            <td>{{ $ticket->parent->subject ?? '-' }}</td>
+                            <td>{{ $ticket->status == 0 ? 'بسته شده' : 'باز' }}</td>
                             <td class="width-16-rem text-left">
                                 <a href="{{ route('admin.ticket.show', $ticket->id) }}" class="btn btn-info btn-sm"><i class="fa fa-eye"></i> مشاهده</a>
-                                <a href="{{ route('admin.ticket.change', $ticket->id) }}" class="btn btn-warning btn-sm"><i class="fa fa-check"></i> {{ $ticket->status == 1 ? 'باز کردن' : 'بستن' }}</a>
+                                <a href="{{ route('admin.ticket.change', $ticket->id) }}" class="btn btn-warning btn-sm"><i class="fa fa-check"></i> {{ $ticket->status == 1 ? 'بستن' : 'باز کردن' }}</a>
                             </td>
                         </tr>
 

@@ -5,6 +5,7 @@ namespace App\Http\Controllers\admin\ticket;
 use Illuminate\Http\Request;
 use App\Models\Ticket\Ticket;
 use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\Auth;
 use App\Http\Requests\Admin\Ticket\TicketRequest;
 
 class TicketController extends Controller
@@ -12,7 +13,7 @@ class TicketController extends Controller
 
     public function newTickets()
     {
-        $tickets = Ticket::where('seen', 0)->get();
+        $tickets = Ticket::where('seen', 0)->where('ticket_id', null)->get();
         foreach($tickets as $newTicket){
             $newTicket->seen = 1;
             $result = $newTicket->save();
@@ -22,13 +23,13 @@ class TicketController extends Controller
 
     public function openTickets()
     {
-        $tickets = Ticket::where('status', 0)->get();
+        $tickets = Ticket::where('status', 0)->where('ticket_id', null)->get();
         return view('admin.ticket.index', compact('tickets'));
     }
 
     public function closeTickets()
     {
-        $tickets = Ticket::where('status', 1)->get();
+        $tickets = Ticket::where('status', 1)->where('ticket_id', null)->get();
         return view('admin.ticket.index', compact('tickets'));
     }
     /**
@@ -38,7 +39,7 @@ class TicketController extends Controller
      */
     public function index()
     {
-        $tickets = Ticket::all();
+        $tickets = Ticket::where('ticket_id', null)->get();
         return view('admin.ticket.index', compact('tickets'));
     }
 
@@ -117,12 +118,12 @@ class TicketController extends Controller
         $inputs['description'] = $request->description;
         $inputs['seen'] = 1;
         $inputs['reference_id'] = $ticket->reference_id;
-        $inputs['user_id'] = 1;
+        $inputs['user_id'] = Auth::user()->id;
         $inputs['category_id'] = $ticket->category_id;
         $inputs['priority_id'] = $ticket->priority_id;
         $inputs['ticket_id'] = $ticket->id;
         $ticket = Ticket::create($inputs);
-        return redirect()->route('admin.ticket.index')->with('swal-success', '  پاسخ شما با موفقیت ثبت شد');
+        return redirect()->back()->with('swal-success', '  پاسخ شما با موفقیت ثبت شد');
     }
 
 

@@ -191,5 +191,6 @@ return [
         'no' => 'پلاک',
         'recipient_first_name' => 'نام گیرنده',
         'recipient_last_name' => 'نام خانوادگی گیرنده',
+        'subject' => 'موضوع',
     ],
 ];

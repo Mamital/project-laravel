@@ -35,6 +35,10 @@ class Ticket extends Model
     {
         return $this->belongsTo(TicketCategory::class);
     }
+    public function file()
+    {
+        return $this->hasOne(TicketFile::class);
+    }
 
 
     public function parent()
