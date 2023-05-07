@@ -477,6 +477,7 @@ Route::namespace('Auth')->group(function () {
 });
 
 Route::get('/', [HomeController::class, 'home'])->name('home');
+Route::get('/products/{productCategory?}', [HomeController::class, 'products'])->name('home.products');
 
 Route::namespace('Market')->group(function () {
 
@@ -535,7 +536,7 @@ Route::middleware(['auth:sanctum', 'verified'])->get('/dashboard', function () {
     return view('dashboard');
 })->name('dashboard');
 
-Route::get('login', function(){
-    Auth::loginUsingId(1);
-    return back();
-});
+// Route::get('login', function(){
+//     Auth::loginUsingId(1);
+//     return back();
+// });

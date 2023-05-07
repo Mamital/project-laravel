@@ -19,10 +19,10 @@ class CreateProductsTable extends Migration
             $table->text('introduction');
             $table->string('slug')->unique()->nullable();
             $table->text('image');
-            $table->decimal('weight', 10, 2);
-            $table->decimal('length', 10, 1)->comment('cm unit');
-            $table->decimal('width', 10, 1)->comment('cm unit');
-            $table->decimal('height', 10, 1)->comment('cm unit');
+            $table->decimal('weight', 10, 2)->nullable();
+            $table->decimal('length', 10, 1)->comment('cm unit')->nullable();
+            $table->decimal('width', 10, 1)->comment('cm unit')->nullable();
+            $table->decimal('height', 10, 1)->comment('cm unit')->nullable();
             $table->decimal('price', 20, 3);
             $table->tinyInteger('status')->default(0);
             $table->tinyInteger('marketable')->default(1)->comment('1 => marketable, 0 => is not marketable');

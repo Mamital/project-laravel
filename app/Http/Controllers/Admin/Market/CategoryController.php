@@ -28,7 +28,7 @@ class CategoryController extends Controller
      */
     public function create()
     {
-        $parentCategories = ProductCategory::where('parent_id', null)->get();
+        $parentCategories = ProductCategory::all();
         return view('admin.market.category.create', compact('parentCategories'));
     }
 

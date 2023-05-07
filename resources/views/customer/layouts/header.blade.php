@@ -20,10 +20,11 @@
                         <section class="search-box">
                             <section class="search-textbox">
                                 <span><i class="fa fa-search"></i></span>
-                                <input id="search" type="text" class="" placeholder="جستجو ..."
-                                    autocomplete="off">
+                                <form action="{{ route('home.products') }}" method="get">
+                                    <input id="search" type="text" name="search" value="{{request()->search}}" class="" placeholder="جستجو ..." autocomplete="off">
+                                </form>
                             </section>
-                            <section class="search-result visually-hidden">
+                            {{-- <section class="search-result visually-hidden">
                                 <section class="search-result-title">نتایج جستجو برای <span class="search-words">"موبایل
                                         شیا"</span><span class="search-result-type">در دسته بندی ها</span></section>
                                 <section class="search-result-item"><a class="text-decoration-none" href="#"><i
@@ -42,7 +43,7 @@
                                         شیا"</span><span class="search-result-type">در کالاها</span></section>
                                 <section class="search-result-item"><span class="search-no-result">موردی یافت نشد</span>
                                 </section>
-                            </section>
+                            </section> --}}
                         </section>
                     </section>
 
@@ -55,11 +56,11 @@
                                 </button>
                                 <section class="dropdown-menu dropdown-menu-end custom-drop-down"
                                     aria-labelledby="dropdownMenuButton1">
-                                    <section><a class="dropdown-item" href="{{route('home.profile.my-profile')}}"><i
+                                    <section><a class="dropdown-item" href="{{ route('home.profile.my-profile') }}"><i
                                                 class="fa fa-user-circle"></i>پروفایل کاربری</a></section>
-                                    <section><a class="dropdown-item" href="{{route('home.profile.my-order')}}"><i
+                                    <section><a class="dropdown-item" href="{{ route('home.profile.my-order') }}"><i
                                                 class="fa fa-newspaper"></i>سفارشات</a></section>
-                                    <section><a class="dropdown-item" href="{{route('home.profile.my-favorite')}}"><i
+                                    <section><a class="dropdown-item" href="{{ route('home.profile.my-favorite') }}"><i
                                                 class="fa fa-heart"></i>لیست علاقه مندی</a></section>
                                     <section>
                                         <hr class="dropdown-divider">
@@ -80,19 +81,19 @@
 
                         @if (auth()->check())
 
-                        <section class="header-cart d-inline ps-3 border-start position-relative">
-                            <a class="btn btn-link position-relative text-dark header-cart-link"
-                                href="javascript:void(0)">
-                                <i class="fa fa-shopping-cart"></i> <span style="top: 80%;"
-                                    class="position-absolute start-0 translate-middle badge rounded-pill bg-danger">{{($cartItems->count())}}</span>
-                            </a>
-                            <section class="header-cart-dropdown">
-                                <section class="border-bottom d-flex justify-content-between p-2">
-                                    <span class="text-muted">{{ persian($cartItems->count()) }} کالا</span>
-                                    <a class="text-decoration-none text-info"
-                                        href="{{ route('home.sales-proccess.cart') }}">مشاهده سبد خرید </a>
-                                </section>
-                                
+                            <section class="header-cart d-inline ps-3 border-start position-relative">
+                                <a class="btn btn-link position-relative text-dark header-cart-link"
+                                    href="javascript:void(0)">
+                                    <i class="fa fa-shopping-cart"></i> <span style="top: 80%;"
+                                        class="position-absolute start-0 translate-middle badge rounded-pill bg-danger">{{ $cartItems->count() }}</span>
+                                </a>
+                                <section class="header-cart-dropdown">
+                                    <section class="border-bottom d-flex justify-content-between p-2">
+                                        <span class="text-muted">{{ persian($cartItems->count()) }} کالا</span>
+                                        <a class="text-decoration-none text-info"
+                                            href="{{ route('home.sales-proccess.cart') }}">مشاهده سبد خرید </a>
+                                    </section>
+
                                     <section class="header-cart-dropdown-body">
                                         @php
                                             $total_price = 0;
@@ -126,12 +127,12 @@
                                         <section class=""><a class="btn btn-danger btn-sm d-block"
                                                 href="{{ route('home.sales-proccess.cart') }}">ثبت سفارش</a></section>
                                     </section>
-                                @endif
-                            </section>
-                        </section>
+                        @endif
                     </section>
                 </section>
             </section>
+        </section>
+        </section>
         </section>
         <!-- end top-header logo, searchbox and cart -->
 
