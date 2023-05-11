@@ -32,7 +32,8 @@ class LoginRegisterRequest extends FormRequest
             ];
         }else{
         return [
-            'id' => 'required|min:11|max:64|regex:/^[a-zA-Z0-9_.@\+]*$/'
+            'id' => 'required|min:11|max:64|regex:/^[a-zA-Z0-9_.@\+]*$/',
+            'g-recaptcha-response' => 'recaptcha'
         ];
     }
     }

@@ -13,7 +13,7 @@
             @csrf
             <section class="login-wrapper mb-5">
                 <section class="login-logo">
-                    <img src="{{ asset('customer-assets/images/logo/4.png') }}" alt="">
+                    <a href="{{ route('home') }}"><img src="{{ asset('customer-assets/images/logo/4.png') }}" alt="logo"></a>
                 </section>
                 <section class="login-title">
                     <a href="{{ route('auth.customer.login-register-form') }}"><i class="fa fa-arrow-right"> بازگشت</i></a>
