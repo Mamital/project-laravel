@@ -58,7 +58,9 @@
                                         <section class="order-item-id"><i class="fa fa-id-card-alt"></i>کد سفارش : {{$order->id}}</section>
                                         <section class="order-item-status"><i class="fa fa-clock"></i> {{$order->payment_status_value}}</section>
                                         <section class="order-item-products">
-                                            {{-- <a href="#"><img src="{{asset($order->image['indexArray']['medium'])}}" alt=""></a> --}}
+                                            @foreach ($order->orderItems as $item)
+                                            <a href="{{route('home.product.index', json_decode($item->product)->slug)}}"><img src="{{asset(json_decode($item->product)->image->indexArray->medium)}}" alt=""></a>
+                                            @endforeach
                                         </section>
                                     </section>
                                     <section class="order-item-link"><a href="#">پرداخت سفارش</a></section>

@@ -13,7 +13,7 @@ use Illuminate\Support\Facades\Auth;
 class HomeController extends Controller
 {
     public function home()
-    {
+    {        
         $topBannerSliders = Baner::where('position', 0)->where('status', 1)->get();
         $topBannerUp = Baner::where('position', 1)->where('status', 1)->first();
         $topBannerBottom = Baner::where('position', 2)->where('status', 1)->first();

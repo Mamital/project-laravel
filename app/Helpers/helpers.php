@@ -14,9 +14,10 @@ function persian($number)
     return str_replace($arabic_western, $arabic_eastern, $number);
 }
 
-function priceFormat($price)
+function priceFormat($price, $persian = true)
 {
     $number = number_format($price, 0, '/', '،');
+    if($persian)
     $number = persian($number);
     return $number;
 }

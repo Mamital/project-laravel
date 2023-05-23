@@ -1,5 +1,43 @@
 @extends('customer.layouts.master-one-col')
+@section('head-tag')
+    <style>
+        @import url(//netdna.bootstrapcdn.com/font-awesome/3.2.1/css/font-awesome.css);
 
+        /* Styling h1 and links
+                    ––––––––––––––––––––––––––––––––– */
+        .starrating>input {
+            display: none;
+        }
+
+        /* Remove radio buttons */
+
+        .starrating>label:before {
+            content: "\f005";
+            /* Star */
+            margin: 2px;
+            font-size: 2em;
+            font-family: FontAwesome;
+            display: inline-block;
+        }
+
+        .starrating>label {
+            color: #cfcfcf;
+            /* Start color when not clicked */
+        }
+
+        .starrating>input:checked~label {
+            color: #ffca08;
+        }
+
+        /* Set yellow color when star checked */
+
+        .starrating>input:hover~label {
+            color: #ffca08;
+        }
+
+        /* Set yellow color when star hover */
+    </style>
+@endsection
 @section('content')
     <!-- start cart -->
     <section class="mb-4">
@@ -7,11 +45,11 @@
             <section class="row">
                 @if (session('alert-success'))
                     <div class="alert-success m-2 p-3">
-                        {{session('alert-success')}}
+                        {{ session('alert-success') }}
                     </div>
-                    @elseif (session('alert-error'))
+                @elseif (session('alert-error'))
                     <div class="alert alert-danger">
-                        {{session('alert-error')}}
+                        {{ session('alert-error') }}
                     </div>
                 @endif
                 <section class="col">
@@ -62,107 +100,116 @@
                                 <section class="content-header mb-3">
                                     <section class="d-flex justify-content-between align-items-center">
                                         <h2 class="content-header-title content-header-title-small">
-                                            کتاب اثر مرکب نوشته دارن هاردی
+                                            {{ $product->name }}
                                         </h2>
                                         <section class="content-header-link">
                                             <!--<a href="#">مشاهده همه</a>-->
                                         </section>
                                     </section>
                                 </section>
-                                <form action="{{route('home.sales-proccess.add-to-cart', $product->slug)}}" method="POST">
+                                <form action="{{ route('home.sales-proccess.add-to-cart', $product->slug) }}"
+                                    method="POST">
                                     @csrf
-                                <section class="product-info">
+                                    <section class="product-info">
 
-                                    @empty(!$product->colors()->first())
-                                        @php
-                                            $colors = $product->colors;
-                                        @endphp
+                                        @empty(!$product->colors()->first())
+                                            @php
+                                                $colors = $product->colors;
+                                            @endphp
 
-                                        <p><span>رنگ انتخاب شده : <span id="selected_color_name">
-                                                    {{ $colors->first()->color_name }}</span></span></p>
-                                    @endempty
-                                    <p>
-                                        @foreach ($product->colors as $key => $color)
-                                            <label for="color-{{$color->id}}"
-                                                style="background-color: {{ $color->color }};"
-                                                class="product-info-colors me-1" data-bs-toggle="tooltip"
-                                                data-bs-placement="bottom" title="{{ $color->color_name }}"></label>
+                                            <p><span>رنگ انتخاب شده : <span id="selected_color_name">
+                                                        {{ $colors->first()->color_name }}</span></span></p>
+                                        @endempty
+                                        <p>
+                                            @foreach ($product->colors as $key => $color)
+                                                <label for="color-{{ $color->id }}"
+                                                    style="background-color: {{ $color->color }};"
+                                                    class="product-info-colors me-1" data-bs-toggle="tooltip"
+                                                    data-bs-placement="bottom" title="{{ $color->color_name }}"></label>
 
-                                            <input class="d-none" type="radio" name="color"
-                                                data-color-name="{{ $color->color_name }}"
-                                                id="color-{{$color->id}}" value='{{$color->id}}'
-                                                data-color-price={{ $color->price_increase }}
-                                                @if ($loop->iteration == 1) checked @endif >
-                                        @endforeach
-                                    </p>
-                                    @if ($product->guarantees->count() != 0)
-                                        <p><i class="fa fa-shield-alt cart-product-selected-warranty me-1"></i>
-                                            گارانتی :
-                                            <select name="guarantee" id="guarantee" class="p-1">
-                                                @foreach ($product->guarantees as $key => $guarantee)
-                                                    <option value="{{ $guarantee->id }}"
-                                                        data-guarantee-price={{ $guarantee->price_increase }}
-                                                        @if ($key == 0) selected @endif>
-                                                        {{ $guarantee->name }}</option>
-                                                @endforeach
-
-                                            </select>
+                                                <input class="d-none" type="radio" name="color"
+                                                    data-color-name="{{ $color->color_name }}"
+                                                    id="color-{{ $color->id }}" value='{{ $color->id }}'
+                                                    data-color-price={{ $color->price_increase }}
+                                                    @if ($loop->iteration == 1) checked @endif>
+                                            @endforeach
                                         </p>
-                                    @endif
-                                    @if ($product->marketable_number > 0)
-                                        <p><i class="fa fa-store-alt cart-product-selected-store me-1"></i> <span>کالا موجود
-                                                در انبار</span></p>
-                                    @else
-                                        <p><i class="fa fa-store-alt cart-product-selected-store me-1"></i> <span>کالا موجود
-                                                نیست</span></p>
-                                    @endif
-                                    @guest
-                                        <section class="product-add-to-favorite position-relative my-2" style="top:0">
-                                            <button type="button" class="btn btn-light btn-sm text-decoration-none" data-bs-toggle="tooltip"
-                                                data-bs-placement="left"
-                                                data-url="{{ route('home.product.add-favorite', $product) }}"
-                                                title="افزودن به علاقه مندی">
-                                                <i class="fa fa-heart"></i>
-                                            </button>
-                                        </section>
-                                    @endguest
-                                    @auth
-                                        @if ($product->users->contains(auth()->user()->id))
-                                            <section class="product-add-to-favorite position-relative my-2" style="top:0">
-                                                <button type="button" class="add-to-favorite btn btn-light btn-sm text-decoration-none"
-                                                    data-bs-toggle="tooltip" data-bs-placement="left"
-                                                    data-url="{{ route('home.product.add-favorite', $product) }}"
-                                                    title="حذف از علاقه مندی">
-                                                    <i class="fa fa-heart text-danger"></i>
-                                                </button>
-                                            </section>
+                                        @if ($product->guarantees->count() != 0)
+                                            <p><i class="fa fa-shield-alt cart-product-selected-warranty me-1"></i>
+                                                گارانتی :
+                                                <select name="guarantee" id="guarantee" class="p-1">
+                                                    @foreach ($product->guarantees as $key => $guarantee)
+                                                        <option value="{{ $guarantee->id }}"
+                                                            data-guarantee-price={{ $guarantee->price_increase }}
+                                                            @if ($key == 0) selected @endif>
+                                                            {{ $guarantee->name }}</option>
+                                                    @endforeach
+
+                                                </select>
+                                            </p>
+                                        @endif
+                                        @if ($product->marketable_number > 0)
+                                            <p><i class="fa fa-store-alt cart-product-selected-store me-1"></i> <span>کالا
+                                                    موجود
+                                                    در انبار</span></p>
                                         @else
-                                         <section class="product-add-to-favorite position-relative my-2" style="top:0">
-                                                <button type="button" class="add-to-favorite btn btn-light btn-sm text-decoration-none"
+                                            <p><i class="fa fa-store-alt cart-product-selected-store me-1"></i> <span>کالا
+                                                    موجود
+                                                    نیست</span></p>
+                                        @endif
+                                        @guest
+                                            <section class="product-add-to-favorite position-relative my-2" style="top:0">
+                                                <button type="button" class="btn btn-light btn-sm text-decoration-none"
                                                     data-bs-toggle="tooltip" data-bs-placement="left"
                                                     data-url="{{ route('home.product.add-favorite', $product) }}"
                                                     title="افزودن به علاقه مندی">
                                                     <i class="fa fa-heart"></i>
                                                 </button>
                                             </section>
-                                        @endif
-                                    @endauth
-                                    <section>
-                                        <section class="cart-product-number d-inline-block ">
-                                            <button class="cart-number cart-number-down" type="button">-</button>
-                                            <input class="" id="number" type="number" min="1"
-                                                max="5" step="1" value="1" readonly="readonly" name="number">
-                                            <button class="cart-number cart-number-up" type="button">+</button>
+                                        @endguest
+                                        @auth
+                                            @if ($product->users->contains(auth()->user()->id))
+                                                <section class="product-add-to-favorite position-relative my-2" style="top:0">
+                                                    <button type="button"
+                                                        class="add-to-favorite btn btn-light btn-sm text-decoration-none"
+                                                        data-bs-toggle="tooltip" data-bs-placement="left"
+                                                        data-url="{{ route('home.product.add-favorite', $product) }}"
+                                                        title="حذف از علاقه مندی">
+                                                        <i class="fa fa-heart text-danger"></i>
+                                                    </button>
+                                                </section>
+                                            @else
+                                                <section class="product-add-to-favorite position-relative my-2" style="top:0">
+                                                    <button type="button"
+                                                        class="add-to-favorite btn btn-light btn-sm text-decoration-none"
+                                                        data-bs-toggle="tooltip" data-bs-placement="left"
+                                                        data-url="{{ route('home.product.add-favorite', $product) }}"
+                                                        title="افزودن به علاقه مندی">
+                                                        <i class="fa fa-heart"></i>
+                                                    </button>
+                                                </section>
+                                            @endif
+                                        @endauth
+                                        <section>
+                                            <section class="cart-product-number d-inline-block ">
+                                                <button class="cart-number cart-number-down" type="button">-</button>
+                                                <input class="" id="number" type="number" min="1"
+                                                    max="5" step="1" value="1" readonly="readonly"
+                                                    name="number">
+                                                <button class="cart-number cart-number-up" type="button">+</button>
+                                            </section>
                                         </section>
+                                        <p class="mb-3 mt-5">
+                                            <i class="fa fa-info-circle me-1"></i>کاربر گرامی خرید شما هنوز نهایی نشده است.
+                                            برای
+                                            ثبت سفارش و تکمیل خرید باید ابتدا آدرس خود را انتخاب کنید و سپس نحوه ارسال را
+                                            انتخاب
+                                            کنید. نحوه ارسال انتخابی شما محاسبه و به این مبلغ اضافه شده خواهد شد. و در نهایت
+                                            پرداخت این سفارش صورت میگیرد. پس از ثبت سفارش کالا بر اساس نحوه ارسال که شما
+                                            انتخاب
+                                            کرده اید کالا برای شما در مدت زمان مذکور ارسال می گردد.
+                                        </p>
                                     </section>
-                                    <p class="mb-3 mt-5">
-                                        <i class="fa fa-info-circle me-1"></i>کاربر گرامی خرید شما هنوز نهایی نشده است. برای
-                                        ثبت سفارش و تکمیل خرید باید ابتدا آدرس خود را انتخاب کنید و سپس نحوه ارسال را انتخاب
-                                        کنید. نحوه ارسال انتخابی شما محاسبه و به این مبلغ اضافه شده خواهد شد. و در نهایت
-                                        پرداخت این سفارش صورت میگیرد. پس از ثبت سفارش کالا بر اساس نحوه ارسال که شما انتخاب
-                                        کرده اید کالا برای شما در مدت زمان مذکور ارسال می گردد.
-                                    </p>
-                                </section>
                             </section>
 
                         </section>
@@ -337,6 +384,8 @@
                                                 href="#features">ویژگی ها</a></span>
                                         <span class="me-2"><a class="text-decoration-none text-dark"
                                                 href="#comments">دیدگاه ها</a></span>
+                                        <span class="me-2"><a class="text-decoration-none text-dark"
+                                                href="#rating">امتیاز ها</a></span>
                                     </h2>
                                     <section class="content-header-link">
                                         <!--<a href="#">مشاهده همه</a>-->
@@ -507,6 +556,66 @@
                                     </section>
                                 @endforeach
                             </section>
+
+                            <section id="rating" class="content-header mt-2 mb-4">
+                                <section class="d-flex justify-content-between align-items-center">
+                                    <h2 class="content-header-title content-header-title-small">
+                                        امتیاز ها
+                                    </h2>
+                                </section>
+                            </section>
+
+                            <section class="product-comments mb-4 p-4">
+                                @auth
+                                    @if (auth()->user()->userProductPurchase()->contains($product->id))
+                                        <div class="container">
+                                            <h5 class="text-danger">
+                                                امتیاز خود را به این محصول انتخاب نمایید
+                                            </h5>
+                                            <form
+                                                class="starrating risingstar d-flex justify-content-end flex-row-reverse align-items-center"
+                                                action="{{ route('home.product.add-rate', $product) }}" method="post">
+                                                @csrf
+                                                <div class="mx-3">
+                                                    <button class="btn btn-info btn-sm">ثبت امتیاز</button>
+                                                </div>
+                                                <input type="radio" id="star5" name="rating" value="5" />
+                                                <label for="star5" title="5 star"></label>
+                                                <input type="radio" id="star4" name="rating" value="4" />
+                                                <label for="star4" title="4 star"></label>
+                                                <input type="radio" id="star3" name="rating" value="3" />
+                                                <label for="star3" title="3 star"></label>
+                                                <input type="radio" id="star2" name="rating" value="2" />
+                                                <label for="star2" title="2 star"></label>
+                                                <input type="radio" id="star1" name="rating" value="1" />
+                                                <label for="star1" title="1 star"></label>
+
+                                            </form>
+                                            <h6>
+                                                میانگین امتیاز :
+                                                {{ number_format($product->ratingsAvg(), 1, '/') ??
+                                                    'شما اولین
+                                                                                                                                                                                                                                                                        امتیاز را ثبت نمایید!!!' }}
+                                            </h6>
+                                            <h6>
+                                                تعداد افراد شرکت کننده :
+                                                {{ $product->ratingsCount() ??
+                                                    'شما اولین امتیاز را ثبت
+                                                                                                                                                                                                                                                                        نمایید!!!' }}
+                                            </h6>
+                                        </div>
+                                    @else
+                                        <p>برای ثبت امتیاز، ابتدا باید محصول را خریداری کنید</p>
+                                    @endif
+                                @endauth
+                                @guest
+                                    <section class="modal-body">
+                                        <p>برای ثبت امتیاز ابتدا باید به حساب کاربری خود وارد شوید</p>
+                                        <p>برای وارد شدن <a href="{{ route('auth.customer.login-register-form') }}">کلیک
+                                                کنید.</a></p>
+                                    </section>
+                                @endguest
+                            </section>
                         </section>
                     </section>
                 </section>
@@ -515,8 +624,7 @@
     </section>
     <!-- end description, features and comments -->
 
-     <section class="position-fixed p-4 flex-row-reverse"
-        style="right: 0; top: 3rem; width: 26rem; max-width: 80%;">
+    <section class="position-fixed p-4 flex-row-reverse" style="right: 0; top: 3rem; width: 26rem; max-width: 80%;">
         <div class="toast" role="alert" aria-live="assertive" aria-atomic="true">
             <div class="toast-header">
                 <strong class="me-auto">فروشگاه</strong>
@@ -531,9 +639,7 @@
                     </a>
                 </strong>
             </div>
-        </section>
-        
-
+    </section>
 @endsection
 
 @section('script')
@@ -622,22 +728,21 @@
     </script>
 @endsection
 @section('script')
-<script>
-    //start product introduction, features and comment
-$(document).ready(function() {
-    var s = $("#introduction-features-comments");
-    var pos = s.position();
-    $(window).scroll(function() {
-        var windowpos = $(window).scrollTop();
+    <script>
+        //start product introduction, features and comment
+        $(document).ready(function() {
+            var s = $("#introduction-features-comments");
+            var pos = s.position();
+            $(window).scroll(function() {
+                var windowpos = $(window).scrollTop();
 
-        if (windowpos >= pos.top) {
-            s.addClass("stick");
-        } else {
-            s.removeClass("stick");
-        }
-    });
-});
-//end product introduction, features and comment
-
-</script>
+                if (windowpos >= pos.top) {
+                    s.addClass("stick");
+                } else {
+                    s.removeClass("stick");
+                }
+            });
+        });
+        //end product introduction, features and comment
+    </script>
 @endsection

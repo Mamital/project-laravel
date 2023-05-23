@@ -17,6 +17,8 @@ class OrderController extends Controller
         } else {
             $orders = Order::where('user_id', $user->id)->orderBy('created_at')->get();
         }
+
+
         return view('customer.profile.my-order', compact('orders'));
     }
 }

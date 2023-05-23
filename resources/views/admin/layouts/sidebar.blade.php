@@ -2,6 +2,12 @@
     <section class="sidebar-container">
         <section class="sidebar-wrapper">
 
+            
+            <a href="{{ route('home') }}" class="sidebar-link">
+                <i class="fas fa-home"></i>
+                <span>مشاهده فروشگاه</span>
+            </a>
+            <hr>
             <a href="{{ route('admin.home') }}" class="sidebar-link">
                 <i class="fas fa-home"></i>
                 <span>خانه</span>

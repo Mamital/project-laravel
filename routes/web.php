@@ -484,6 +484,7 @@ Route::namespace('Market')->group(function () {
     Route::get('/product/{product:slug}', [CustomerProductController::class, 'index'])->name('home.product.index');
     Route::get('/add-comment/{product}', [CustomerProductController::class, 'addComment'])->name('home.product.add-comment');
     Route::get('/add-favorite/{product}', [CustomerProductController::class, 'addFavorite'])->name('home.product.add-favorite');
+    Route::post('/add-rate/{product}', [CustomerProductController::class, 'addRate'])->name('home.product.add-rate');
 });
 
 Route::namespace('SalesProccess')->group(function () {

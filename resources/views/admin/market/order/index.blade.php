@@ -37,9 +37,7 @@
                         <tr>
                             <th>#</th>
                             <th>کد سفارش</th>
-                            <th>مجموع مبلغ سفارش (بدون تخفیف)</th>
-                            <th>مجموع تمامی مبلغ تخفیفات </th>
-                            <th>مبلغ تخفیف همه محصولات</th>
+                            <th>مبلغ سفارش (بدون تخفیف)</th>
                             <th>مبلغ نهایی</th>
                             <th>وضعیت پرداخت</th>
                             <th>شیوه پرداخت</th>
@@ -55,10 +53,8 @@
                         <tr>
                             <th>{{ $loop->iteration }}</th>
                             <td>{{ $order->id }}</td>
-                            <td>{{ $order->order_final_amount }} تومان</td>
-                            <td>{{ $order->order_discount_amount }} تومان</td>
-                            <td>{{ $order->order_total_products_discount_amount == null ? '-' : $order->order_total_products_discount_amount . 'تومان ' }}</td>
-                            <td>{{ $order->order_final_amount -  $order->order_discount_amount }} تومان</td>
+                            <td>{{ priceFormat($order->order_final_amount, false) }} تومان</td>                            
+                            <td>{{ priceFormat($order->order_final_amount -  $order->order_discount_amount, false) }} تومان</td>
                             <td>{{$order->payment_status_value}}</td>
                             <td>{{$order->payment_type_value}}</td>
                             <td>{{$order->delivery_status_value}}</td>

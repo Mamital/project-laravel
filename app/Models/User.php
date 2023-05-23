@@ -2,17 +2,20 @@
 
 namespace App\Models;
 
+use App\Models\Market\Order;
+use App\Models\Market\OrderItem;
+use App\Models\User\Role;
+use App\Models\User\Address;
+use App\Models\Ticket\Ticket;
 use App\Models\Market\Payment;
 use App\Models\Market\Product;
-use App\Models\Ticket\Ticket;
-use App\Traits\Permission\HasPermissionTrait;
+use App\Models\User\Permission;
 use Laravel\Sanctum\HasApiTokens;
 use App\Models\Ticket\TicketAdmin;
-use App\Models\User\Address;
-use App\Models\User\Permission;
-use App\Models\User\Role;
 use Laravel\Jetstream\HasProfilePhoto;
+use Nagy\LaravelRating\Traits\CanRate;
 use Illuminate\Notifications\Notifiable;
+use App\Traits\Permission\HasPermissionTrait;
 use Laravel\Fortify\TwoFactorAuthenticatable;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -26,6 +29,7 @@ class User extends Authenticatable
     use Notifiable;
     use TwoFactorAuthenticatable;
     use HasPermissionTrait;
+    use CanRate;
 
     /**
      * The attributes that are mass assignable.
@@ -113,5 +117,19 @@ class User extends Authenticatable
     public function permissions()
     {
         return $this->belongsToMany(Permission::class);
+    }
+    public function orderItems()
+    {
+        return $this->hasManyThrough(OrderItem::class, Order::class);
+    }
+
+    public function userProductPurchase()
+    {
+        $productId = collect();
+        foreach (auth()->user()->orderItems as $orderItem) {
+            $productId->push($orderItem->product_id);
+        }
+        $productId = $productId->unique();
+        return $productId;
     }
 }

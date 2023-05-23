@@ -57,7 +57,7 @@
                                     <span>پربازدیدترین کالاها</span>
                                 </h2>
                                 <section class="content-header-link">
-                                    <a href="#">مشاهده همه</a>
+                                    <a href="{{route('home.products')}}">مشاهده همه</a>
                                 </section>
                             </section>
                         </section>
@@ -176,7 +176,7 @@
                                     <span>پیشنهاد آمازون به شما</span>
                                 </h2>
                                 <section class="content-header-link">
-                                    <a href="#">مشاهده همه</a>
+                                    <a href="{{route('home.products')}}">مشاهده همه</a>
                                 </section>
                             </section>
                         </section>

@@ -23,28 +23,25 @@
                  فاکتور
                 </h5>
             </section>
+            
 
             <section class="table-responsive">
-                <table class="table table-striped table-hover h-150px" id="printable">
+                <table class="table table-striped table-hover h-150px printable" id="printable">
                     <thead>
                         <tr>
-                            <th>#</th>
+                            <th>{{ $order->id }}</th>
+                            <th class="width-8-rem text-left">
+                                <a href="" class="btn btn-dark btn-sm text-white" id="print">
+                                    <i class="fa fa-print"></i>
+                                    چاپ
+                                </a>
+                            </th>
                             
                     </thead>
                     <tbody>
 
                         <tr class="table-primary">
-                            <th>{{ $order->id }}</th>
-                            <td class="width-8-rem text-left">
-                                <a href="" class="btn btn-dark btn-sm text-white" id="print">
-                                    <i class="fa fa-print"></i>
-                                    چاپ
-                                </a>
-                                 <a href="{{route('admin.market.order.detail', $order->id)}}" class="btn btn-warning btn-sm">
-                                    <i class="fa fa-book"></i>
-                                    جزئیات
-                                </a>
-                            </td>
+                            
                         </tr>
 
                            <tr class="border-bottom">
@@ -116,7 +113,7 @@
                            <tr class="border-bottom">
                             <th>مبلغ ارسال</th>
                             <td class="text-left font-weight-bolder">
-                                {{ $order->delivery_amount ?? '-' }}
+                                {{ priceFormat($order->delivery_amount) ?? '-' }}
                             </td>
                         </tr>
                            <tr class="border-bottom">
@@ -134,25 +131,25 @@
                            <tr class="border-bottom">
                             <th>مجموع مبلغ سفارش (بدون تخفیف)</th>
                             <td class="text-left font-weight-bolder">
-                                {{ $order->order_final_amount ?? '-' }}
+                                {{ priceFormat($order->order_final_amount, false) ?? '-' }}
                             </td>
                         </tr>
                            <tr class="border-bottom">
                             <th>مجموع تمامی مبلغ تخفیفات</th>
                             <td class="text-left font-weight-bolder">
-                                {{ $order->order_discount_amount ?? '-' }}
+                                {{ priceFormat($order->order_discount_amount, false) ?? '-' }}
                             </td>
                         </tr>
                            <tr class="border-bottom">
                             <th>مبلغ تخفیف همه محصولات</th>
                             <td class="text-left font-weight-bolder">
-                                {{ $order->order_total_products_discount_amount ?? '-' }}
+                                {{ priceFormat($order->order_total_products_discount_amount, false) ?? '-' }}
                             </td>
                         </tr>
                            <tr class="border-bottom">
                             <th>مبلغ نهایی</th>
                             <td class="text-left font-weight-bolder">
-                                {{ $order->order_final_amount -  $order->order_discount_amount }}
+                                {{ priceFormat($order->order_final_amount -  $order->order_discount_amount, false) }}
                             </td>
                         </tr>
                            <tr class="border-bottom">
@@ -183,7 +180,7 @@
                           <tr class="border-bottom">
                             <th>مبلغ تخفیف عمومی</th>
                             <td class="text-left font-weight-bolder">
-                                {{ $order->order_common_discount_amount ?? '-' }}
+                                {{ priceFormat($order->order_common_discount_amount, false) ?? '-' }}
                             </td>
                         </tr>
                           <tr class="border-bottom">
@@ -196,6 +193,54 @@
                     </tbody>
                 </table>
             </section>
+
+            <section class="table-responsive mt-5">
+                <table class="table table-striped table-hover h-150px printable">
+                    <thead>
+                        <tr>
+                            <th>#</th>
+                            <th>نام محصول</th>
+                            <th>درصد فروش فوق العاده </th>
+                            <th>مبلغ فروش فوق العاده </th>
+                            <th>تعداد</th>
+                            <th>جمع قیمت محصول</th>
+                            <th>قیمت نهایی محصول</th>
+                            <th>رنگ</th>
+                            <th>گارانتی </th>
+                            <th>ویژگی</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                      @foreach ($order->orderItems as $item)
+
+                        <tr>
+                            <th>{{ $loop->iteration }}</th>
+                            <td>{{ $item->singleProduct->name ?? '-' }}</td>
+                            <td >{{ priceFormat($item->amazingSale->percentage, false) ?? '-' }} %</td>
+                            <td>{{ priceFormat($item->amazing_sale_discount_amount, false) ?? '-' }} تومان</td>
+                            <td>{{ $item->number }}</td>
+                            <td>{{ priceFormat($item->final_product_price, false) ?? '-' }} تومان</td>
+                            <td>{{ priceFormat($item->final_total_price, false) ?? '-'}} تومان</td>
+                            <td>{{ $item->color->color_name ?? '-' }}</td>
+                            <td>{{ $item->guarantee->name ?? '-' }}</td>
+                            <td>
+                                @forelse($item->orderItemAttributes as $attribute)
+                                {{ $attribute->categoryAttribute->name ?? '-' }}
+                                :
+                                {{ json_decode($attribute->categoryAttributeValue->value)->value ?? '-' }}
+                                @empty
+                                -
+                                @endforelse
+                            </td>
+                        </tr>
+
+                        @endforeach
+
+                    </tbody>
+                </table>
+            </section>
+
+            
 
         </section>
     </section>
@@ -217,7 +262,7 @@ printBtn.addEventListener('click', function(){
 function printContent(el){
 
     var restorePage = $('body').html();
-    var printContent = $('#' + el).clone();
+    var printContent = $('.' + el).clone();
     $('body').empty().html(printContent);
     window.print();
     $('body').html(restorePage);

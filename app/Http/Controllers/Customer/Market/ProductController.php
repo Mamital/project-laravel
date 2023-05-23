@@ -45,4 +45,12 @@ class ProductController extends Controller
             return response()->json(['status' => 3]);
         }
     }
+
+    public function addRate(Product $product,Request $request)
+    {
+        Auth::loginUsingId(8);
+        $user = Auth::user();
+        $user->rate($product, $request->rating);
+        return back();
+    }
 }

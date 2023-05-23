@@ -7,19 +7,20 @@ use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Notifications\Messages\MailMessage;
 use Illuminate\Notifications\Notification;
 
-class NewUserRegistered extends Notification
+class NewOrderCreate extends Notification
 {
     use Queueable;
-    private $details;
+
+    private $order_id;
 
     /**
      * Create a new notification instance.
      *
      * @return void
      */
-    public function __construct($details)
+    public function __construct($order_id)
     {
-        $this->details = $details;
+        $this->order_id = $order_id;
     }
 
     /**
@@ -56,7 +57,7 @@ class NewUserRegistered extends Notification
     public function toArray($notifiable)
     {
         return [
-            'message' => "کاربر جدید با آیدی {$this->details['user_id']} در سایت ثبت نام کرد",
+            'message' => "سفارش جدید با آیدی {$this->order_id} ثبت گردید",
         ];
     }
 }

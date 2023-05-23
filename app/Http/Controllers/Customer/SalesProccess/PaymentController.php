@@ -2,18 +2,21 @@
 
 namespace App\Http\Controllers\Customer\SalesProccess;
 
+use App\Models\User;
 use App\Models\Market\Copan;
 use App\Models\Market\Order;
 use Illuminate\Http\Request;
-use App\Models\Market\CartItem;
-use App\Http\Controllers\Controller;
-use App\Http\Services\Payment\PaymentService;
-use App\Models\Market\CashPayment;
-use App\Models\Market\OfflinePayment;
-use App\Models\Market\OnlinePayment;
-use App\Models\Market\OrderItem;
 use App\Models\Market\Payment;
+use App\Models\Market\CartItem;
+use App\Models\Market\OrderItem;
+use App\Models\Market\CashPayment;
+use App\Http\Controllers\Controller;
+use App\Models\Market\OnlinePayment;
 use Illuminate\Support\Facades\Auth;
+use App\Models\Market\OfflinePayment;
+use App\Notifications\NewOrderCreate;
+use App\Http\Services\Payment\PaymentService;
+use Illuminate\Support\Facades\DB;
 
 class PaymentController extends Controller
 {
@@ -126,56 +129,61 @@ class PaymentController extends Controller
                 return redirect()->back();
         }
 
-        $paymented = $targetModel::create([
-            'amount' => $order->order_final_amount,
-            'user_id' => auth()->user()->id,
-            'pay_date' => now(),
-            'status' => 1,
-            'cash_receiver' => $cash_receiver
-        ]);
+        DB::transaction(function () use ($targetModel, $cartItems, $order, $cash_receiver, $type, $paymentService) {
 
-        if ($type == 0) {
-            $result = $paymentService->zarinpal($order->order_final_amount, $paymented, $order);
-        }
+            $paymented = $targetModel::create([
+                'amount' => $order->order_final_amount,
+                'user_id' => auth()->user()->id,
+                'pay_date' => now(),
+                'status' => 1,
+                'cash_receiver' => $cash_receiver
+            ]);
 
-        $payment = Payment::create([
-            'amount' => $order->order_final_amount,
-            'user_id' => auth()->user()->id,
-            'pay_date' => now(),
-            'type' => $type,
-            'status' => 1,
-            'paymentable_id' => $paymented->id,
-            'paymentable_type' => $targetModel
-        ]);
-
-
-        if ($type == 0) { //online
-            if ($result['status']) {
-                
-                return redirect()->away('https://sandbox.zarinpal.com/pg/StartPay/' . $result['authority']);
-            } else {
-                return redirect()->route('home')->with('alert-error', $result['message']);
+            if ($type == 0) {
+                $result = $paymentService->zarinpal($order->order_final_amount, $paymented, $order);
             }
-        } else { //offline and cash
-            foreach ($cartItems as $cartItem) {
-                OrderItem::create([
-                    'order_id' => $order->id,
-                    'product_id' => $cartItem->product_id,
-                    'product' => $cartItem->product,
-                    'amazing_sale_id' => $cartItem->product->activeAmazingSales()->id ?? 0,
-                    'amazing_sale_object' => $cartItem->product->activeAmazingSales() ?? null,
-                    'amazing_sale_discount_amount' => $cartItem->cartItemProductDiscount(),
-                    'number' => $cartItem->number,
-                    'final_product_price' => $cartItem->cartItemProductDiscount(),
-                    'final_total_price' => $cartItem->cartItemFinalPrice(),
-                    'color_id' => $cartItem->color_id,
-                    'guarantee_id' => $cartItem->guarantee_id
 
-                ]);
-                $cartItem->delete();
+            $payment = Payment::create([
+                'amount' => $order->order_final_amount,
+                'user_id' => auth()->user()->id,
+                'pay_date' => now(),
+                'type' => $type,
+                'status' => 1,
+                'paymentable_id' => $paymented->id,
+                'paymentable_type' => $targetModel
+            ]);
+
+
+            if ($type == 0) { //online
+                if ($result['status']) {
+
+                    return redirect()->away('https://sandbox.zarinpal.com/pg/StartPay/' . $result['authority']);
+                } else {
+                    return redirect()->route('home')->with('alert-error', $result['message']);
+                }
+            } else { //offline and cash
+                foreach ($cartItems as $cartItem) {
+                    OrderItem::create([
+                        'order_id' => $order->id,
+                        'product_id' => $cartItem->product_id,
+                        'product' => $cartItem->product,
+                        'amazing_sale_id' => $cartItem->product->activeAmazingSales()->id ?? null,
+                        'amazing_sale_object' => $cartItem->product->activeAmazingSales() ?? null,
+                        'amazing_sale_discount_amount' => $cartItem->cartItemProductDiscount(),
+                        'number' => $cartItem->number,
+                        'final_product_price' => $cartItem->cartItemProductDiscount(),
+                        'final_total_price' => $cartItem->cartItemFinalPrice(),
+                        'color_id' => $cartItem->color_id,
+                        'guarantee_id' => $cartItem->guarantee_id
+
+                    ]);
+                    $cartItem->delete();
+                }
             }
-        }
-        $order->update(['order_status' => 1]);
+            $order->update(['order_status' => 1]);
+            $user = User::find(1);
+            $user->notify(new NewOrderCreate($order->id));
+        });
         return redirect()->route('home')->with(['alert-success' => 'سفارش شما با موفقیت ثبت گردید']);
     }
 
@@ -190,13 +198,15 @@ class PaymentController extends Controller
 
             $payment = Payment::where('paymentable_id', $onlinePayment->id)->update(['payment_status' => 1]);
             $order->update(['order_status' => 1, 'payment_status' => 1]);
+            $user = User::find(1);
+            $user->notify(new NewOrderCreate($order->id));
 
             foreach ($cartItems as $cartItem) {
                 OrderItem::create([
                     'order_id' => $order->id,
                     'product_id' => $cartItem->product_id,
                     'product' => $cartItem->product,
-                    'amazing_sale_id' => $cartItem->product->activeAmazingSales()->id ?? 0,
+                    'amazing_sale_id' => $cartItem->product->activeAmazingSales()->id ?? null,
                     'amazing_sale_object' => $cartItem->product->activeAmazingSales() ?? null,
                     'amazing_sale_discount_amount' => $cartItem->cartItemProductDiscount(),
                     'number' => $cartItem->number,

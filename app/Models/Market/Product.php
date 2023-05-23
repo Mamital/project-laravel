@@ -2,17 +2,18 @@
 
 namespace App\Models\Market;
 
-use App\Models\Content\Comment;
-use App\Models\User;
 use Carbon\Carbon;
+use App\Models\User;
+use App\Models\Content\Comment;
 use Illuminate\Database\Eloquent\Model;
+use Nagy\LaravelRating\Traits\Rateable;
 use Cviebrock\EloquentSluggable\Sluggable;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 class Product extends Model
 {
-    use HasFactory, SoftDeletes, Sluggable;
+    use HasFactory, SoftDeletes, Sluggable, Rateable;
 
     public function sluggable(): array
     {
@@ -79,5 +80,15 @@ class Product extends Model
     public function users()
     {
         return $this->belongsToMany(User::class);
+    }
+
+    public function amazingSaleDiscount()
+    {
+        if($this->activeAmazingSales())
+        {
+            return $this->price * $this->activeAmazingSales()->percentage / 100 ;
+        }else{
+            return 0;
+        }
     }
 }
