@@ -33,6 +33,7 @@ use App\Http\Controllers\admin\user\PermissionController;
 use App\Http\Controllers\Admin\Market\GuaranteeController;
 use App\Http\Controllers\Admin\Notify\EmailFileController;
 use App\Http\Controllers\Admin\Ticket\TicketAdminController;
+use App\Http\Controllers\Customer\Profile\CompareController;
 use App\Http\Controllers\Customer\Profile\ProfileController;
 use App\Http\Controllers\Admin\Market\ProductColorController;
 use App\Http\Controllers\Customer\Profile\FavoriteController;
@@ -484,6 +485,7 @@ Route::namespace('Market')->group(function () {
     Route::get('/product/{product:slug}', [CustomerProductController::class, 'index'])->name('home.product.index');
     Route::get('/add-comment/{product}', [CustomerProductController::class, 'addComment'])->name('home.product.add-comment');
     Route::get('/add-favorite/{product}', [CustomerProductController::class, 'addFavorite'])->name('home.product.add-favorite');
+    Route::get('/add-compare/{product}', [CustomerProductController::class, 'addCompare'])->name('home.product.add-compare');
     Route::post('/add-rate/{product}', [CustomerProductController::class, 'addRate'])->name('home.product.add-rate');
 });
 
@@ -517,12 +519,18 @@ Route::namespace('SalesProccess')->group(function () {
 Route::prefix('profile')->group(
     function () {
         Route::get('/my-order', [CustomerOrderController::class, 'orders'])->name('home.profile.my-order');
+
         Route::get('/my-favorite', [FavoriteController::class, 'favorites'])->name('home.profile.my-favorite');
         Route::get('/my-favorite/delete/{product}', [FavoriteController::class, 'deleteFavorite'])->name('home.profile.my-favorite.delete');
+
+        Route::get('/my-compare', [CompareController::class, 'compare'])->name('home.profile.my-compare');
+        Route::get('/my-compare/{product}', [CompareController::class, 'remove'])->name('home.profile.my-compare.remove');
+
         Route::get('/my-profile', [ProfileController::class, 'profile'])->name('home.profile.my-profile');
         Route::put('/my-profile', [ProfileController::class, 'update'])->name('home.profile.my-profile.update');
-        Route::put('/my-profile', [ProfileController::class, 'update'])->name('home.profile.my-profile.update');
+
         Route::get('/my-addresses', [CustomerAddressController::class, 'index'])->name('home.profile.my-address');
+
         Route::get('/my-ticket', [CustomerTicketController::class, 'index'])->name('home.profile.my-ticket');
         Route::get('my-ticket/show/{ticket}', [CustomerTicketController::class, 'show'])->name('home.profile.my-ticket.show');
         Route::post('my-ticket/answer/{ticket}', [CustomerTicketController::class, 'answer'])->name('home.profile.my-ticket.answer');
@@ -530,6 +538,7 @@ Route::prefix('profile')->group(
         Route::get('my-ticket/create', [CustomerTicketController::class, 'create'])->name('home.profile.my-ticket.create');
         Route::post('my-ticket/store', [CustomerTicketController::class, 'store'])->name('home.profile.my-ticket.store');
         Route::get('my-ticket/download/{ticket}', [CustomerTicketController::class, 'download'])->name('home.profile.my-ticket.download');
+
         
     });
 

@@ -4,9 +4,13 @@
         @import url(//netdna.bootstrapcdn.com/font-awesome/3.2.1/css/font-awesome.css);
 
         /* Styling h1 and links
-                    ––––––––––––––––––––––––––––––––– */
+                        ––––––––––––––––––––––––––––––––– */
         .starrating>input {
             display: none;
+        }
+
+        .fa-star {
+            color: #ffca08
         }
 
         /* Remove radio buttons */
@@ -112,11 +116,18 @@
                                     @csrf
                                     <section class="product-info">
 
+                                        <section class="d-flex">
+                                            <p class="p-2"><i class="fa fa-star"></i>
+                                                {{ persian(number_format($product->ratingsAvg(), 1, '/')) }} (
+                                                {{ persian($product->ratingsCount()) }} )</p>
+                                            <p class="p-2">( {{ persian($product->activeComments()->count()) }} ) دیدگاه
+                                            </p>
+                                        </section>
+
                                         @empty(!$product->colors()->first())
                                             @php
                                                 $colors = $product->colors;
                                             @endphp
-
                                             <p><span>رنگ انتخاب شده : <span id="selected_color_name">
                                                         {{ $colors->first()->color_name }}</span></span></p>
                                         @endempty
@@ -157,6 +168,8 @@
                                                     موجود
                                                     نیست</span></p>
                                         @endif
+                                        <div class="d-flex">
+                                        {{-- favorite --}}
                                         @guest
                                             <section class="product-add-to-favorite position-relative my-2" style="top:0">
                                                 <button type="button" class="btn btn-light btn-sm text-decoration-none"
@@ -190,6 +203,41 @@
                                                 </section>
                                             @endif
                                         @endauth
+                                        {{-- compare --}}
+                                        @guest
+                                            <section class="product-add-to-compare position-relative my-2" style="top:0">
+                                                <button type="button" class="btn btn-light btn-sm text-decoration-none"
+                                                    data-bs-toggle="tooltip" data-bs-placement="left"
+                                                    data-url="{{ route('home.product.add-compare', $product) }}"
+                                                    title="افزودن به مقایسه">
+                                                    <i class="fa fa-industry"></i>
+                                                </button>
+                                            </section>
+                                        @endguest
+                                        @auth
+                                            @if (auth()->user()->compare && $product->compares->contains(auth()->user()->compare->id))
+                                                <section class="product-add-to-compare position-relative my-2" style="top:0">
+                                                    <button type="button"
+                                                        class="add-to-compare btn btn-light btn-sm text-decoration-none"
+                                                        data-bs-toggle="tooltip" data-bs-placement="left"
+                                                        data-url="{{ route('home.product.add-compare', $product) }}"
+                                                        title="حذف از مقایسه">
+                                                        <i class="fa fa-industry text-danger"></i>
+                                                    </button>
+                                                </section>
+                                            @else
+                                                <section class="product-add-to-compare position-relative my-2" style="top:0">
+                                                    <button type="button"
+                                                        class="add-to-compare btn btn-light btn-sm text-decoration-none"
+                                                        data-bs-toggle="tooltip" data-bs-placement="left"
+                                                        data-url="{{ route('home.product.add-compare', $product) }}"
+                                                        title="افزودن به  مقایسه">
+                                                        <i class="fa fa-industry"></i>
+                                                    </button>
+                                                </section>
+                                            @endif
+                                        @endauth
+                                        </div>
                                         <section>
                                             <section class="cart-product-number d-inline-block ">
                                                 <button class="cart-number cart-number-down" type="button">-</button>
@@ -290,10 +338,10 @@
                                     <section class="item">
                                         <section class="lazyload-item-wrapper">
                                             <section class="product">
-                                                <section class="product-add-to-cart"><a href="#"
+                                                {{-- <section class="product-add-to-cart"><a href="#"
                                                         data-bs-toggle="tooltip" data-bs-placement="left"
                                                         title="افزودن به سبد خرید"><i class="fa fa-cart-plus"></i></a>
-                                                </section>
+                                                </section> --}}
                                                 @guest
                                                     <section class="product-add-to-favorite">
                                                         <button class="btn btn-light btn-sm text-decoration-none"
@@ -595,13 +643,13 @@
                                                 میانگین امتیاز :
                                                 {{ number_format($product->ratingsAvg(), 1, '/') ??
                                                     'شما اولین
-                                                                                                                                                                                                                                                                        امتیاز را ثبت نمایید!!!' }}
+                                                                                                                                                                                                                                                                                                                        امتیاز را ثبت نمایید!!!' }}
                                             </h6>
                                             <h6>
                                                 تعداد افراد شرکت کننده :
                                                 {{ $product->ratingsCount() ??
                                                     'شما اولین امتیاز را ثبت
-                                                                                                                                                                                                                                                                        نمایید!!!' }}
+                                                                                                                                                                                                                                                                                                                        نمایید!!!' }}
                                             </h6>
                                         </div>
                                     @else
@@ -640,6 +688,7 @@
                 </strong>
             </div>
     </section>
+
 @endsection
 
 @section('script')
@@ -726,8 +775,31 @@
             })
         })
     </script>
-@endsection
-@section('script')
+    <script>
+        $('.product-add-to-compare button').click(function() {
+            var url = $(this).attr('data-url');
+            var element = $(this);
+            $.ajax({
+                url: url,
+                success: function(result) {
+                    if (result.status == 1) {
+                        $(element).children().first().addClass('text-danger');
+                        $(element).attr('data-original-title', 'حذف از مقایسه');
+                        $(element).attr('data-bs-original-title', 'حذف از مقایسه');
+                    } else if (result.status == 2) {
+                        $(element).children().first().removeClass('text-danger')
+                        $(element).attr('data-original-title', 'افزودن به مقایسه');
+                        $(element).attr('data-bs-original-title', 'افزودن به مقایسه');
+                    } else if (result.status == 3) {
+                        $('.toast').toast('show');
+                    }
+                     else if (result.status == 4) {
+                        alert('بیشتر از 3 محصول نمیتوانید به مقایسه ها اضافه کنید');
+                    }
+                }
+            })
+        })
+    </script>
     <script>
         //start product introduction, features and comment
         $(document).ready(function() {

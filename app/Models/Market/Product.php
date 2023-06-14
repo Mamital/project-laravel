@@ -5,6 +5,7 @@ namespace App\Models\Market;
 use Carbon\Carbon;
 use App\Models\User;
 use App\Models\Content\Comment;
+use App\Models\User\Compare;
 use Illuminate\Database\Eloquent\Model;
 use Nagy\LaravelRating\Traits\Rateable;
 use Cviebrock\EloquentSluggable\Sluggable;
@@ -65,6 +66,11 @@ class Product extends Model
     public function comments()
     {
         return $this->morphMany(Comment::class, 'commentable');
+    }
+
+    public function compares()
+    {
+        return $this->belongsToMany(Compare::class);
     }
 
     public function activeAmazingSales()

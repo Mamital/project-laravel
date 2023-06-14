@@ -63,6 +63,9 @@
                                     <section><a class="dropdown-item" href="{{ route('home.profile.my-favorite') }}"><i
                                                 class="fa fa-heart"></i>لیست علاقه مندی</a></section>
                                     <section>
+                                    <section><a class="dropdown-item" href="{{ route('home.profile.my-compare') }}"><i
+                                                class="fa fa-industry"></i>لیست مقایسه</a></section>
+                                    <section>
                                         <hr class="dropdown-divider">
                                     </section>
                                     <section><a class="dropdown-item" href="{{ route('auth.customer.logout') }}"><i

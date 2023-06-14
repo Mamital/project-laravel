@@ -30,7 +30,8 @@
                 </section>
 
                 <section>
-                    <form action="{{ route('admin.market.product.store') }}" method="POST" id="form" enctype="multipart/form-data">
+                    <form action="{{ route('admin.market.product.store') }}" method="POST" id="form"
+                        enctype="multipart/form-data">
                         @csrf
                         <section class="row">
 
@@ -55,10 +56,9 @@
                                     <select name="category_id" id="category_id" class="form-control form-control-sm">
                                         <option value="" disabled selected>دسته مورد نظر را انتخاب کنید</option>
                                         @foreach ($categories as $category)
-                                            <option value="{{ $category->id }}" @if (old('category_id') == $category->id)
-                                                selected
-                                            @endif >
-                                            {{ $category->name }}</option>
+                                            <option value="{{ $category->id }}"
+                                                @if (old('category_id') == $category->id) selected @endif>
+                                                {{ $category->name }}</option>
                                         @endforeach
                                     </select>
                                 </div>
@@ -76,10 +76,9 @@
                                     <select name="brand_id" id="brand_id" class="form-control form-control-sm">
                                         <option value="" disabled selected>برند مورد نظر را انتخاب کنید</option>
                                         @foreach ($brands as $brand)
-                                            <option value="{{ $brand->id }}" @if (old('brand_id') == $brand->id)
-                                                selected
-                                            @endif>
-                                            {{ $brand->original_name }}</option>
+                                            <option value="{{ $brand->id }}"
+                                                @if (old('brand_id') == $brand->id) selected @endif>
+                                                {{ $brand->original_name }}</option>
                                         @endforeach
                                     </select>
                                 </div>
@@ -179,7 +178,7 @@
                             <section class="col-12">
                                 <div class="form-group">
                                     <label for="">توضیحات</label>
-                                    <textarea name="introduction" id="introduction" class="form-control form-control-sm" rows="6">{{old('introduction')}}</textarea>
+                                    <textarea name="introduction" id="introduction" class="form-control form-control-sm" rows="6">{{ old('introduction') }}</textarea>
                                 </div>
                                 @error('introduction')
                                     <span class="alert_required bg-danger text-white p-1 rounded" role="alert">
@@ -342,8 +341,8 @@
         })
     </script>
     <script>
-        $(function () {
-            $('#btn-copy').on('click', function () {
+        $(function() {
+            $('#btn-copy').on('click', function() {
                 var ele = $(this).parent().prev().clone(true);
                 $(this).before(ele);
             })

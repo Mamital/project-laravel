@@ -14,6 +14,9 @@
                                 <span class="sidebar-nav-item-title"><a class="p-3" href="{{route('home.profile.my-favorite')}}">لیست علاقه مندی</a></span>
                             </section>
                             <section class="sidebar-nav-item">
+                                <span class="sidebar-nav-item-title"><a class="p-3" href="{{route('home.profile.my-compare')}}">لیست مقایسه</a></span>
+                            </section>
+                            <section class="sidebar-nav-item">
                                 <span class="sidebar-nav-item-title"><a class="p-3" href="{{route('home.profile.my-ticket')}}">تیکت های من</a></span>
                             </section>
                             <section class="sidebar-nav-item">

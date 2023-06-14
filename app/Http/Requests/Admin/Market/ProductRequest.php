@@ -26,7 +26,7 @@ class ProductRequest extends FormRequest
         if ($this->isMethod('post')) {
             return [
                 'name' => 'required|max:120|min:2|regex:/^[ا-یa-zA-Z0-9\-۰-۹ء-ي., ]+$/u',
-                'introduction' => 'required|max:500|min:5',
+                'introduction' => 'required|max:2000|min:5',
                 'image' => 'required|image|mimes:png,jpg,jpeg,gif',
                 'status' => 'required|numeric|in:0,1',
                 'marketable' => 'required|numeric|in:0,1',
@@ -43,7 +43,7 @@ class ProductRequest extends FormRequest
         } else {
             return [
                 'name' => 'required|max:120|min:2|regex:/^[ا-یa-zA-Z0-9\-۰-۹ء-ي., ]+$/u',
-                'introduction' => 'required|max:500|min:5',
+                'introduction' => 'required|max:2000|min:5',
                 'image' => 'image|mimes:png,jpg,jpeg,gif',
                 'status' => 'required|numeric|in:0,1',
                 'marketable' => 'required|numeric|in:0,1',

@@ -153,7 +153,6 @@
             });
             select_tags.children('option').attr('selected', true).trigger('change');
 
-
             $('#form').submit(function ( event ){
                 if(select_tags.val() !== null && select_tags.val().length > 0){
                     var selectedSource = select_tags.val().join(',');

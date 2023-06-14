@@ -41,7 +41,7 @@ class CategoryRequest extends FormRequest
                 'status' => 'required|numeric|in:0,1',
                 'tags' => 'required|regex:/^[ا-یa-zA-Z0-9\-۰-۹ء-ي., ]+$/u',
                 'show_in_menu' => 'required|numeric|in:0,1',
-                'parent_id' => 'exists:product_categories,parent_id',
+                'parent_id' => 'nullable|exists:product_categories,id',
             ];
         }
     }

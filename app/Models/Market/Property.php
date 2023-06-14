@@ -19,6 +19,6 @@ class Property extends Model
     }
     public function values()
     {
-        return $this->belongsTo(CategoryValue::class);
+        return $this->hasMany(CategoryValue::class, 'category_attribute_id');
     }
 }

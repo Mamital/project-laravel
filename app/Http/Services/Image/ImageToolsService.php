@@ -50,7 +50,6 @@ class ImageToolsService
     public function setCurrentImageName()
     {
             return !empty($this->image) ? $this->setImageName(pathinfo($this->image->getClientOriginalName(), PATHINFO_FILENAME)) : false;
-            // $_FILES['image']['name']
     }
 
     public function getImageFormat()

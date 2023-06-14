@@ -12,6 +12,7 @@ use App\Models\Market\Product;
 use App\Models\User\Permission;
 use Laravel\Sanctum\HasApiTokens;
 use App\Models\Ticket\TicketAdmin;
+use App\Models\User\Compare;
 use Laravel\Jetstream\HasProfilePhoto;
 use Nagy\LaravelRating\Traits\CanRate;
 use Illuminate\Notifications\Notifiable;
@@ -121,6 +122,10 @@ class User extends Authenticatable
     public function orderItems()
     {
         return $this->hasManyThrough(OrderItem::class, Order::class);
+    }
+    public function compare()
+    {
+        return $this->hasOne(Compare::class);
     }
 
     public function userProductPurchase()
