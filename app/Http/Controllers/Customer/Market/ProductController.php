@@ -9,14 +9,26 @@ use App\Models\Content\Comment;
 use App\Models\User;
 use App\Models\User\Compare;
 use Illuminate\Support\Facades\Auth;
+use Nagy\LaravelRating\Models\Rating;
 
 class ProductController extends Controller
 {
     public function index(Product $product)
     {
-        $reletedProducts = Product::take(7)->get();
+        $product = $product->with(['values' => function ($query) {
+            $query->with('attribute');
+        }])->where('id', $product->id)->first();
+        
+        $reletedProducts = Product::where('category_id', $product->category_id)->take(5)->get()->except($product->id);
         $amazingSale = $product->activeAmazingSales();
-        return view('customer.market.product.product', compact(['product', 'reletedProducts', 'amazingSale']));
+
+        $ratings = Rating::where(['rateable_type' => Product::class, 'rateable_id' => $product->id])->get();
+
+        $comments = Comment::with(['answers' => function($query){
+            $query->with('user', 'answers');
+        }, 'user'])->where(['approved' => 1,'parent_id' => null, 'commentable_id' => $product->id, 'commentable_type' => Product::class])->get();
+        
+        return view('customer.market.product.product', compact(['product', 'reletedProducts', 'amazingSale', 'comments', 'ratings']));
     }
     public function addComment(Product $product, Request $request)
     {

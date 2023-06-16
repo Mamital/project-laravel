@@ -23,13 +23,13 @@ class TicketController extends Controller
 
     public function openTickets()
     {
-        $tickets = Ticket::where('status', 0)->where('ticket_id', null)->get();
+        $tickets = Ticket::where('status', 1)->where('ticket_id', null)->get();
         return view('admin.ticket.index', compact('tickets'));
     }
 
     public function closeTickets()
     {
-        $tickets = Ticket::where('status', 1)->where('ticket_id', null)->get();
+        $tickets = Ticket::where('status', 0)->where('ticket_id', null)->get();
         return view('admin.ticket.index', compact('tickets'));
     }
     /**

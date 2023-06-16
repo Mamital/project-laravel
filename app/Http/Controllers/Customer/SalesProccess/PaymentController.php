@@ -129,61 +129,58 @@ class PaymentController extends Controller
                 return redirect()->back();
         }
 
-        DB::transaction(function () use ($targetModel, $cartItems, $order, $cash_receiver, $type, $paymentService) {
+                $paymented = $targetModel::create([
+                    'amount' => $order->order_final_amount,
+                    'user_id' => auth()->user()->id,
+                    'pay_date' => now(),
+                    'status' => 1,
+                    'cash_receiver' => $cash_receiver
+                ]);                
 
-            $paymented = $targetModel::create([
-                'amount' => $order->order_final_amount,
-                'user_id' => auth()->user()->id,
-                'pay_date' => now(),
-                'status' => 1,
-                'cash_receiver' => $cash_receiver
-            ]);
+                $payment = Payment::create([
+                    'amount' => $order->order_final_amount,
+                    'user_id' => auth()->user()->id,
+                    'pay_date' => now(),
+                    'type' => $type,
+                    'status' => 1,
+                    'paymentable_id' => $paymented->id,
+                    'paymentable_type' => $targetModel
+                ]);
 
-            if ($type == 0) {
-                $result = $paymentService->zarinpal($order->order_final_amount, $paymented, $order);
-            }
+                if ($type != 0) {
+                    foreach ($cartItems as $cartItem) {
+                        OrderItem::create([
+                            'order_id' => $order->id,
+                            'product_id' => $cartItem->product_id,
+                            'product' => $cartItem->product,
+                            'amazing_sale_id' => $cartItem->product->activeAmazingSales()->id ?? null,
+                            'amazing_sale_object' => $cartItem->product->activeAmazingSales() ?? null,
+                            'amazing_sale_discount_amount' => $cartItem->cartItemProductDiscount(),
+                            'number' => $cartItem->number,
+                            'final_product_price' => $cartItem->cartItemProductDiscount(),
+                            'final_total_price' => $cartItem->cartItemFinalPrice(),
+                            'color_id' => $cartItem->color_id,
+                            'guarantee_id' => $cartItem->guarantee_id
 
-            $payment = Payment::create([
-                'amount' => $order->order_final_amount,
-                'user_id' => auth()->user()->id,
-                'pay_date' => now(),
-                'type' => $type,
-                'status' => 1,
-                'paymentable_id' => $paymented->id,
-                'paymentable_type' => $targetModel
-            ]);
-
-
-            if ($type == 0) { //online
-                if ($result['status']) {
-
-                    return redirect()->away('https://sandbox.zarinpal.com/pg/StartPay/' . $result['authority']);
-                } else {
-                    return redirect()->route('home')->with('alert-error', $result['message']);
+                        ]);
+                        $cartItem->delete();
+                    }
                 }
-            } else { //offline and cash
-                foreach ($cartItems as $cartItem) {
-                    OrderItem::create([
-                        'order_id' => $order->id,
-                        'product_id' => $cartItem->product_id,
-                        'product' => $cartItem->product,
-                        'amazing_sale_id' => $cartItem->product->activeAmazingSales()->id ?? null,
-                        'amazing_sale_object' => $cartItem->product->activeAmazingSales() ?? null,
-                        'amazing_sale_discount_amount' => $cartItem->cartItemProductDiscount(),
-                        'number' => $cartItem->number,
-                        'final_product_price' => $cartItem->cartItemProductDiscount(),
-                        'final_total_price' => $cartItem->cartItemFinalPrice(),
-                        'color_id' => $cartItem->color_id,
-                        'guarantee_id' => $cartItem->guarantee_id
 
-                    ]);
-                    $cartItem->delete();
-                }
+
+        if ($type == 0) { //online
+
+            $result = $paymentService->zarinpal($order->order_final_amount, $paymented, $order);
+
+            if ($result['status']) {
+                return redirect()->away('https://sandbox.zarinpal.com/pg/StartPay/' . $result['authority']);
+            } else {
+                return redirect()->route('home')->with('alert-error', $result['message']);
             }
-            $order->update(['order_status' => 1]);
-            $user = User::find(1);
-            $user->notify(new NewOrderCreate($order->id));
-        });
+        }
+        $order->update(['order_status' => 1]);
+        $user = User::find(1);
+        $user->notify(new NewOrderCreate($order->id));
         return redirect()->route('home')->with(['alert-success' => 'سفارش شما با موفقیت ثبت گردید']);
     }
 
