@@ -73,7 +73,7 @@
                                                 <input type="checkbox" class="form-check-input" name="permission[]"
                                                     id="{{ $permission->id }}" value="{{ $permission->id }}">
                                                 <label for="{{ $permission->id }}"
-                                                    class="form-check-label mr-3 mt-1">{{ $permission->name }}</label>
+                                                    class="form-check-label mr-3 mt-1">{{ $permission->description }}</label>
                                             </div>
                                             @error('permission.'. $key)
                                                 <span class="alert_required bg-danger text-white p-1 rounded" role="alert">

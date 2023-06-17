@@ -43,7 +43,7 @@
                                             @if ($user_permission->id == $permission->id)
                                             selected
                                             @endif @endforeach>
-                                                {{ $permission->name }}</option>
+                                                {{ $permission->description }}</option>
                                         @endforeach
                                     </select>
                                 </div>
