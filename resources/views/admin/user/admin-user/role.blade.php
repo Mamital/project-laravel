@@ -43,7 +43,7 @@
                                             @if ($user_role->id == $role->id)
                                             selected
                                             @endif @endforeach>
-                                                {{ $role->name }}</option>
+                                                {{ $role->description }}</option>
                                         @endforeach
                                     </select>
                                 </div>

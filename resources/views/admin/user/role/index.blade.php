@@ -47,7 +47,7 @@
                         
                         <tr>
                             <th>{{++$key}}</th>
-                            <td>{{$role->name}} </td>
+                            <td>{{$role->description}} </td>
                             <td> 
 
                                 @if (empty($role->permissions()->get()->toArray()))
@@ -57,8 +57,10 @@
                                 @endif
 
                                 @foreach ($role->permissions as $key => $permission)
-                                    {{ persian(++$key) . ') ' . $permission->name }}
+                                    {{ persian(++$key) . ') ' . $permission->description }}
+                                    @if($loop->iteration % 3 == 0)
                                     <br>
+                                    @endif
                                 @endforeach
                             </td>
                             <td class="width-22-rem text-left">

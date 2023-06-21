@@ -39,7 +39,7 @@
                                 <th>نام</th>
                                 <th>شماره موبایل</th>
                                 <th>نقش</th>
-                                <th>دسترسی</th>
+                                <th>دسترسی اضافی</th>
                                 <th>فعال سازی</th>
                                 <th>وضعیت</th>
                                 <th class="max-width-16-rem text-center"><i class="fa fa-cogs"></i> تنظیمات</th>
@@ -54,14 +54,14 @@
                                     <td>{{ $admin->mobile }}</td>
                                     <td>
                                         @forelse ($admin->roles as $role)
-                                            {{ $role->name }},
+                                            {{ $role->description }},
                                         @empty
                                             <p>بدون نقش</p>
                                         @endforelse
                                     </td>
                                     <td>
                                         @forelse ($admin->permissions as $permission)
-                                            {{ $permission->name }},
+                                            {{ $permission->description }},
                                         @empty
 
                                             <p>بدون دسترسی</p>

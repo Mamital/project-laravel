@@ -51,7 +51,7 @@
                                             <div class="form-check">
                                                  <input type="checkbox" class="form-check-input" name="permission[]" value="{{ $permission->id }}" id="{{ $permission->id }}" @if(in_array($permission->id, $rolePermissionsArray)) checked @endif/>
                                                 <label for="{{ $permission->id }}"
-                                                    class="form-check-label mr-3 mt-1">{{ $permission->name }}
+                                                    class="form-check-label mr-3 mt-1">{{ $permission->description }}
                                                 </label>
                                             </div>
                                             @error('permission.' . $key)

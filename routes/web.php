@@ -2,6 +2,7 @@
 
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
+use App\Http\Middleware\AdminMiddleware;
 use App\Http\Controllers\Customer\HomeController;
 use App\Http\Controllers\admin\user\RoleController;
 use App\Http\Controllers\admin\notify\SMSController;
@@ -71,84 +72,83 @@ use App\Http\Controllers\Customer\SalesProccess\PaymentController as CustomerPay
 |--------------------------------------------------------------------------
 */
 
-Route::prefix('admin')->namespace('Admin')->group(function () {
+Route::middleware('admin')->prefix('admin')->namespace('Admin')->group(function () {
 
-    // Route::get('/', 'AdminDashboardController@index')->name('admin.home');
     Route::get('/', [AdminDashboardController::class, 'index'])->name('admin.home');
 
     Route::prefix('market')->namespace('Market')->group(function () {
 
         //category
         Route::prefix('category')->group(function () {
-            Route::get('/', [CategoryController::class, 'index'])->name('admin.market.category.index');
-            Route::get('/create', [CategoryController::class, 'create'])->name('admin.market.category.create');
-            Route::post('/store', [CategoryController::class, 'store'])->name('admin.market.category.store');
-            Route::get('/edit/{productCategory}', [CategoryController::class, 'edit'])->name('admin.market.category.edit');
-            Route::put('/update/{productCategory}', [CategoryController::class, 'update'])->name('admin.market.category.update');
-            Route::delete('/destroy/{productCategory}', [CategoryController::class, 'destroy'])->name('admin.market.category.destroy');
-            Route::get('/status/{productCategory}', [CategoryController::class, 'status'])->name('admin.market.category.status');
-            Route::get('/show-in-menu/{productCategory}', [CategoryController::class, 'showInMenu'])->name('admin.market.category.show-in-menu');
+            Route::get('/', [CategoryController::class, 'index'])->name('admin.market.category.index')->middleware('can:read-productCategory');
+            Route::get('/create', [CategoryController::class, 'create'])->name('admin.market.category.create')->middleware('can:create-productCategory');
+            Route::post('/store', [CategoryController::class, 'store'])->name('admin.market.category.store')->middleware('can:create-productCategory');
+            Route::get('/edit/{productCategory}', [CategoryController::class, 'edit'])->name('admin.market.category.edit')->middleware('can:edit-productCategory');
+            Route::put('/update/{productCategory}', [CategoryController::class, 'update'])->name('admin.market.category.update')->middleware('can:edit-productCategory');
+            Route::delete('/destroy/{productCategory}', [CategoryController::class, 'destroy'])->name('admin.market.category.destroy')->middleware('can:delete-productCategory');
+            Route::get('/status/{productCategory}', [CategoryController::class, 'status'])->name('admin.market.category.status')->middleware('can:edit-productCategory');
+            Route::get('/show-in-menu/{productCategory}', [CategoryController::class, 'showInMenu'])->name('admin.market.category.show-in-menu')->middleware('can:edit-productCategory');
         });
 
         //baners
         Route::prefix('baner')->group(function () {
-            Route::get('/', [BanerController::class, 'index'])->name('admin.market.baner.index');
-            Route::get('/create', [BanerController::class, 'create'])->name('admin.market.baner.create');
-            Route::post('/store', [BanerController::class, 'store'])->name('admin.market.baner.store');
-            Route::get('/edit/{baner}', [BanerController::class, 'edit'])->name('admin.market.baner.edit');
-            Route::put('/update/{baner}', [BanerController::class, 'update'])->name('admin.market.baner.update');
-            Route::delete('/destroy/{baner}', [BanerController::class, 'destroy'])->name('admin.market.baner.destroy');
-            Route::get('/status/{baner}', [BanerController::class, 'status'])->name('admin.market.baner.status');
+            Route::get('/', [BanerController::class, 'index'])->name('admin.market.baner.index')->middleware('can:read-baner');
+            Route::get('/create', [BanerController::class, 'create'])->name('admin.market.baner.create')->middleware('can:create-baner');
+            Route::post('/store', [BanerController::class, 'store'])->name('admin.market.baner.store')->middleware('can:create-baner');
+            Route::get('/edit/{baner}', [BanerController::class, 'edit'])->name('admin.market.baner.edit')->middleware('can:edit-baner');
+            Route::put('/update/{baner}', [BanerController::class, 'update'])->name('admin.market.baner.update')->middleware('can:edit-baner');
+            Route::delete('/destroy/{baner}', [BanerController::class, 'destroy'])->name('admin.market.baner.destroy')->middleware('can:delete-baner');
+            Route::get('/status/{baner}', [BanerController::class, 'status'])->name('admin.market.baner.status')->middleware('can:edit-baner');
         });
 
         Route::prefix('color')->group(function () {
             //color
-            Route::get('/{product}', [ProductColorController::class, 'index'])->name('admin.market.color.index');
-            Route::get('/create/{product}', [ProductColorController::class, 'create'])->name('admin.market.color.create');
-            Route::post('/store/{product}', [ProductColorController::class, 'store'])->name('admin.market.color.store');
-            Route::delete('/destroy/{product}/{productColor}', [ProductColorController::class, 'destroy'])->name('admin.market.color.destroy');
-            Route::get('/status/{productColor}', [ProductColorController::class, 'status'])->name('admin.market.color.status');
+            Route::get('/{product}', [ProductColorController::class, 'index'])->name('admin.market.color.index')->middleware('can:read-product');
+            Route::get('/create/{product}', [ProductColorController::class, 'create'])->name('admin.market.color.create')->middleware('can:create-product');
+            Route::post('/store/{product}', [ProductColorController::class, 'store'])->name('admin.market.color.store')->middleware('can:create-product');
+            Route::delete('/destroy/{product}/{productColor}', [ProductColorController::class, 'destroy'])->name('admin.market.color.destroy')->middleware('can:delete-product');
+            Route::get('/status/{productColor}', [ProductColorController::class, 'status'])->name('admin.market.color.status')->middleware('can:edit-product');
         });
 
         //Guarantee
         Route::prefix('guarantee')->group(function () {
-            Route::get('/{product}', [GuaranteeController::class, 'index'])->name('admin.market.guarantee.index');
-            Route::get('/create/{product}', [GuaranteeController::class, 'create'])->name('admin.market.guarantee.create');
-            Route::post('/store/{product}', [GuaranteeController::class, 'store'])->name('admin.market.guarantee.store');
-            Route::delete('/destroy/{guarantee}/{product}', [GuaranteeController::class, 'destroy'])->name('admin.market.guarantee.destroy');
-            Route::get('/status/{guarantee}', [GuaranteeController::class, 'status'])->name('admin.market.guarantee.status');
+            Route::get('/{product}', [GuaranteeController::class, 'index'])->name('admin.market.guarantee.index')->middleware('can:read-product');
+            Route::get('/create/{product}', [GuaranteeController::class, 'create'])->name('admin.market.guarantee.create')->middleware('can:create-product');
+            Route::post('/store/{product}', [GuaranteeController::class, 'store'])->name('admin.market.guarantee.store')->middleware('can:create-product');
+            Route::delete('/destroy/{guarantee}/{product}', [GuaranteeController::class, 'destroy'])->name('admin.market.guarantee.destroy')->middleware('can:delete-product');
+            Route::get('/status/{guarantee}', [GuaranteeController::class, 'status'])->name('admin.market.guarantee.status')->middleware('can:edit-product');
         });
 
         //brand
         Route::prefix('brand')->group(function () {
-            Route::get('/', [BrandController::class, 'index'])->name('admin.market.brand.index');
-            Route::get('/create', [BrandController::class, 'create'])->name('admin.market.brand.create');
-            Route::post('/store', [BrandController::class, 'store'])->name('admin.market.brand.store');
-            Route::get('/edit/{brand}', [BrandController::class, 'edit'])->name('admin.market.brand.edit');
-            Route::put('/update/{brand}', [BrandController::class, 'update'])->name('admin.market.brand.update');
-            Route::delete('/destroy/{brand}', [BrandController::class, 'destroy'])->name('admin.market.brand.destroy');
-            Route::get('/status/{brand}', [BrandController::class, 'status'])->name('admin.market.brand.status');
+            Route::get('/', [BrandController::class, 'index'])->name('admin.market.brand.index')->middleware('can:read-brand');
+            Route::get('/create', [BrandController::class, 'create'])->name('admin.market.brand.create')->middleware('can:create-brand');
+            Route::post('/store', [BrandController::class, 'store'])->name('admin.market.brand.store')->middleware('can:create-brand');
+            Route::get('/edit/{brand}', [BrandController::class, 'edit'])->name('admin.market.brand.edit')->middleware('can:edit-brand');
+            Route::put('/update/{brand}', [BrandController::class, 'update'])->name('admin.market.brand.update')->middleware('can:edit-brand');
+            Route::delete('/destroy/{brand}', [BrandController::class, 'destroy'])->name('admin.market.brand.destroy')->middleware('can:delete-brand');
+            Route::get('/status/{brand}', [BrandController::class, 'status'])->name('admin.market.brand.status')->middleware('can:edit-brand');
         });
 
         //comment
         Route::prefix('comment')->group(function () {
-            Route::get('/', [MarketCommentController::class, 'index'])->name('admin.market.comment.index');
-            Route::get('/show/{comment}', [MarketCommentController::class, 'show'])->name('admin.market.comment.show');
-            Route::delete('/destroy/{comment}', [MarketCommentController::class, 'destroy'])->name('admin.market.comment.destroy');
-            Route::get('/approved/{comment}', [MarketCommentController::class, 'approved'])->name('admin.market.comment.approved');
-            Route::get('/status/{comment}', [MarketCommentController::class, 'status'])->name('admin.market.comment.status');
-            Route::post('/answer/{comment}', [MarketCommentController::class, 'answer'])->name('admin.market.comment.answer');
+            Route::get('/', [MarketCommentController::class, 'index'])->name('admin.market.comment.index')->middleware('can:read-productComment');
+            Route::get('/show/{comment}', [MarketCommentController::class, 'show'])->name('admin.market.comment.show')->middleware('can:read-productComment');
+            Route::delete('/destroy/{comment}', [MarketCommentController::class, 'destroy'])->name('admin.market.comment.destroy')->middleware('can:approve-productComment');
+            Route::get('/approved/{comment}', [MarketCommentController::class, 'approved'])->name('admin.market.comment.approved')->middleware('can:approve-productComment');
+            Route::get('/status/{comment}', [MarketCommentController::class, 'status'])->name('admin.market.comment.status')->middleware('can:approve-productComment');
+            Route::post('/answer/{comment}', [MarketCommentController::class, 'answer'])->name('admin.market.comment.answer')->middleware('can:answer-productComment');
         });
 
         //delivery
         Route::prefix('delivery')->group(function () {
-            Route::get('/', [DeliveryController::class, 'index'])->name('admin.market.delivery.index');
-            Route::get('/create', [DeliveryController::class, 'create'])->name('admin.market.delivery.create');
-            Route::post('/store', [DeliveryController::class, 'store'])->name('admin.market.delivery.store');
-            Route::get('/edit/{delivery}', [DeliveryController::class, 'edit'])->name('admin.market.delivery.edit');
-            Route::put('/update/{delivery}', [DeliveryController::class, 'update'])->name('admin.market.delivery.update');
-            Route::delete('/destroy/{delivery}', [DeliveryController::class, 'destroy'])->name('admin.market.delivery.destroy');
-            Route::get('/status/{delivery}', [DeliveryController::class, 'status'])->name('admin.market.delivery.status');
+            Route::get('/', [DeliveryController::class, 'index'])->name('admin.market.delivery.index')->middleware('can:read-delivery');
+            Route::get('/create', [DeliveryController::class, 'create'])->name('admin.market.delivery.create')->middleware('can:create-delivery');
+            Route::post('/store', [DeliveryController::class, 'store'])->name('admin.market.delivery.store')->middleware('can:create-delivery');
+            Route::get('/edit/{delivery}', [DeliveryController::class, 'edit'])->name('admin.market.delivery.edit')->middleware('can:edit-delivery');
+            Route::put('/update/{delivery}', [DeliveryController::class, 'update'])->name('admin.market.delivery.update')->middleware('can:edit-delivery');
+            Route::delete('/destroy/{delivery}', [DeliveryController::class, 'destroy'])->name('admin.market.delivery.destroy')->middleware('can:delete-delivery');
+            Route::get('/status/{delivery}', [DeliveryController::class, 'status'])->name('admin.market.delivery.status')->middleware('can:edit-delivery');
         });
 
         //discount
@@ -156,106 +156,106 @@ Route::prefix('admin')->namespace('Admin')->group(function () {
 
             //copan
 
-            Route::get('/copan', [DiscountController::class, 'copan'])->name('admin.market.discount.copan');
-            Route::get('/copan/create', [DiscountController::class, 'copanCreate'])->name('admin.market.discount.copan.create');
-            Route::post('/copan/store', [DiscountController::class, 'copanStore'])->name('admin.market.discount.copan.store');
-            Route::get('/copan/edit/{copan}', [DiscountController::class, 'copanEdit'])->name('admin.market.discount.copan.edit');
-            Route::put('/copan/update/{copan}', [DiscountController::class, 'copanUpdate'])->name('admin.market.discount.copan.update');
-            Route::delete('/copan/destroy/{copan}', [DiscountController::class, 'copanDestroy'])->name('admin.market.discount.copan.destroy');
+            Route::get('/copan', [DiscountController::class, 'copan'])->name('admin.market.discount.copan')->middleware('can:read-discount');
+            Route::get('/copan/create', [DiscountController::class, 'copanCreate'])->name('admin.market.discount.copan.create')->middleware('can:create-discount');
+            Route::post('/copan/store', [DiscountController::class, 'copanStore'])->name('admin.market.discount.copan.store')->middleware('can:create-discount');
+            Route::get('/copan/edit/{copan}', [DiscountController::class, 'copanEdit'])->name('admin.market.discount.copan.edit')->middleware('can:edit-discount');
+            Route::put('/copan/update/{copan}', [DiscountController::class, 'copanUpdate'])->name('admin.market.discount.copan.update')->middleware('can:edit-discount');
+            Route::delete('/copan/destroy/{copan}', [DiscountController::class, 'copanDestroy'])->name('admin.market.discount.copan.destroy')->middleware('can:delete-discount');
 
             //common discount
 
-            Route::get('/common-discount', [DiscountController::class, 'commonDiscount'])->name('admin.market.discount.commonDiscount');
-            Route::get('/common-discount/create', [DiscountController::class, 'commonDiscountCreate'])->name('admin.market.discount.commonDiscount.create');
-            Route::post('/common-discount/store', [DiscountController::class, 'commonDiscountStore'])->name('admin.market.discount.commonDiscount.store');
-            Route::get('/common-discount/edit/{commonDiscount}', [DiscountController::class, 'commonDiscountEdit'])->name('admin.market.discount.commonDiscount.edit');
-            Route::put('/common-discount/update/{commonDiscount}', [DiscountController::class, 'commonDiscountUpdate'])->name('admin.market.discount.commonDiscount.update');
-            Route::delete('/common-discount/destroy/{commonDiscount}', [DiscountController::class, 'commonDiscountDestroy'])->name('admin.market.discount.commonDiscount.destroy');
+            Route::get('/common-discount', [DiscountController::class, 'commonDiscount'])->name('admin.market.discount.commonDiscount')->middleware('can:read-discount');
+            Route::get('/common-discount/create', [DiscountController::class, 'commonDiscountCreate'])->name('admin.market.discount.commonDiscount.create')->middleware('can:create-discount');
+            Route::post('/common-discount/store', [DiscountController::class, 'commonDiscountStore'])->name('admin.market.discount.commonDiscount.store')->middleware('can:create-discount');
+            Route::get('/common-discount/edit/{commonDiscount}', [DiscountController::class, 'commonDiscountEdit'])->name('admin.market.discount.commonDiscount.edit')->middleware('can:edit-discount');
+            Route::put('/common-discount/update/{commonDiscount}', [DiscountController::class, 'commonDiscountUpdate'])->name('admin.market.discount.commonDiscount.update')->middleware('can:edit-discount');
+            Route::delete('/common-discount/destroy/{commonDiscount}', [DiscountController::class, 'commonDiscountDestroy'])->name('admin.market.discount.commonDiscount.destroy')->middleware('can:delete-discount');
 
             //amazing sale
 
-            Route::get('/amazing-sale', [DiscountController::class, 'amazingSale'])->name('admin.market.discount.amazingSale');
-            Route::get('/amazing-sale/create', [DiscountController::class, 'amazingSaleCreate'])->name('admin.market.discount.amazingSale.create');
-            Route::post('/amazing-sale/store', [DiscountController::class, 'amazingSaleStore'])->name('admin.market.discount.amazingSale.store');
-            Route::get('/amazing-sale/edit/{amazingSale}', [DiscountController::class, 'amazingSaleEdit'])->name('admin.market.discount.amazingSale.edit');
-            Route::put('/amazing-sale/update/{amazingSale}', [DiscountController::class, 'amazingSaleUpdate'])->name('admin.market.discount.amazingSale.update');
-            Route::delete('/amazing-sale/destroy/{amazingSale}', [DiscountController::class, 'amazingSaleDestroy'])->name('admin.market.discount.amazingSale.destroy');
+            Route::get('/amazing-sale', [DiscountController::class, 'amazingSale'])->name('admin.market.discount.amazingSale')->middleware('can:read-discount');
+            Route::get('/amazing-sale/create', [DiscountController::class, 'amazingSaleCreate'])->name('admin.market.discount.amazingSale.create')->middleware('can:create-discount');
+            Route::post('/amazing-sale/store', [DiscountController::class, 'amazingSaleStore'])->name('admin.market.discount.amazingSale.store')->middleware('can:create-discount');
+            Route::get('/amazing-sale/edit/{amazingSale}', [DiscountController::class, 'amazingSaleEdit'])->name('admin.market.discount.amazingSale.edit')->middleware('can:edit-discount');
+            Route::put('/amazing-sale/update/{amazingSale}', [DiscountController::class, 'amazingSaleUpdate'])->name('admin.market.discount.amazingSale.update')->middleware('can:edit-discount');
+            Route::delete('/amazing-sale/destroy/{amazingSale}', [DiscountController::class, 'amazingSaleDestroy'])->name('admin.market.discount.amazingSale.destroy')->middleware('can:delete-discount');
         });
 
         //order
         Route::prefix('order')->group(function () {
-            Route::get('/', [OrderController::class, 'all'])->name('admin.market.order.all');
-            Route::get('/new-order', [OrderController::class, 'newOrders'])->name('admin.market.order.newOrders');
-            Route::get('/sending', [OrderController::class, 'sending'])->name('admin.market.order.sending');
-            Route::get('/unpaid', [OrderController::class, 'unpaid'])->name('admin.market.order.unpaid');
-            Route::get('/canceled', [OrderController::class, 'canceled'])->name('admin.market.order.canceled');
-            Route::get('/returned', [OrderController::class, 'returned'])->name('admin.market.order.returned');
-            Route::get('/show/{order}', [OrderController::class, 'show'])->name('admin.market.order.show');
-            Route::get('/show/{order}/detail', [OrderController::class, 'detail'])->name('admin.market.order.detail');
-            Route::get('/change-send-status/{order}', [OrderController::class, 'changeSendStatus'])->name('admin.market.order.changeSendStatus');
-            Route::get('/change-order-status/{order}', [OrderController::class, 'changeOrderStatus'])->name('admin.market.order.changeOrderStatus');
-            Route::get('/cancel-order/{order}', [OrderController::class, 'cancelOrder'])->name('admin.market.order.cancelOrder');
+            Route::get('/', [OrderController::class, 'all'])->name('admin.market.order.all')->middleware('can:read-order');
+            Route::get('/new-order', [OrderController::class, 'newOrders'])->name('admin.market.order.newOrders')->middleware('can:read-order');
+            Route::get('/sending', [OrderController::class, 'sending'])->name('admin.market.order.sending')->middleware('can:edit-order');
+            Route::get('/unpaid', [OrderController::class, 'unpaid'])->name('admin.market.order.unpaid')->middleware('can:edit-order');
+            Route::get('/canceled', [OrderController::class, 'canceled'])->name('admin.market.order.canceled')->middleware('can:edit-order');
+            Route::get('/returned', [OrderController::class, 'returned'])->name('admin.market.order.returned')->middleware('can:edit-order');
+            Route::get('/show/{order}', [OrderController::class, 'show'])->name('admin.market.order.show')->middleware('can:read-order');
+            Route::get('/show/{order}/detail', [OrderController::class, 'detail'])->name('admin.market.order.detail')->middleware('can:read-order');
+            Route::get('/change-send-status/{order}', [OrderController::class, 'changeSendStatus'])->name('admin.market.order.changeSendStatus')->middleware('can:edit-order');
+            Route::get('/change-order-status/{order}', [OrderController::class, 'changeOrderStatus'])->name('admin.market.order.changeOrderStatus')->middleware('can:edit-order');
+            Route::get('/cancel-order/{order}', [OrderController::class, 'cancelOrder'])->name('admin.market.order.cancelOrder')->middleware('can:edit-order');
         });
 
 
         //payment
         Route::prefix('payment')->group(function () {
-            Route::get('/', [PaymentController::class, 'index'])->name('admin.market.payment.index');
-            Route::get('/show/{payment}', [PaymentController::class, 'show'])->name('admin.market.payment.show');
-            Route::get('/online', [PaymentController::class, 'online'])->name('admin.market.payment.online');
-            Route::get('/offline', [PaymentController::class, 'offline'])->name('admin.market.payment.offline');
-            Route::get('/attendance', [PaymentController::class, 'attendance'])->name('admin.market.payment.attendance');
-            Route::get('/confirm', [PaymentController::class, 'confirm'])->name('admin.market.payment.confirm');
-            Route::get('/cancel/{payment}', [PaymentController::class, 'cancel'])->name('admin.market.payment.cancel');
-            Route::get('/return/{payment}', [PaymentController::class, 'return'])->name('admin.market.payment.return');
+            Route::get('/', [PaymentController::class, 'index'])->name('admin.market.payment.index')->middleware('can:read-payment');
+            Route::get('/show/{payment}', [PaymentController::class, 'show'])->name('admin.market.payment.show')->middleware('can:read-payment');
+            Route::get('/online', [PaymentController::class, 'online'])->name('admin.market.payment.online')->middleware('can:read-payment');
+            Route::get('/offline', [PaymentController::class, 'offline'])->name('admin.market.payment.offline')->middleware('can:read-payment');
+            Route::get('/attendance', [PaymentController::class, 'attendance'])->name('admin.market.payment.attendance')->middleware('can:edit-payment');
+            Route::get('/confirm', [PaymentController::class, 'confirm'])->name('admin.market.payment.confirm')->middleware('can:edit-payment');
+            Route::get('/cancel/{payment}', [PaymentController::class, 'cancel'])->name('admin.market.payment.cancel')->middleware('can:edit-payment');
+            Route::get('/return/{payment}', [PaymentController::class, 'return'])->name('admin.market.payment.return')->middleware('can:edit-payment');
         });
 
         //product
         Route::prefix('product')->group(function () {
-            Route::get('/', [ProductController::class, 'index'])->name('admin.market.product.index');
-            Route::get('/create', [ProductController::class, 'create'])->name('admin.market.product.create');
-            Route::post('/store', [ProductController::class, 'store'])->name('admin.market.product.store');
-            Route::get('/edit/{product}', [ProductController::class, 'edit'])->name('admin.market.product.edit');
-            Route::put('/update/{product}', [ProductController::class, 'update'])->name('admin.market.product.update');
-            Route::delete('/destroy/{product}', [ProductController::class, 'destroy'])->name('admin.market.product.destroy');
-            Route::get('/status/{product}', [ProductController::class, 'status'])->name('admin.market.product.status');
-            Route::get('/marketable/{product}', [ProductController::class, 'marketable'])->name('admin.market.product.marketable');
+            Route::get('/', [ProductController::class, 'index'])->name('admin.market.product.index')->middleware('can:read-product');
+            Route::get('/create', [ProductController::class, 'create'])->name('admin.market.product.create')->middleware('can:create-product');
+            Route::post('/store', [ProductController::class, 'store'])->name('admin.market.product.store')->middleware('can:create-product');
+            Route::get('/edit/{product}', [ProductController::class, 'edit'])->name('admin.market.product.edit')->middleware('can:edit-product');
+            Route::put('/update/{product}', [ProductController::class, 'update'])->name('admin.market.product.update')->middleware('can:edit-product');
+            Route::delete('/destroy/{product}', [ProductController::class, 'destroy'])->name('admin.market.product.destroy')->middleware('can:delete-product');
+            Route::get('/status/{product}', [ProductController::class, 'status'])->name('admin.market.product.status')->middleware('can:edit-product');
+            Route::get('/marketable/{product}', [ProductController::class, 'marketable'])->name('admin.market.product.marketable')->middleware('can:edit-product');
             //gallery
-            Route::get('/gallery/{product}', [GalleryController::class, 'index'])->name('admin.market.gallery.index');
-            Route::get('/create/{product}', [GalleryController::class, 'create'])->name('admin.market.gallery.create');
-            Route::post('/gallery/store/{product}', [GalleryController::class, 'store'])->name('admin.market.gallery.store');
-            Route::delete('/gallery/destroy{product}/{gallery}', [GalleryController::class, 'destroy'])->name('admin.market.gallery.destroy');
-            Route::get('/status/{gallery}', [GalleryController::class, 'status'])->name('admin.market.gallery.status');
+            Route::get('/gallery/{product}', [GalleryController::class, 'index'])->name('admin.market.gallery.index')->middleware('can:edit-product');
+            Route::get('/create/{product}', [GalleryController::class, 'create'])->name('admin.market.gallery.create')->middleware('can:edit-product');
+            Route::post('/gallery/store/{product}', [GalleryController::class, 'store'])->name('admin.market.gallery.store')->middleware('can:edit-product');
+            Route::delete('/gallery/destroy{product}/{gallery}', [GalleryController::class, 'destroy'])->name('admin.market.gallery.destroy')->middleware('can:edit-product');
+            Route::get('/status/{gallery}', [GalleryController::class, 'status'])->name('admin.market.gallery.status')->middleware('can:edit-product');
         });
 
         //property
         Route::prefix('property')->group(function () {
-            Route::get('/', [PropertyController::class, 'index'])->name('admin.market.property.index');
-            Route::get('/create', [PropertyController::class, 'create'])->name('admin.market.property.create');
-            Route::post('/store', [PropertyController::class, 'store'])->name('admin.market.property.store');
-            Route::get('/edit/{property}', [PropertyController::class, 'edit'])->name('admin.market.property.edit');
-            Route::put('/update/{property}', [PropertyController::class, 'update'])->name('admin.market.property.update');
-            Route::delete('/destroy/{property}', [PropertyController::class, 'destroy'])->name('admin.market.property.destroy');
+            Route::get('/', [PropertyController::class, 'index'])->name('admin.market.property.index')->middleware('can:edit-product');
+            Route::get('/create', [PropertyController::class, 'create'])->name('admin.market.property.create')->middleware('can:edit-product');
+            Route::post('/store', [PropertyController::class, 'store'])->name('admin.market.property.store')->middleware('can:edit-product');
+            Route::get('/edit/{property}', [PropertyController::class, 'edit'])->name('admin.market.property.edit')->middleware('can:edit-product');
+            Route::put('/update/{property}', [PropertyController::class, 'update'])->name('admin.market.property.update')->middleware('can:edit-product');
+            Route::delete('/destroy/{property}', [PropertyController::class, 'destroy'])->name('admin.market.property.destroy')->middleware('can:edit-product');
 
             Route::prefix('value')->group(function () {
                 //value
-                Route::get('/{property}', [CategoryValueController::class, 'index'])->name('admin.market.value.index');
-                Route::get('/create/{property}', [CategoryValueController::class, 'create'])->name('admin.market.value.create');
-                Route::post('/store/{property}', [CategoryValueController::class, 'store'])->name('admin.market.value.store');
-                Route::get('/edit/{property}/{categoryValue}', [CategoryValueController::class, 'edit'])->name('admin.market.value.edit');
-                Route::put('/update/{property}/{categoryValue}', [CategoryValueController::class, 'update'])->name('admin.market.value.update');
-                Route::delete('/destroy/{property}/{categoryValue}', [CategoryValueController::class, 'destroy'])->name('admin.market.value.destroy');
-                Route::get('/status/{categoryValue}', [CategoryValueController::class, 'status'])->name('admin.market.value.status');
+                Route::get('/{property}', [CategoryValueController::class, 'index'])->name('admin.market.value.index')->middleware('can:edit-product');
+                Route::get('/create/{property}', [CategoryValueController::class, 'create'])->name('admin.market.value.create')->middleware('can:edit-product');
+                Route::post('/store/{property}', [CategoryValueController::class, 'store'])->name('admin.market.value.store')->middleware('can:edit-product');
+                Route::get('/edit/{property}/{categoryValue}', [CategoryValueController::class, 'edit'])->name('admin.market.value.edit')->middleware('can:edit-product');
+                Route::put('/update/{property}/{categoryValue}', [CategoryValueController::class, 'update'])->name('admin.market.value.update')->middleware('can:edit-product');
+                Route::delete('/destroy/{property}/{categoryValue}', [CategoryValueController::class, 'destroy'])->name('admin.market.value.destroy')->middleware('can:edit-product');
+                Route::get('/status/{categoryValue}', [CategoryValueController::class, 'status'])->name('admin.market.value.status')->middleware('can:edit-product');
             });
         });
 
         //store
         Route::prefix('store')->group(function () {
-            Route::get('/', [StoreController::class, 'index'])->name('admin.market.store.index');
-            Route::get('/add-to-store/{product}', [StoreController::class, 'addToStore'])->name('admin.market.store.add-to-store');
-            Route::post('/store/{product}', [StoreController::class, 'store'])->name('admin.market.store.store');
-            Route::get('/edit/{product}', [StoreController::class, 'edit'])->name('admin.market.store.edit');
-            Route::put('/update/{product}', [StoreController::class, 'update'])->name('admin.market.store.update');
+            Route::get('/', [StoreController::class, 'index'])->name('admin.market.store.index')->middleware('can:read-store');
+            Route::get('/add-to-store/{product}', [StoreController::class, 'addToStore'])->name('admin.market.store.add-to-store')->middleware('can:edit-store');
+            Route::post('/store/{product}', [StoreController::class, 'store'])->name('admin.market.store.store')->middleware('can:edit-store');
+            Route::get('/edit/{product}', [StoreController::class, 'edit'])->name('admin.market.store.edit')->middleware('can:edit-store');
+            Route::put('/update/{product}', [StoreController::class, 'update'])->name('admin.market.store.update')->middleware('can:edit-store');
         });
     });
 
@@ -263,67 +263,67 @@ Route::prefix('admin')->namespace('Admin')->group(function () {
 
         //category
         Route::prefix('category')->group(function () {
-            Route::get('/', [ContentCategoryController::class, 'index'])->name('admin.content.category.index');
-            Route::get('/create', [ContentCategoryController::class, 'create'])->name('admin.content.category.create');
-            Route::post('/store', [ContentCategoryController::class, 'store'])->name('admin.content.category.store');
-            Route::get('/edit/{postCategory}', [ContentCategoryController::class, 'edit'])->name('admin.content.category.edit');
-            Route::put('/update/{postCategory}', [ContentCategoryController::class, 'update'])->name('admin.content.category.update');
-            Route::delete('/destroy/{postCategory}', [ContentCategoryController::class, 'destroy'])->name('admin.content.category.destroy');
-            Route::get('/status/{postCategory}', [ContentCategoryController::class, 'status'])->name('admin.content.category.status');
+            Route::get('/', [ContentCategoryController::class, 'index'])->name('admin.content.category.index')->middleware('can:read-postCategory');
+            Route::get('/create', [ContentCategoryController::class, 'create'])->name('admin.content.category.create')->middleware('can:create-postCategory');
+            Route::post('/store', [ContentCategoryController::class, 'store'])->name('admin.content.category.store')->middleware('can:create-postCategory');
+            Route::get('/edit/{postCategory}', [ContentCategoryController::class, 'edit'])->name('admin.content.category.edit')->middleware('can:edit-postCategory');
+            Route::put('/update/{postCategory}', [ContentCategoryController::class, 'update'])->name('admin.content.category.update')->middleware('can:edit-postCategory');
+            Route::delete('/destroy/{postCategory}', [ContentCategoryController::class, 'destroy'])->name('admin.content.category.destroy')->middleware('can:delete-postCategory');
+            Route::get('/status/{postCategory}', [ContentCategoryController::class, 'status'])->name('admin.content.category.status')->middleware('can:edit-postCategory');
         });
 
         //comment
         Route::prefix('comment')->group(function () {
-            Route::get('/', [ContentCommentController::class, 'index'])->name('admin.content.comment.index');
-            Route::get('/show/{comment}', [ContentCommentController::class, 'show'])->name('admin.content.comment.show');
-            Route::delete('/destroy/{comment}', [ContentCommentController::class, 'destroy'])->name('admin.content.comment.destroy');
-            Route::get('/approved/{comment}', [ContentCommentController::class, 'approved'])->name('admin.content.comment.approved');
-            Route::get('/status/{comment}', [ContentCommentController::class, 'status'])->name('admin.content.comment.status');
-            Route::post('/answer/{comment}', [ContentCommentController::class, 'answer'])->name('admin.content.comment.answer');
+            Route::get('/', [ContentCommentController::class, 'index'])->name('admin.content.comment.index')->middleware('can:read-postComment');
+            Route::get('/show/{comment}', [ContentCommentController::class, 'show'])->name('admin.content.comment.show')->middleware('can:read-postComment');
+            Route::delete('/destroy/{comment}', [ContentCommentController::class, 'destroy'])->name('admin.content.comment.destroy')->middleware('can:approved-postComment');
+            Route::get('/approved/{comment}', [ContentCommentController::class, 'approved'])->name('admin.content.comment.approved')->middleware('can:approved-postComment');
+            Route::get('/status/{comment}', [ContentCommentController::class, 'status'])->name('admin.content.comment.status')->middleware('can:approved-postComment');
+            Route::post('/answer/{comment}', [ContentCommentController::class, 'answer'])->name('admin.content.comment.answer')->middleware('can:answer-postComment');
         });
 
         //faq
         Route::prefix('faq')->group(function () {
-            Route::get('/', [FAQController::class, 'index'])->name('admin.content.faq.index');
-            Route::get('/create', [FAQController::class, 'create'])->name('admin.content.faq.create');
-            Route::post('/store', [FAQController::class, 'store'])->name('admin.content.faq.store');
-            Route::get('/edit/{faq}', [FAQController::class, 'edit'])->name('admin.content.faq.edit');
-            Route::put('/update/{faq}', [FAQController::class, 'update'])->name('admin.content.faq.update');
-            Route::delete('/destroy/{faq}', [FAQController::class, 'destroy'])->name('admin.content.faq.destroy');
-            Route::get('/status/{faq}', [FAQController::class, 'status'])->name('admin.content.faq.status');
+            Route::get('/', [FAQController::class, 'index'])->name('admin.content.faq.index')->middleware('can:read-faq');
+            Route::get('/create', [FAQController::class, 'create'])->name('admin.content.faq.create')->middleware('can:create-faq');
+            Route::post('/store', [FAQController::class, 'store'])->name('admin.content.faq.store')->middleware('can:create-faq');
+            Route::get('/edit/{faq}', [FAQController::class, 'edit'])->name('admin.content.faq.edit')->middleware('can:edit-faq');
+            Route::put('/update/{faq}', [FAQController::class, 'update'])->name('admin.content.faq.update')->middleware('can:edit-faq');
+            Route::delete('/destroy/{faq}', [FAQController::class, 'destroy'])->name('admin.content.faq.destroy')->middleware('can:delete-faq');
+            Route::get('/status/{faq}', [FAQController::class, 'status'])->name('admin.content.faq.status')->middleware('can:edit-faq');
         });
         //menu
         Route::prefix('menu')->group(function () {
-            Route::get('/', [MenuController::class, 'index'])->name('admin.content.menu.index');
-            Route::get('/create', [MenuController::class, 'create'])->name('admin.content.menu.create');
-            Route::post('/store', [MenuController::class, 'store'])->name('admin.content.menu.store');
-            Route::get('/edit/{menu}', [MenuController::class, 'edit'])->name('admin.content.menu.edit');
-            Route::put('/update/{menu}', [MenuController::class, 'update'])->name('admin.content.menu.update');
-            Route::delete('/destroy/{menu}', [MenuController::class, 'destroy'])->name('admin.content.menu.destroy');
-            Route::get('/status/{menu}', [MenuController::class, 'status'])->name('admin.content.menu.status');
+            Route::get('/', [MenuController::class, 'index'])->name('admin.content.menu.index')->middleware('can:read-menu');
+            Route::get('/create', [MenuController::class, 'create'])->name('admin.content.menu.create')->middleware('can:create-menu');
+            Route::post('/store', [MenuController::class, 'store'])->name('admin.content.menu.store')->middleware('can:create-menu');
+            Route::get('/edit/{menu}', [MenuController::class, 'edit'])->name('admin.content.menu.edit')->middleware('can:edit-menu');
+            Route::put('/update/{menu}', [MenuController::class, 'update'])->name('admin.content.menu.update')->middleware('can:edit-menu');
+            Route::delete('/destroy/{menu}', [MenuController::class, 'destroy'])->name('admin.content.menu.destroy')->middleware('can:delete-menu');
+            Route::get('/status/{menu}', [MenuController::class, 'status'])->name('admin.content.menu.status')->middleware('can:edit-menu');
         });
 
         //page
         Route::prefix('page')->group(function () {
-            Route::get('/', [PageController::class, 'index'])->name('admin.content.page.index');
-            Route::get('/create', [PageController::class, 'create'])->name('admin.content.page.create');
-            Route::post('/store', [PageController::class, 'store'])->name('admin.content.page.store');
-            Route::get('/edit/{page}', [PageController::class, 'edit'])->name('admin.content.page.edit');
-            Route::put('/update/{page}', [PageController::class, 'update'])->name('admin.content.page.update');
-            Route::delete('/destroy/{page}', [PageController::class, 'destroy'])->name('admin.content.page.destroy');
-            Route::get('/status/{page}', [PageController::class, 'status'])->name('admin.content.page.status');
+            Route::get('/', [PageController::class, 'index'])->name('admin.content.page.index')->middleware('can:read-page');
+            Route::get('/create', [PageController::class, 'create'])->name('admin.content.page.create')->middleware('can:create-page');
+            Route::post('/store', [PageController::class, 'store'])->name('admin.content.page.store')->middleware('can:create-page');
+            Route::get('/edit/{page}', [PageController::class, 'edit'])->name('admin.content.page.edit')->middleware('can:edit-page');
+            Route::put('/update/{page}', [PageController::class, 'update'])->name('admin.content.page.update')->middleware('can:edit-page');
+            Route::delete('/destroy/{page}', [PageController::class, 'destroy'])->name('admin.content.page.destroy')->middleware('can:delete-page');
+            Route::get('/status/{page}', [PageController::class, 'status'])->name('admin.content.page.status')->middleware('can:edit-page');
         });
 
         //post
         Route::prefix('post')->group(function () {
-            Route::get('/', [PostController::class, 'index'])->name('admin.content.post.index');
-            Route::get('/create', [PostController::class, 'create'])->name('admin.content.post.create');
-            Route::post('/store', [PostController::class, 'store'])->name('admin.content.post.store');
-            Route::get('/edit/{post}', [PostController::class, 'edit'])->name('admin.content.post.edit');
-            Route::put('/update/{post}', [PostController::class, 'update'])->name('admin.content.post.update');
-            Route::delete('/destroy/{post}', [PostController::class, 'destroy'])->name('admin.content.post.destroy');
-            Route::get('/status/{post}', [PostController::class, 'status'])->name('admin.content.post.status');
-            Route::get('/commentable/{post}', [PostController::class, 'commentable'])->name('admin.content.post.commentable');
+            Route::get('/', [PostController::class, 'index'])->name('admin.content.post.index')->middleware('can:read-post');
+            Route::get('/create', [PostController::class, 'create'])->name('admin.content.post.create')->middleware('can:create-post');
+            Route::post('/store', [PostController::class, 'store'])->name('admin.content.post.store')->middleware('can:create-post');
+            Route::get('/edit/{post}', [PostController::class, 'edit'])->name('admin.content.post.edit')->middleware('can:edit-post');
+            Route::put('/update/{post}', [PostController::class, 'update'])->name('admin.content.post.update')->middleware('can:edit-post');
+            Route::delete('/destroy/{post}', [PostController::class, 'destroy'])->name('admin.content.post.destroy')->middleware('can:delete-post');
+            Route::get('/status/{post}', [PostController::class, 'status'])->name('admin.content.post.status')->middleware('can:edit-post');
+            Route::get('/commentable/{post}', [PostController::class, 'commentable'])->name('admin.content.post.commentable')->middleware('can:edit-post');
         });
     });
 
@@ -331,52 +331,52 @@ Route::prefix('admin')->namespace('Admin')->group(function () {
 
         //admin-user
         Route::prefix('admin-user')->group(function () {
-            Route::get('/', [AdminUserController::class, 'index'])->name('admin.user.admin-user.index');
-            Route::get('/create', [AdminUserController::class, 'create'])->name('admin.user.admin-user.create');
-            Route::post('/store', [AdminUserController::class, 'store'])->name('admin.user.admin-user.store');
-            Route::get('/edit/{admin}', [AdminUserController::class, 'edit'])->name('admin.user.admin-user.edit');
-            Route::put('/update/{admin}', [AdminUserController::class, 'update'])->name('admin.user.admin-user.update');
-            Route::delete('/destroy/{admin}', [AdminUserController::class, 'destroy'])->name('admin.user.admin-user.destroy');
-            Route::get('/status/{user}', [AdminUserController::class, 'status'])->name('admin.user.admin-user.status');
-            Route::get('/activation/{user}', [AdminUserController::class, 'activation'])->name('admin.user.admin-user.activation');
-            Route::get('/role/{user}', [AdminUserController::class, 'showRole'])->name('admin.user.admin-user.role');
-            Route::post('/role/{user}', [AdminUserController::class, 'storeRole'])->name('admin.user.admin-user.role.store');
-            Route::get('/permission/{user}', [AdminUserController::class, 'showPermission'])->name('admin.user.admin-user.permission');
-            Route::post('/permission/{user}', [AdminUserController::class, 'storePermission'])->name('admin.user.admin-user.permission.store');
+            Route::get('/', [AdminUserController::class, 'index'])->name('admin.user.admin-user.index')->middleware('can:read-admin');
+            Route::get('/create', [AdminUserController::class, 'create'])->name('admin.user.admin-user.create')->middleware('can:create-admin');
+            Route::post('/store', [AdminUserController::class, 'store'])->name('admin.user.admin-user.store')->middleware('can:create-admin');
+            Route::get('/edit/{admin}', [AdminUserController::class, 'edit'])->name('admin.user.admin-user.edit')->middleware('can:edit-admin');
+            Route::put('/update/{admin}', [AdminUserController::class, 'update'])->name('admin.user.admin-user.update')->middleware('can:edit-admin');
+            Route::delete('/destroy/{admin}', [AdminUserController::class, 'destroy'])->name('admin.user.admin-user.destroy')->middleware('can:delete-admin');
+            Route::get('/status/{user}', [AdminUserController::class, 'status'])->name('admin.user.admin-user.status')->middleware('can:edit-admin');
+            Route::get('/activation/{user}', [AdminUserController::class, 'activation'])->name('admin.user.admin-user.activation')->middleware('can:edit-admin');
+            Route::get('/role/{user}', [AdminUserController::class, 'showRole'])->name('admin.user.admin-user.role')->middleware('can:access-admin');
+            Route::post('/role/{user}', [AdminUserController::class, 'storeRole'])->name('admin.user.admin-user.role.store')->middleware('can:access-admin');
+            Route::get('/permission/{user}', [AdminUserController::class, 'showPermission'])->name('admin.user.admin-user.permission')->middleware('can:access-admin');
+            Route::post('/permission/{user}', [AdminUserController::class, 'storePermission'])->name('admin.user.admin-user.permission.store')->middleware('can:access-admin');
         });
 
         //customer
         Route::prefix('customer')->group(function () {
-            Route::get('/', [CustomerController::class, 'index'])->name('admin.user.customer.index');
-            Route::get('/create', [CustomerController::class, 'create'])->name('admin.user.customer.create');
-            Route::post('/store', [CustomerController::class, 'store'])->name('admin.user.customer.store');
-            Route::get('/edit/{user}', [CustomerController::class, 'edit'])->name('admin.user.customer.edit');
-            Route::put('/update/{user}', [CustomerController::class, 'update'])->name('admin.user.customer.update');
-            Route::delete('/destroy/{user}', [CustomerController::class, 'destroy'])->name('admin.user.customer.destroy');
-            Route::get('/status/{user}', [CustomerController::class, 'status'])->name('admin.user.customer.status');
-            Route::get('/activation/{user}', [CustomerController::class, 'activation'])->name('admin.user.customer.activation');
+            Route::get('/', [CustomerController::class, 'index'])->name('admin.user.customer.index')->middleware('can:read-customer');
+            Route::get('/create', [CustomerController::class, 'create'])->name('admin.user.customer.create')->middleware('can:create-customer');
+            Route::post('/store', [CustomerController::class, 'store'])->name('admin.user.customer.store')->middleware('can:create-customer');
+            Route::get('/edit/{user}', [CustomerController::class, 'edit'])->name('admin.user.customer.edit')->middleware('can:edit-customer');
+            Route::put('/update/{user}', [CustomerController::class, 'update'])->name('admin.user.customer.update')->middleware('can:edit-customer');
+            Route::delete('/destroy/{user}', [CustomerController::class, 'destroy'])->name('admin.user.customer.destroy')->middleware('can:delete-customer');
+            Route::get('/status/{user}', [CustomerController::class, 'status'])->name('admin.user.customer.status')->middleware('can:edit-customer');
+            Route::get('/activation/{user}', [CustomerController::class, 'activation'])->name('admin.user.customer.activation')->middleware('can:edit-customer');
         });
 
         //role
         Route::prefix('role')->group(function () {
-            Route::get('/', [RoleController::class, 'index'])->name('admin.user.role.index');
-            Route::get('/create', [RoleController::class, 'create'])->name('admin.user.role.create');
-            Route::post('/store', [RoleController::class, 'store'])->name('admin.user.role.store');
-            Route::get('/edit/{role}', [RoleController::class, 'edit'])->name('admin.user.role.edit');
-            Route::put('/update/{role}', [RoleController::class, 'update'])->name('admin.user.role.update');
-            Route::delete('/destroy/{role}', [RoleController::class, 'destroy'])->name('admin.user.role.destroy');
-            Route::get('/permission-form/{role}', [RoleController::class, 'PermissionForm'])->name('admin.user.role.permission-form');
-            Route::put('/permission-update/{role}', [RoleController::class, 'PermissionUpdate'])->name('admin.user.role.permission-update');
+            Route::get('/', [RoleController::class, 'index'])->name('admin.user.role.index')->middleware('can:read-role');
+            Route::get('/create', [RoleController::class, 'create'])->name('admin.user.role.create')->middleware('can:create-role');
+            Route::post('/store', [RoleController::class, 'store'])->name('admin.user.role.store')->middleware('can:create-role');
+            Route::get('/edit/{role}', [RoleController::class, 'edit'])->name('admin.user.role.edit')->middleware('can:edit-role');
+            Route::put('/update/{role}', [RoleController::class, 'update'])->name('admin.user.role.update')->middleware('can:edit-role');
+            Route::delete('/destroy/{role}', [RoleController::class, 'destroy'])->name('admin.user.role.destroy')->middleware('can:delete-role');
+            Route::get('/permission-form/{role}', [RoleController::class, 'PermissionForm'])->name('admin.user.role.permission-form')->middleware('can:access-admin');
+            Route::put('/permission-update/{role}', [RoleController::class, 'PermissionUpdate'])->name('admin.user.role.permission-update')->middleware('can:access-admin');
         });
 
         //permission
         Route::prefix('permission')->group(function () {
-            Route::get('/', [PermissionController::class, 'index'])->name('admin.user.permission.index');
-            Route::get('/create', [PermissionController::class, 'create'])->name('admin.user.permission.create');
-            Route::post('/store', [PermissionController::class, 'store'])->name('admin.user.permission.store');
-            Route::get('/edit/{permission}', [PermissionController::class, 'edit'])->name('admin.user.permission.edit');
-            Route::put('/update/{permission}', [PermissionController::class, 'update'])->name('admin.user.permission.update');
-            Route::delete('/destroy/{permission}', [PermissionController::class, 'destroy'])->name('admin.user.permission.destroy');
+            Route::get('/', [PermissionController::class, 'index'])->name('admin.user.permission.index')->middleware('can:read-permission');
+            Route::get('/create', [PermissionController::class, 'create'])->name('admin.user.permission.create')->middleware('can:create-permission');
+            Route::post('/store', [PermissionController::class, 'store'])->name('admin.user.permission.store')->middleware('can:create-permission');
+            Route::get('/edit/{permission}', [PermissionController::class, 'edit'])->name('admin.user.permission.edit')->middleware('can:edit-permission');
+            Route::put('/update/{permission}', [PermissionController::class, 'update'])->name('admin.user.permission.update')->middleware('can:edit-permission');
+            Route::delete('/destroy/{permission}', [PermissionController::class, 'destroy'])->name('admin.user.permission.destroy')->middleware('can:delete-permission');
         });
     });
 
@@ -385,36 +385,36 @@ Route::prefix('admin')->namespace('Admin')->group(function () {
 
         //email
         Route::prefix('email')->group(function () {
-            Route::get('/', [EmailController::class, 'index'])->name('admin.notify.email.index');
-            Route::get('/create', [EmailController::class, 'create'])->name('admin.notify.email.create');
-            Route::post('/store', [EmailController::class, 'store'])->name('admin.notify.email.store');
-            Route::get('/edit/{email}', [EmailController::class, 'edit'])->name('admin.notify.email.edit');
-            Route::put('/update/{email}', [EmailController::class, 'update'])->name('admin.notify.email.update');
-            Route::delete('/destroy/{email}', [EmailController::class, 'destroy'])->name('admin.notify.email.destroy');
-            Route::get('/status/{email}', [EmailController::class, 'status'])->name('admin.notify.email.status');
+            Route::get('/', [EmailController::class, 'index'])->name('admin.notify.email.index')->middleware('can:read-email');
+            Route::get('/create', [EmailController::class, 'create'])->name('admin.notify.email.create')->middleware('can:create-email');
+            Route::post('/store', [EmailController::class, 'store'])->name('admin.notify.email.store')->middleware('can:create-email');
+            Route::get('/edit/{email}', [EmailController::class, 'edit'])->name('admin.notify.email.edit')->middleware('can:edit-email');
+            Route::put('/update/{email}', [EmailController::class, 'update'])->name('admin.notify.email.update')->middleware('can:edit-email');
+            Route::delete('/destroy/{email}', [EmailController::class, 'destroy'])->name('admin.notify.email.destroy')->middleware('can:delete-email');
+            Route::get('/status/{email}', [EmailController::class, 'status'])->name('admin.notify.email.status')->middleware('can:edit-email');
         });
 
 
         //email file
         Route::prefix('email-file')->group(function () {
-            Route::get('/{email}', [EmailFileController::class, 'index'])->name('admin.notify.email-file.index');
-            Route::get('/{email}/create', [EmailFileController::class, 'create'])->name('admin.notify.email-file.create');
-            Route::post('/{email}/store', [EmailFileController::class, 'store'])->name('admin.notify.email-file.store');
-            Route::get('/edit/{file}', [EmailFileController::class, 'edit'])->name('admin.notify.email-file.edit');
-            Route::put('/update/{file}', [EmailFileController::class, 'update'])->name('admin.notify.email-file.update');
-            Route::delete('/destroy/{file}', [EmailFileController::class, 'destroy'])->name('admin.notify.email-file.destroy');
-            Route::get('/status/{file}', [EmailFileController::class, 'status'])->name('admin.notify.email-file.status');
+            Route::get('/{email}', [EmailFileController::class, 'index'])->name('admin.notify.email-file.index')->middleware('can:edit-email');
+            Route::get('/{email}/create', [EmailFileController::class, 'create'])->name('admin.notify.email-file.create')->middleware('can:edit-email');
+            Route::post('/{email}/store', [EmailFileController::class, 'store'])->name('admin.notify.email-file.store')->middleware('can:edit-email');
+            Route::get('/edit/{file}', [EmailFileController::class, 'edit'])->name('admin.notify.email-file.edit')->middleware('can:edit-email');
+            Route::put('/update/{file}', [EmailFileController::class, 'update'])->name('admin.notify.email-file.update')->middleware('can:edit-email');
+            Route::delete('/destroy/{file}', [EmailFileController::class, 'destroy'])->name('admin.notify.email-file.destroy')->middleware('can:edit-email');
+            Route::get('/status/{file}', [EmailFileController::class, 'status'])->name('admin.notify.email-file.status')->middleware('can:edit-email');
         });
 
         //sms
         Route::prefix('sms')->group(function () {
-            Route::get('/', [SMSController::class, 'index'])->name('admin.notify.sms.index');
-            Route::get('/create', [SMSController::class, 'create'])->name('admin.notify.sms.create');
-            Route::post('/store', [SMSController::class, 'store'])->name('admin.notify.sms.store');
-            Route::get('/edit/{sms}', [SMSController::class, 'edit'])->name('admin.notify.sms.edit');
-            Route::put('/update/{sms}', [SMSController::class, 'update'])->name('admin.notify.sms.update');
-            Route::delete('/destroy/{sms}', [SMSController::class, 'destroy'])->name('admin.notify.sms.destroy');
-            Route::get('/status/{sms}', [SMSController::class, 'status'])->name('admin.notify.sms.status');
+            Route::get('/', [SMSController::class, 'index'])->name('admin.notify.sms.index')->middleware('can:read-sms');
+            Route::get('/create', [SMSController::class, 'create'])->name('admin.notify.sms.create')->middleware('can:create-sms');
+            Route::post('/store', [SMSController::class, 'store'])->name('admin.notify.sms.store')->middleware('can:create-smssms');
+            Route::get('/edit/{sms}', [SMSController::class, 'edit'])->name('admin.notify.sms.edit')->middleware('can:edit-sms');
+            Route::put('/update/{sms}', [SMSController::class, 'update'])->name('admin.notify.sms.update')->middleware('can:edit-sms');
+            Route::delete('/destroy/{sms}', [SMSController::class, 'destroy'])->name('admin.notify.sms.destroy')->middleware('can:delete-sms');
+            Route::get('/status/{sms}', [SMSController::class, 'status'])->name('admin.notify.sms.status')->middleware('can:edit-sms');
         });
     });
 
@@ -422,50 +422,50 @@ Route::prefix('admin')->namespace('Admin')->group(function () {
 
         //category
         Route::prefix('category')->group(function () {
-            Route::get('/', [TicketCategoryController::class, 'index'])->name('admin.ticket.category.index');
-            Route::get('/create', [TicketCategoryController::class, 'create'])->name('admin.ticket.category.create');
-            Route::post('/store', [TicketCategoryController::class, 'store'])->name('admin.ticket.category.store');
-            Route::get('/edit/{ticketCategory}', [TicketCategoryController::class, 'edit'])->name('admin.ticket.category.edit');
-            Route::put('/update/{ticketCategory}', [TicketCategoryController::class, 'update'])->name('admin.ticket.category.update');
-            Route::delete('/destroy/{ticketCategory}', [TicketCategoryController::class, 'destroy'])->name('admin.ticket.category.destroy');
-            Route::get('/status/{ticketCategory}', [TicketCategoryController::class, 'status'])->name('admin.ticket.category.status');
+            Route::get('/', [TicketCategoryController::class, 'index'])->name('admin.ticket.category.index')->middleware('can:read-ticketCategory');
+            Route::get('/create', [TicketCategoryController::class, 'create'])->name('admin.ticket.category.create')->middleware('can:create-ticketCategory');
+            Route::post('/store', [TicketCategoryController::class, 'store'])->name('admin.ticket.category.store')->middleware('can:create-ticketCategory');
+            Route::get('/edit/{ticketCategory}', [TicketCategoryController::class, 'edit'])->name('admin.ticket.category.edit')->middleware('can:edit-ticketCategory');
+            Route::put('/update/{ticketCategory}', [TicketCategoryController::class, 'update'])->name('admin.ticket.category.update')->middleware('can:delete-ticketCategory');
+            Route::delete('/destroy/{ticketCategory}', [TicketCategoryController::class, 'destroy'])->name('admin.ticket.category.destroy')->middleware('can:edit-ticketCategory');
+            Route::get('/status/{ticketCategory}', [TicketCategoryController::class, 'status'])->name('admin.ticket.category.status')->middleware('can:edit-ticketCategory');
         });
 
 
         //priority
         Route::prefix('priority')->group(function () {
-            Route::get('/', [TicketPriorityController::class, 'index'])->name('admin.ticket.priority.index');
-            Route::get('/create', [TicketPriorityController::class, 'create'])->name('admin.ticket.priority.create');
-            Route::post('/store', [TicketPriorityController::class, 'store'])->name('admin.ticket.priority.store');
-            Route::get('/edit/{ticketPriority}', [TicketPriorityController::class, 'edit'])->name('admin.ticket.priority.edit');
-            Route::put('/update/{ticketPriority}', [TicketPriorityController::class, 'update'])->name('admin.ticket.priority.update');
-            Route::delete('/destroy/{ticketPriority}', [TicketPriorityController::class, 'destroy'])->name('admin.ticket.priority.destroy');
-            Route::get('/status/{ticketPriority}', [TicketPriorityController::class, 'status'])->name('admin.ticket.priority.status');
+            Route::get('/', [TicketPriorityController::class, 'index'])->name('admin.ticket.priority.index')->middleware('can:read-ticketPriority');
+            Route::get('/create', [TicketPriorityController::class, 'create'])->name('admin.ticket.priority.create')->middleware('can:create-ticketPriority');
+            Route::post('/store', [TicketPriorityController::class, 'store'])->name('admin.ticket.priority.store')->middleware('can:create-ticketPriority');
+            Route::get('/edit/{ticketPriority}', [TicketPriorityController::class, 'edit'])->name('admin.ticket.priority.edit')->middleware('can:edit-ticketPriority');
+            Route::put('/update/{ticketPriority}', [TicketPriorityController::class, 'update'])->name('admin.ticket.priority.update')->middleware('can:edit-ticketPriority');
+            Route::delete('/destroy/{ticketPriority}', [TicketPriorityController::class, 'destroy'])->name('admin.ticket.priority.destroy')->middleware('can:delete-ticketPriority');
+            Route::get('/status/{ticketPriority}', [TicketPriorityController::class, 'status'])->name('admin.ticket.priority.status')->middleware('can:edit-ticketPriority');
         });
 
 
         //admin
         Route::prefix('admin')->group(function () {
-            Route::get('/', [TicketAdminController::class, 'index'])->name('admin.ticket.admin.index');
-            Route::get('/set/{admin}', [TicketAdminController::class, 'set'])->name('admin.ticket.admin.set');
+            Route::get('/', [TicketAdminController::class, 'index'])->name('admin.ticket.admin.index')->middleware('can:read-ticketAdmin');
+            Route::get('/set/{admin}', [TicketAdminController::class, 'set'])->name('admin.ticket.admin.set')->middleware('can:edit-ticketAdmin');
         });
 
         //main
-        Route::get('/', [TicketController::class, 'index'])->name('admin.ticket.index');
-        Route::get('/new-tickets', [TicketController::class, 'newTickets'])->name('admin.ticket.newTickets');
-        Route::get('/open-tickets', [TicketController::class, 'openTickets'])->name('admin.ticket.openTickets');
-        Route::get('/close-tickets', [TicketController::class, 'closeTickets'])->name('admin.ticket.closeTickets');
-        Route::get('/show/{ticket}', [TicketController::class, 'show'])->name('admin.ticket.show');
-        Route::post('/answer/{ticket}', [TicketController::class, 'answer'])->name('admin.ticket.answer');
-        Route::get('/change/{ticket}', [TicketController::class, 'change'])->name('admin.ticket.change');
+        Route::get('/', [TicketController::class, 'index'])->name('admin.ticket.index')->middleware('can:read-ticket');
+        Route::get('/new-tickets', [TicketController::class, 'newTickets'])->name('admin.ticket.newTickets')->middleware('can:edit-ticket');
+        Route::get('/open-tickets', [TicketController::class, 'openTickets'])->name('admin.ticket.openTickets')->middleware('can:edit-ticket');
+        Route::get('/close-tickets', [TicketController::class, 'closeTickets'])->name('admin.ticket.closeTickets')->middleware('can:edit-ticket');
+        Route::get('/show/{ticket}', [TicketController::class, 'show'])->name('admin.ticket.show')->middleware('can:edit-ticket');
+        Route::post('/answer/{ticket}', [TicketController::class, 'answer'])->name('admin.ticket.answer')->middleware('can:edit-ticket');
+        Route::get('/change/{ticket}', [TicketController::class, 'change'])->name('admin.ticket.change')->middleware('can:edit-ticket');
     });
 
     Route::prefix('setting')->namespace('Setting')->group(function () {
 
-        Route::get('/', [SettingController::class, 'index'])->name('admin.setting.index');
-        Route::get('/edit/{setting}', [SettingController::class, 'edit'])->name('admin.setting.edit');
-        Route::put('/update/{setting}', [SettingController::class, 'update'])->name('admin.setting.update');
-        Route::delete('/destroy/{setting}', [SettingController::class, 'destroy'])->name('admin.setting.destroy');
+        Route::get('/', [SettingController::class, 'index'])->name('admin.setting.index')->middleware('can:read-setting');
+        Route::get('/edit/{setting}', [SettingController::class, 'edit'])->name('admin.setting.edit')->middleware('can:edit-setting');
+        Route::put('/update/{setting}', [SettingController::class, 'update'])->name('admin.setting.update')->middleware('can:edit-setting');
+        Route::delete('/destroy/{setting}', [SettingController::class, 'destroy'])->name('admin.setting.destroy')->middleware('can:edit-setting');
     });
     Route::post('/notification/read-all', [NotificationController::class, 'readAll'])->name('admin.notification.read-all');
 });
@@ -551,15 +551,13 @@ Route::prefix('profile')->group(
         Route::get('my-ticket/create', [CustomerTicketController::class, 'create'])->name('home.profile.my-ticket.create');
         Route::post('my-ticket/store', [CustomerTicketController::class, 'store'])->name('home.profile.my-ticket.store');
         Route::get('my-ticket/download/{ticket}', [CustomerTicketController::class, 'download'])->name('home.profile.my-ticket.download');
-
-        
-    });
+    }
+);
 
 Route::middleware(['auth:sanctum', 'verified'])->get('/dashboard', function () {
     return view('dashboard');
 })->name('dashboard');
 
-// Route::get('login', function(){
-//     Auth::loginUsingId(1);
-//     return back();
-// });
+Route::get('/login', function () {
+    auth()->loginUsingId(1);
+});
