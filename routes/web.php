@@ -41,9 +41,11 @@ use App\Http\Controllers\Admin\Market\CategoryValueController;
 use App\Http\Controllers\Admin\Ticket\TicketCategoryController;
 use App\Http\Controllers\Admin\Ticket\TicketPriorityController;
 use App\Http\Controllers\Customer\SalesProccess\CartController;
+use App\Http\Controllers\Customer\Profile\PhoneNumberController;
 use App\Http\Controllers\Customer\SalesProccess\AddressController;
 use App\Http\Controllers\Customer\SalesProccess\ProfileCompletionController;
 use App\Http\Controllers\Admin\Market\CommentController as MarketCommentController;
+use App\Http\Controllers\Customer\Profile\EmailController as ProfileEmailController;
 use App\Http\Controllers\Admin\Content\CommentController as ContentCommentController;
 use App\Http\Controllers\Customer\Profile\OrderController as CustomerOrderController;
 use App\Http\Controllers\Admin\Content\CategoryController as ContentCategoryController;
@@ -479,6 +481,7 @@ Route::namespace('Auth')->group(function () {
 
 Route::get('/', [HomeController::class, 'home'])->name('home');
 Route::get('/products/{productCategory?}', [HomeController::class, 'products'])->name('home.products');
+Route::get('/products/{productCategory?}', [HomeController::class, 'products'])->name('home.products');
 
 Route::namespace('Market')->group(function () {
 
@@ -489,7 +492,7 @@ Route::namespace('Market')->group(function () {
     Route::post('/add-rate/{product}', [CustomerProductController::class, 'addRate'])->name('home.product.add-rate');
 });
 
-Route::namespace('SalesProccess')->group(function () {
+Route::middleware('auth')->namespace('SalesProccess')->group(function () {
     //cart
     Route::get('/cart', [CartController::class, 'cart'])->name('home.sales-proccess.cart');
     Route::post('/cart', [CartController::class, 'updateCart'])->name('home.sales-proccess.update-cart');
@@ -528,6 +531,16 @@ Route::prefix('profile')->group(
 
         Route::get('/my-profile', [ProfileController::class, 'profile'])->name('home.profile.my-profile');
         Route::put('/my-profile', [ProfileController::class, 'update'])->name('home.profile.my-profile.update');
+
+        Route::get('/my-number', [PhoneNumberController::class, 'form'])->name('home.profile.my-number.index');
+        Route::middleware('throttle:login-register-limiter')->post('/my-number', [PhoneNumberController::class, 'update'])->name('home.profile.my-number.update');
+        Route::get('/my-number/confirm/{token}', [PhoneNumberController::class, 'confirmForm'])->name('home.profile.my-number.confirm-form');
+        Route::middleware('throttle:login-confirm-limiter')->post('/my-number/confirm/{token}', [PhoneNumberController::class, 'confirm'])->name('home.profile.my-number.confirm');
+
+        Route::get('/my-email', [ProfileEmailController::class, 'form'])->name('home.profile.my-email.index');
+        Route::middleware('throttle:login-register-limiter')->post('/my-email', [ProfileEmailController::class, 'update'])->name('home.profile.my-email.update');
+        Route::get('/my-email/confirm/{token}', [ProfileEmailController::class, 'confirmForm'])->name('home.profile.my-email.confirm-form');
+        Route::middleware('throttle:login-confirm-limiter')->post('/my-email/confirm/{token}', [ProfileEmailController::class, 'confirm'])->name('home.profile.my-email.confirm');
 
         Route::get('/my-addresses', [CustomerAddressController::class, 'index'])->name('home.profile.my-address');
 

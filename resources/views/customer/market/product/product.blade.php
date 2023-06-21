@@ -4,7 +4,7 @@
         @import url(//netdna.bootstrapcdn.com/font-awesome/3.2.1/css/font-awesome.css);
 
         /* Styling h1 and links
-                        ––––––––––––––––––––––––––––––––– */
+                                        ––––––––––––––––––––––––––––––––– */
         .starrating>input {
             display: none;
         }
@@ -39,7 +39,75 @@
             color: #ffca08;
         }
 
-        /* Set yellow color when star hover */
+        /* Three column layout */
+        .side {
+            float: left;
+            width: 15%;
+            margin-top: 10px;
+        }
+
+        #rating-chart {
+            width: 50%;
+        }
+
+        .middle {
+            float: left;
+            width: 70%;
+            margin-top: 10px;
+            direction: rtl;
+        }
+
+        .chart {
+            direction: ltr
+        }
+
+        /* The bar container */
+        .bar-container {
+            width: 100%;
+            background-color: #f1f1f1;
+            text-align: center;
+            color: white;
+        }
+
+        /* Individual bars */
+        .bar-5 {
+            height: 18px;
+            background-color: #04AA6D;
+        }
+
+        .bar-4 {
+            height: 18px;
+            background-color: #2196F3;
+        }
+
+        .bar-3 {
+            height: 18px;
+            background-color: #00bcd4;
+        }
+
+        .bar-2 {
+            height: 18px;
+            background-color: #ff9800;
+        }
+
+        .bar-1 {
+            height: 18px;
+            background-color: #f44336;
+        }
+
+        /* Responsive layout - make the columns stack on top of each other instead of next to each other */
+        @media (max-width: 400px) {
+
+            .side,
+            .middle {
+                width: 100%;
+            }
+
+            /* Hide the right column on small screens */
+            .right {
+                display: none;
+            }
+        }
     </style>
 @endsection
 @section('content')
@@ -169,74 +237,78 @@
                                                     نیست</span></p>
                                         @endif
                                         <div class="d-flex">
-                                        {{-- favorite --}}
-                                        @guest
-                                            <section class="product-add-to-favorite position-relative my-2" style="top:0">
-                                                <button type="button" class="btn btn-light btn-sm text-decoration-none"
-                                                    data-bs-toggle="tooltip" data-bs-placement="left"
-                                                    data-url="{{ route('home.product.add-favorite', $product) }}"
-                                                    title="افزودن به علاقه مندی">
-                                                    <i class="fa fa-heart"></i>
-                                                </button>
-                                            </section>
-                                        @endguest
-                                        @auth
-                                            @if ($product->users->contains(auth()->user()->id))
+                                            {{-- favorite --}}
+                                            @guest
                                                 <section class="product-add-to-favorite position-relative my-2" style="top:0">
-                                                    <button type="button"
-                                                        class="add-to-favorite btn btn-light btn-sm text-decoration-none"
-                                                        data-bs-toggle="tooltip" data-bs-placement="left"
-                                                        data-url="{{ route('home.product.add-favorite', $product) }}"
-                                                        title="حذف از علاقه مندی">
-                                                        <i class="fa fa-heart text-danger"></i>
-                                                    </button>
-                                                </section>
-                                            @else
-                                                <section class="product-add-to-favorite position-relative my-2" style="top:0">
-                                                    <button type="button"
-                                                        class="add-to-favorite btn btn-light btn-sm text-decoration-none"
+                                                    <button type="button" class="btn btn-light btn-sm text-decoration-none"
                                                         data-bs-toggle="tooltip" data-bs-placement="left"
                                                         data-url="{{ route('home.product.add-favorite', $product) }}"
                                                         title="افزودن به علاقه مندی">
                                                         <i class="fa fa-heart"></i>
                                                     </button>
                                                 </section>
-                                            @endif
-                                        @endauth
-                                        {{-- compare --}}
-                                        @guest
-                                            <section class="product-add-to-compare position-relative my-2" style="top:0">
-                                                <button type="button" class="btn btn-light btn-sm text-decoration-none"
-                                                    data-bs-toggle="tooltip" data-bs-placement="left"
-                                                    data-url="{{ route('home.product.add-compare', $product) }}"
-                                                    title="افزودن به مقایسه">
-                                                    <i class="fa fa-industry"></i>
-                                                </button>
-                                            </section>
-                                        @endguest
-                                        @auth
-                                            @if (auth()->user()->compare && $product->compares->contains(auth()->user()->compare->id))
+                                            @endguest
+                                            @auth
+                                                @if ($product->users->contains(auth()->user()->id))
+                                                    <section class="product-add-to-favorite position-relative my-2"
+                                                        style="top:0">
+                                                        <button type="button"
+                                                            class="add-to-favorite btn btn-light btn-sm text-decoration-none"
+                                                            data-bs-toggle="tooltip" data-bs-placement="left"
+                                                            data-url="{{ route('home.product.add-favorite', $product) }}"
+                                                            title="حذف از علاقه مندی">
+                                                            <i class="fa fa-heart text-danger"></i>
+                                                        </button>
+                                                    </section>
+                                                @else
+                                                    <section class="product-add-to-favorite position-relative my-2"
+                                                        style="top:0">
+                                                        <button type="button"
+                                                            class="add-to-favorite btn btn-light btn-sm text-decoration-none"
+                                                            data-bs-toggle="tooltip" data-bs-placement="left"
+                                                            data-url="{{ route('home.product.add-favorite', $product) }}"
+                                                            title="افزودن به علاقه مندی">
+                                                            <i class="fa fa-heart"></i>
+                                                        </button>
+                                                    </section>
+                                                @endif
+                                            @endauth
+                                            {{-- compare --}}
+                                            @guest
                                                 <section class="product-add-to-compare position-relative my-2" style="top:0">
-                                                    <button type="button"
-                                                        class="add-to-compare btn btn-light btn-sm text-decoration-none"
+                                                    <button type="button" class="btn btn-light btn-sm text-decoration-none"
                                                         data-bs-toggle="tooltip" data-bs-placement="left"
                                                         data-url="{{ route('home.product.add-compare', $product) }}"
-                                                        title="حذف از مقایسه">
-                                                        <i class="fa fa-industry text-danger"></i>
-                                                    </button>
-                                                </section>
-                                            @else
-                                                <section class="product-add-to-compare position-relative my-2" style="top:0">
-                                                    <button type="button"
-                                                        class="add-to-compare btn btn-light btn-sm text-decoration-none"
-                                                        data-bs-toggle="tooltip" data-bs-placement="left"
-                                                        data-url="{{ route('home.product.add-compare', $product) }}"
-                                                        title="افزودن به  مقایسه">
+                                                        title="افزودن به مقایسه">
                                                         <i class="fa fa-industry"></i>
                                                     </button>
                                                 </section>
-                                            @endif
-                                        @endauth
+                                            @endguest
+                                            @auth
+                                                @if (auth()->user()->compare && $product->compares->contains(auth()->user()->compare->id))
+                                                    <section class="product-add-to-compare position-relative my-2"
+                                                        style="top:0">
+                                                        <button type="button"
+                                                            class="add-to-compare btn btn-light btn-sm text-decoration-none"
+                                                            data-bs-toggle="tooltip" data-bs-placement="left"
+                                                            data-url="{{ route('home.product.add-compare', $product) }}"
+                                                            title="حذف از مقایسه">
+                                                            <i class="fa fa-industry text-danger"></i>
+                                                        </button>
+                                                    </section>
+                                                @else
+                                                    <section class="product-add-to-compare position-relative my-2"
+                                                        style="top:0">
+                                                        <button type="button"
+                                                            class="add-to-compare btn btn-light btn-sm text-decoration-none"
+                                                            data-bs-toggle="tooltip" data-bs-placement="left"
+                                                            data-url="{{ route('home.product.add-compare', $product) }}"
+                                                            title="افزودن به  مقایسه">
+                                                            <i class="fa fa-industry"></i>
+                                                        </button>
+                                                    </section>
+                                                @endif
+                                            @endauth
                                         </div>
                                         <section>
                                             <section class="cart-product-number d-inline-block ">
@@ -312,109 +384,110 @@
     <!-- end cart -->
 
 
-
-    <!-- start product lazy load -->
-    <section class="mb-4">
-        <section class="container-xxl">
-            <section class="row">
-                <section class="col">
-                    <section class="content-wrapper bg-white p-3 rounded-2">
-                        <!-- start vontent header -->
-                        <section class="content-header">
-                            <section class="d-flex justify-content-between align-items-center">
-                                <h2 class="content-header-title">
-                                    <span>کالاهای مرتبط</span>
-                                </h2>
-                                <section class="content-header-link">
-                                    <!--<a href="#">مشاهده همه</a>-->
+    @if ($reletedProducts->count() > 0)
+        <!-- start product lazy load -->
+        <section class="mb-4">
+            <section class="container-xxl">
+                <section class="row">
+                    <section class="col">
+                        <section class="content-wrapper bg-white p-3 rounded-2">
+                            <!-- start vontent header -->
+                            <section class="content-header">
+                                <section class="d-flex justify-content-between align-items-center">
+                                    <h2 class="content-header-title">
+                                        <span>کالاهای مرتبط</span>
+                                    </h2>
+                                    <section class="content-header-link">
+                                        <!--<a href="#">مشاهده همه</a>-->
+                                    </section>
                                 </section>
                             </section>
-                        </section>
-                        <!-- start vontent header -->
-                        <section class="lazyload-wrapper">
-                            <section class="lazyload light-owl-nav owl-carousel owl-theme">
+                            <!-- start vontent header -->
+                            <section class="lazyload-wrapper">
+                                <section class="lazyload light-owl-nav owl-carousel owl-theme">
 
-                                @foreach ($reletedProducts as $reletedProduct)
-                                    <section class="item">
-                                        <section class="lazyload-item-wrapper">
-                                            <section class="product">
-                                                {{-- <section class="product-add-to-cart"><a href="#"
+                                    @foreach ($reletedProducts as $reletedProduct)
+                                        <section class="item">
+                                            <section class="lazyload-item-wrapper">
+                                                <section class="product">
+                                                    {{-- <section class="product-add-to-cart"><a href="#"
                                                         data-bs-toggle="tooltip" data-bs-placement="left"
                                                         title="افزودن به سبد خرید"><i class="fa fa-cart-plus"></i></a>
                                                 </section> --}}
-                                                @guest
-                                                    <section class="product-add-to-favorite">
-                                                        <button class="btn btn-light btn-sm text-decoration-none"
-                                                            data-bs-toggle="tooltip" data-bs-placement="left"
-                                                            data-url="{{ route('home.product.add-favorite', $reletedProduct) }}"
-                                                            title="افزودن به علاقه مندی">
-                                                            <i class="fa fa-heart"></i>
-                                                        </button>
-                                                    </section>
-                                                @endguest
-                                                @auth
-                                                    @if ($reletedProduct->users->contains(auth()->user()->id))
+                                                    {{-- @guest
                                                         <section class="product-add-to-favorite">
-                                                            <button
-                                                                class="add-to-favorite btn btn-light btn-sm text-decoration-none"
-                                                                data-bs-toggle="tooltip" data-bs-placement="left"
-                                                                data-url="{{ route('home.product.add-favorite', $reletedProduct) }}"
-                                                                title="حذف از علاقه مندی">
-                                                                <i class="fa fa-heart text-danger"></i>
-                                                            </button>
-                                                        </section>
-                                                    @else
-                                                        <section class="product-add-to-favorite">
-                                                            <button
-                                                                class="add-to-favorite btn btn-light btn-sm text-decoration-none"
+                                                            <button class="btn btn-light btn-sm text-decoration-none"
                                                                 data-bs-toggle="tooltip" data-bs-placement="left"
                                                                 data-url="{{ route('home.product.add-favorite', $reletedProduct) }}"
                                                                 title="افزودن به علاقه مندی">
                                                                 <i class="fa fa-heart"></i>
                                                             </button>
                                                         </section>
-                                                    @endif
-                                                @endauth
-                                                <a class="product-link"
-                                                    href="{{ route('home.product.index', $reletedProduct) }}">
-                                                    <section class="product-image">
-                                                        <img class=""
-                                                            src="{{ asset($reletedProduct->image['indexArray'][$reletedProduct->image['currentImage']]) }}"
-                                                            alt="{{ $reletedProduct->slug }}">
-                                                    </section>
-                                                    <section class="product-colors"></section>
-                                                    <section class="product-name">
-                                                        <h3>{{ Str::limit($reletedProduct->name, 20) }}</h3>
-                                                    </section>
-                                                    <section class="product-price-wrapper">
-                                                        {{-- <section class="product-discount">
+                                                    @endguest
+                                                    @auth
+                                                        @if ($reletedProduct->users->contains(auth()->user()->id))
+                                                            <section class="product-add-to-favorite">
+                                                                <button
+                                                                    class="add-to-favorite btn btn-light btn-sm text-decoration-none"
+                                                                    data-bs-toggle="tooltip" data-bs-placement="left"
+                                                                    data-url="{{ route('home.product.add-favorite', $reletedProduct) }}"
+                                                                    title="حذف از علاقه مندی">
+                                                                    <i class="fa fa-heart text-danger"></i>
+                                                                </button>
+                                                            </section>
+                                                        @else
+                                                            <section class="product-add-to-favorite">
+                                                                <button
+                                                                    class="add-to-favorite btn btn-light btn-sm text-decoration-none"
+                                                                    data-bs-toggle="tooltip" data-bs-placement="left"
+                                                                    data-url="{{ route('home.product.add-favorite', $reletedProduct) }}"
+                                                                    title="افزودن به علاقه مندی">
+                                                                    <i class="fa fa-heart"></i>
+                                                                </button>
+                                                            </section>
+                                                        @endif
+                                                    @endauth --}}
+                                                    <a class="product-link"
+                                                        href="{{ route('home.product.index', $reletedProduct) }}">
+                                                        <section class="product-image">
+                                                            <img class=""
+                                                                src="{{ asset($reletedProduct->image['indexArray'][$reletedProduct->image['currentImage']]) }}"
+                                                                alt="{{ $reletedProduct->slug }}">
+                                                        </section>
+                                                        <section class="product-colors"></section>
+                                                        <section class="product-name">
+                                                            <h3>{{ Str::limit($reletedProduct->name, 20) }}</h3>
+                                                        </section>
+                                                        <section class="product-price-wrapper">
+                                                            {{-- <section class="product-discount">
                                                             <span class="product-old-price">6,895,000 </span>
                                                             <span class="product-discount-amount">10%</span>
                                                         </section> --}}
-                                                        <section class="product-price">
-                                                            {{ priceFormat($reletedProduct->price) }}</section>
-                                                    </section>
-                                                    <section class="product-colors">
-                                                        @foreach ($reletedProduct->colors as $color)
-                                                            <section class="product-colors-item"
-                                                                style="background-color: {{ $color->color }};"></section>
-                                                        @endforeach
-                                                    </section>
-                                                </a>
-                                            </section>
+                                                            <section class="product-price">
+                                                                {{ priceFormat($reletedProduct->price) }}</section>
+                                                        </section>
+                                                        <section class="product-colors">
+                                                            @foreach ($reletedProduct->colors as $color)
+                                                                <section class="product-colors-item"
+                                                                    style="background-color: {{ $color->color }};">
+                                                                </section>
+                                                            @endforeach
+                                                        </section>
+                                                    </a>
+                                                </section>
 
+                                            </section>
                                         </section>
-                                    </section>
-                                @endforeach
+                                    @endforeach
+                                </section>
                             </section>
                         </section>
                     </section>
                 </section>
             </section>
         </section>
-    </section>
-    <!-- end product lazy load -->
-
+        <!-- end product lazy load -->
+    @endif
     <!-- start description, features and comments -->
     <section class="mb-4">
         <section class="container-xxl">
@@ -422,7 +495,7 @@
                 <section class="col">
                     <section class="content-wrapper bg-white p-3 rounded-2">
                         <!-- start content header -->
-                        <section id="introduction-features-comments" class="introduction-features-comments">
+                        <section id="introduction-features-comments" class="introduction-features-comments" id="introduction">
                             <section class="content-header">
                                 <section class="d-flex justify-content-between align-items-center">
                                     <h2 class="content-header-title">
@@ -559,7 +632,7 @@
                                     </section>
                                 </section>
 
-                                @foreach ($product->activeComments()->where('parent_id', null) as $comment)
+                                @foreach ($comments as $comment)
                                     <section class="product-comment">
                                         <section class="product-comment-header d-flex justify-content-start">
                                             <section class="product-comment-date">{{ jalaliDate($comment->created_at) }}
@@ -613,10 +686,10 @@
                                 </section>
                             </section>
 
-                            <section class="product-comments mb-4 p-4">
+                            <section class="product-comments mb-3 d-flex justify-content-around align-items-center flex-wrap">
                                 @auth
                                     @if (auth()->user()->userProductPurchase()->contains($product->id))
-                                        <div class="container">
+                                        <div class="container d-inline-block" style="width: 50%" id="star-rating">
                                             <h5 class="text-danger">
                                                 امتیاز خود را به این محصول انتخاب نمایید
                                             </h5>
@@ -643,13 +716,13 @@
                                                 میانگین امتیاز :
                                                 {{ number_format($product->ratingsAvg(), 1, '/') ??
                                                     'شما اولین
-                                                                                                                                                                                                                                                                                                                        امتیاز را ثبت نمایید!!!' }}
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        امتیاز را ثبت نمایید!!!' }}
                                             </h6>
                                             <h6>
                                                 تعداد افراد شرکت کننده :
                                                 {{ $product->ratingsCount() ??
                                                     'شما اولین امتیاز را ثبت
-                                                                                                                                                                                                                                                                                                                        نمایید!!!' }}
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        نمایید!!!' }}
                                             </h6>
                                         </div>
                                     @else
@@ -663,6 +736,25 @@
                                                 کنید.</a></p>
                                     </section>
                                 @endguest
+                                <section id="rating-chart">
+                                    <section class="chart">
+                                        @for ($i = 5; $i > 0; $i--)
+                                        <div class="side">
+                                            <div> {{$i}} ستاره </div>
+                                        </div>
+                                        <div class="middle">
+                                            <div class="bar-container">
+                                                <div class="bar-{{$i}}"
+                                                    style="width: {{ ($ratings->countBy('value')[$i] ?? 0) * 100 / ($product->ratingsCount() == 0 ? 1 : $product->ratingsCount()) }}%;">
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="side right">
+                                            <div>{{ $ratings->countBy('value')[$i] ?? 0 }}</div>
+                                        </div>
+                                        @endfor
+                                    </section>
+                                </section>
                             </section>
                         </section>
                     </section>
@@ -673,14 +765,14 @@
     <!-- end description, features and comments -->
 
     <section class="position-fixed p-4 flex-row-reverse" style="right: 0; top: 3rem; width: 26rem; max-width: 80%;">
-        <div class="toast" role="alert" aria-live="assertive" aria-atomic="true">
+        <div class="toast d-none" role="alert" aria-live="assertive" aria-atomic="true">
             <div class="toast-header">
                 <strong class="me-auto">فروشگاه</strong>
                 <button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Close"></button>
             </div>
             <div class="toast-body">
                 <strong class="ml-auto">
-                    برای افزودن کالا به لیست علاقه مندی ها باید ابتدا وارد حساب کاربری خود شوید
+                    برای افزودن کالا به لیست علاقه مندی ها یا مقایسه ها باید ابتدا وارد حساب کاربری خود شوید
                     <br>
                     <a href="{{ route('auth.customer.login-register-form') }}" class="text-dark">
                         ثبت نام / ورود
@@ -769,7 +861,11 @@
                         $(element).attr('data-original-title', 'افزودن از علاقه مندی ها');
                         $(element).attr('data-bs-original-title', 'افزودن از علاقه مندی ها');
                     } else if (result.status == 3) {
+                         $('.toast').removeClass('d-none');
                         $('.toast').toast('show');
+                        setTimeout(function () {
+                            $('.toast').addClass('d-none');
+                        }, 10000);
                     }
                 }
             })
@@ -792,8 +888,7 @@
                         $(element).attr('data-bs-original-title', 'افزودن به مقایسه');
                     } else if (result.status == 3) {
                         $('.toast').toast('show');
-                    }
-                     else if (result.status == 4) {
+                    } else if (result.status == 4) {
                         alert('بیشتر از 3 محصول نمیتوانید به مقایسه ها اضافه کنید');
                     }
                 }
@@ -814,6 +909,20 @@
                     s.removeClass("stick");
                 }
             });
+            if (screen.width > 0 && screen.width < 480) {
+                var content = $('#introduction-features-comments');
+                content.addClass('d-none');
+                var chart= $('#rating-chart');
+                chart.css({'width': '100%'});
+                var star_rating = $('#star-rating');
+                star_rating.css({
+                    'width': '100%',
+                });
+                star_rating.children().css({'font-size': '13px'});
+                console.log(star_rating.children())
+
+                
+            }
         });
         //end product introduction, features and comment
     </script>

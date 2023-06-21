@@ -1,6 +1,7 @@
 @extends('customer.layouts.master-two-col')
 @section('head-tag')
     <title>محصولات</title>
+    <link rel='stylesheet' href='https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css'>
 @endsection
 
 @section('customer.layouts.sidebar')
@@ -104,23 +105,33 @@
             <section class="filters mb-3">
                 @if (request()->search)
                     <span class="d-inline-block border p-1 rounded bg-light">نتیجه جستجو برای :<span
-                            class="badge bg-info text-dark">"{{ request()->search }}"</span></span>
+                            class="badge bg-info text-dark">"{{ request()->search }}"</span>
+                            <a href="{{route('home.products', ['search' => null, 'sort' => 1, 'min_price' => request()->min_price, 'max_price' => request()->max_price, 'brands' => request()->brands, request()->productCategory ?? null]) }}" ><i class="fa fa-close red-color"></i></a>
+                        </span>
                 @endif
                 @if (request()->brands)
-                    <span class="d-inline-block border p-1 rounded bg-light">برند : <span
-                            class="badge bg-info text-dark">"{{ implode(', ', $selected_brands) }}"</span></span>
+                    <span class="d-inline-block border p-1 rounded bg-light">برند : 
+                        <span class="badge bg-info text-dark">"{{ implode(', ', $selected_brands) }}"</span>
+                        <a href="{{route('home.products', ['search' => request()->search, 'sort' => 1, 'min_price' => request()->min_price, 'max_price' => request()->max_price, 'brands' => null, request()->productCategory ?? null]) }}" ><i class="fa fa-close red-color"></i></a>
+                    </span>
                 @endif
                 @if (request()->productCategory)
                     <span class="d-inline-block border p-1 rounded bg-light">دسته : <span
-                            class="badge bg-info text-dark">"{{ request()->productCategory->name }}"</span></span>
+                            class="badge bg-info text-dark">"{{ request()->productCategory->name }}"</span>
+                            <a href="{{route('home.products', ['search' => request()->search, 'sort' => 1, 'min_price' => request()->min_price, 'max_price' => request()->max_price, 'brands' => request()->brands, request()->productCategory = null]) }}" ><i class="fa fa-close red-color"></i></a>
+                        </span>
                 @endif
                 @if (request()->min_price)
                     <span class="d-inline-block border p-1 rounded bg-light">قیمت از : <span
-                            class="badge bg-info text-dark"> {{ request()->min_price }} تومان</span></span>
+                            class="badge bg-info text-dark"> {{ request()->min_price }} تومان</span>
+                        <a href="{{route('home.products', ['search' => request()->search, 'sort' => 1, 'min_price' => null, 'max_price' => request()->max_price, 'brands' => request()->brands, request()->productCategory ?? null]) }}" ><i class="fa fa-close red-color"></i></a>
+                    </span>
                 @endif
                 @if (request()->max_price)
                     <span class="d-inline-block border p-1 rounded bg-light">قیمت تا : <span
-                            class="badge bg-info text-dark"> {{ request()->max_price }} تومان</span></span>
+                            class="badge bg-info text-dark"> {{ request()->max_price }} تومان</span>
+                            <a href="{{route('home.products', ['search' => request()->search, 'sort' => 1, 'min_price' => request()->min_price, 'max_price' => null, 'brands' => request()->brands, request()->productCategory ?? null]) }}" ><i class="fa fa-close red-color"></i></a>
+                        </span>
                 @endif
             </section>
             <section class="sort ">
@@ -146,13 +157,13 @@
                 @forelse ($products as $product)
                     <section class="col-md-3 p-0">
                         <section class="product">
-                            <section class="product-add-to-cart"><a href="#" data-bs-toggle="tooltip"
+                            {{-- <section class="product-add-to-cart"><a href="#" data-bs-toggle="tooltip"
                                     data-bs-placement="left" title="افزودن به سبد خرید"><i
                                         class="fa fa-cart-plus"></i></a></section>
                             <section class="product-add-to-favorite"><a href="#" data-bs-toggle="tooltip"
                                     data-bs-placement="left" title="افزودن به علاقه مندی"><i class="fa fa-heart"></i></a>
-                            </section>
-                            <a class="product-link" href="#">
+                            </section> --}}
+                            <a class="product-link" href="{{route('home.product.index', $product->slug)}}">
                                 <section class="product-image">
                                     <img class="" src="{{ asset($product->image['indexArray']['medium']) }}"
                                         alt="{{ $product->slug }}">

@@ -28,26 +28,21 @@
                     <section class="cart-img align-self-start flex-shrink-1"><img
                             src="{{ asset($product->image['indexArray']['medium']) }}" alt=""></section>
                     <section class="align-self-start w-100">
-                        <p class="fw-bold"> {{ $product->name }} </p>
-                        <p><i class="fa fa-store-alt cart-product-selected-store me-1"></i>
-                            <span>{{ $product->marketable_number > 0 ? 'موجود در انبار' : 'کالا موجود نیست' }}</span>
-                        </p>
-                        <section>
-                            <a class="text-decoration-none cart-delete"
+                        <p class="fw-bold"> {{ Str::substr($product->name, 0, 17) }} ... </p>
+                        <section class="d-flex align-items-start flex-column">
+                            <a class="text-decoration-none cart-delete p-2"
                                 href="{{ route('home.profile.my-favorite.delete', $product) }}"><i
-                                    class="fa fa-trash-alt"></i> حذف از لیست علاقه ها</a>
+                                    class="fa fa-trash-alt"></i>حذف</a>
+                            @if (!empty($product->activeAmazingSales()))
+                                <section class="cart-item-discount text-danger text-nowrap mb-1 p-2">
+                                    {{ priceFormat($product->amazingSaleDiscount()) }}
+                                    تخفیف
+                                </section>
+                            @endif
+                            <section class="text-nowrap fw-bold p-2">
+                                {{ priceFormat($product->price - $product->amazingSaleDiscount()) }}
+                                تومان</section>
                         </section>
-                    </section>
-                    <section class="align-self-end flex-shrink-1">
-                        @if (!empty($product->activeAmazingSales()))
-                            <section class="cart-item-discount text-danger text-nowrap mb-1">
-                                {{ priceFormat($product->amazingSaleDiscount()) }}
-                                تخفیف
-                            </section>
-                        @endif
-                        <section class="text-nowrap fw-bold">
-                            {{ priceFormat($product->price - $product->amazingSaleDiscount()) }}
-                            تومان</section>
                     </section>
                 </section>
 

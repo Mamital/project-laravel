@@ -24,7 +24,8 @@
 
                     <section class="row mt-4">
                         <section class="col-md-9 mb-3">
-                            <form action="{{route('home.sales-proccess.update-cart')}}" method="post" id="cart_items" class="content-wrapper bg-white p-3 rounded-2">
+                            <form action="{{ route('home.sales-proccess.update-cart') }}" method="post" id="cart_items"
+                                class="content-wrapper bg-white p-3 rounded-2">
                                 @csrf
                                 @php
                                     $totalProductPrice = 0;
@@ -54,15 +55,15 @@
                                             <section>
                                                 <section class="cart-product-number d-inline-block ">
                                                     <button class="cart-number cart-number-down" type="button">-</button>
-                                                    <input class="number" 
-                                                    name="number[{{$cartItem->id}}]"
+                                                    <input class="number" name="number[{{ $cartItem->id }}]"
                                                         data-product-price={{ $cartItem->cartItemProductPrice() }}
                                                         data-product-discount={{ $cartItem->cartItemProductDiscount() }}
                                                         type="number" min="1" max="5" step="1"
                                                         value="{{ $cartItem->number }}" readonly="readonly">
                                                     <button class="cart-number cart-number-up" type="button">+</button>
                                                 </section>
-                                                <a class="text-decoration-none ms-4 cart-delete" href="{{route('home.sales-proccess.remove-from-cart', $cartItem)}}"><i
+                                                <a class="text-decoration-none ms-4 cart-delete"
+                                                    href="{{ route('home.sales-proccess.remove-from-cart', $cartItem) }}"><i
                                                         class="fa fa-trash-alt"></i> حذف از سبد</a>
                                             </section>
                                         </section>
@@ -82,19 +83,17 @@
                         <section class="col-md-3">
                             <section class="content-wrapper bg-white p-3 rounded-2 cart-total-price">
                                 <section class="d-flex justify-content-between align-items-center">
-                                    <p class="text-muted">قیمت کالاها ({{$cartItems->count()}})</p>
+                                    <p class="text-muted">قیمت کالاها ({{ $cartItems->count() }})</p>
                                     <p class="text-muted" id="total-product-price">{{ priceFormat($totalProductPrice) }}
                                     </p>
                                 </section>
 
                                 @if ($totalProductDiscount > 0)
-                                    
-                                <section class="d-flex justify-content-between align-items-center">
-                                    <p class="text-muted">تخفیف کالاها</p>
-                                    <p class="text-danger fw-bolder" id="total-product-discount">
-                                        {{ priceFormat($totalProductDiscount) }}</p>
-                                </section>
-
+                                    <section class="d-flex justify-content-between align-items-center">
+                                        <p class="text-muted">تخفیف کالاها</p>
+                                        <p class="text-danger fw-bolder" id="total-product-discount">
+                                            {{ priceFormat($totalProductDiscount) }}</p>
+                                    </section>
                                 @endif
 
                                 <section class="border-bottom mb-3"></section>
@@ -113,7 +112,8 @@
 
 
                                 <section class="">
-                                    <button onclick="document.getElementById('cart_items').submit()" class="btn btn-danger d-block">تکمیل فرآیند خرید</button>
+                                    <button onclick="document.getElementById('cart_items').submit()"
+                                        class="btn btn-danger d-block">تکمیل فرآیند خرید</button>
                                 </section>
 
                             </section>
@@ -152,11 +152,7 @@
                                     <section class="item">
                                         <section class="lazyload-item-wrapper">
                                             <section class="product">
-                                                <section class="product-add-to-cart"><a href="#"
-                                                        data-bs-toggle="tooltip" data-bs-placement="left"
-                                                        title="افزودن به سبد خرید"><i class="fa fa-cart-plus"></i></a>
-                                                </section>
-                                                @guest
+                                                {{-- @guest
                                                     <section class="product-add-to-favorite">
                                                         <button class="btn btn-light btn-sm text-decoration-none"
                                                             data-bs-toggle="tooltip" data-bs-placement="left"
@@ -188,7 +184,7 @@
                                                             </button>
                                                         </section>
                                                     @endif
-                                                @endauth
+                                                @endauth --}}
                                                 <a class="product-link"
                                                     href="{{ route('home.product.index', $reletedProduct) }}">
                                                     <section class="product-image">

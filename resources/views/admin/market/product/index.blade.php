@@ -50,7 +50,7 @@
                             <td>{{$product->name}}</td>
                             <td><img src="{{ asset($product->image['indexArray'][$product->image['currentImage']]) }}"  alt="" class="max-height-2rem" width="100"></td>
                             <td>{{$product->price}}</td>
-                            <td>{{$product->category->name}}</td>                            
+                            <td>{{$product->category->name ?? 'بدون دسته'}}</td>                            
                             <td class="width-8-rem text-left">
                                 <div class="dropdown">
                                     <a href="#" class="btn btn-success btn-sm btn-block dorpdown-toggle" role="button" id="dropdownMenuLink" data-toggle="dropdown" aria-expanded="false">

@@ -63,7 +63,7 @@ $(document).ready(function(){
         rtl:true,
         loop:false,
         margin:10,
-        nav:true,
+        nav:false,
         dots:false,
         autoplay:false,
         autoHeight: false,
@@ -71,7 +71,7 @@ $(document).ready(function(){
         responsive : {
             // breakpoint from 0 up
             0 : {
-                items: 1,
+                items: 2,
             },
             // breakpoint from 480 up
             480 : {
@@ -100,7 +100,7 @@ $(document).ready(function(){
         responsive : {
             // breakpoint from 0 up
             0 : {
-                items: 1,
+                items: 3,
             },
             // breakpoint from 480 up
             480 : {
@@ -272,3 +272,20 @@ $(document).ready(function() {
 
 });
 //end filter
+
+//star footer
+
+ $(document).ready(function() {
+                if (screen.width > 0 && screen.width < 480) {
+                    var column = $('.footer-column');
+                    column.css({
+                        'font-size': '12px',
+                        'width': '30%'
+                    });
+                    // var middleBaner = $('#middle-baner-1');
+                    // var suggest_products = $('#suggest-products');
+                    // middleBaner.appendTo(suggest_products);
+                    var bottom_brand = $('#bottom-brand');
+                    bottom_brand.addClass('d-none');
+                }
+});

@@ -12,7 +12,7 @@
                     <section class="content-header">
                         <section class="d-flex justify-content-between align-items-center">
                             <h2 class="content-header-title">
-                                <span>تکمیل اطلاعات ارسال کالا (آدرس گیرنده، مشخصات گیرنده، نحوه ارسال) </span>
+                                <span>تکمیل اطلاعات ارسال کالا</span>
                             </h2>
                             <section class="content-header-link">
                                 <!--<a href="#">مشاهده همه</a>-->
@@ -158,10 +158,10 @@
 
                                                                 <section class="col-12 mb-2">
                                                                     <section class="form-check">
-                                                                        <input name="receiver" class="form-check-input"
-                                                                            type="checkbox" id="receiver"
-                                                                            @if ($address->recipient_first_name) checked @endif>
-                                                                        <label class="form-check-label" for="receiver">
+                                                                        <input name="receiver" class="form-check-input" id='edit-receiver'
+                                                                            type="checkbox"
+                                                                            @if ($address->recipient_first_name) checked @endif >
+                                                                        <label class="form-check-label">
                                                                             گیرنده سفارش خودم نیستم
                                                                         </label>
                                                                     </section>
@@ -360,8 +360,8 @@
                                         </secrion>
                                     </section>
                                     @foreach ($deliveries as $delivery)
-                                        <input type="radio" form="send" name="delivery_id" value="{{ $delivery->id }}"
-                                            id="d-{{ $delivery->id }}" />
+                                        <input type="radio" form="send" name="delivery_id"
+                                            value="{{ $delivery->id }}" id="d-{{ $delivery->id }}" />
                                         <label for="d-{{ $delivery->id }}"
                                             class="col-12 col-md-4 delivery-wrapper mb-2 pt-2">
                                             <section class="mb-2">
@@ -401,12 +401,10 @@
                                 </section>
 
                                 @if ($totalDiscount > 0)
-
-                                <section class="d-flex justify-content-between align-items-center">
-                                    <p class="text-muted">تخفیف کالاها</p>
-                                    <p class="text-danger fw-bolder">{{ priceFormat($totalDiscount) }} تومان</p>
-                                </section>
-
+                                    <section class="d-flex justify-content-between align-items-center">
+                                        <p class="text-muted">تخفیف کالاها</p>
+                                        <p class="text-danger fw-bolder">{{ priceFormat($totalDiscount) }} تومان</p>
+                                    </section>
                                 @endif
 
                                 <section class="border-bottom mb-3"></section>
@@ -415,11 +413,6 @@
                                     <p class="text-muted">جمع سبد خرید</p>
                                     <p class="fw-bolder">{{ priceFormat($totalProductPrice) }} تومان</p>
                                 </section>
-
-                                {{-- <section class="d-flex justify-content-between align-items-center">
-                                    <p class="text-muted">هزینه ارسال</p>
-                                    <p class="text-warning">54,000 تومان</p>
-                                </section> --}}
 
                                 <p class="my-3">
                                     <i class="fa fa-info-circle me-1"></i> کاربر گرامی کالاها بر اساس نوع ارسالی که انتخاب
@@ -430,14 +423,15 @@
 
                                 <section class="d-flex justify-content-between align-items-center">
                                     <p class="text-muted">مبلغ قابل پرداخت</p>
-                                    <p class="fw-bold">{{priceFormat($totalProductPrice - $totalDiscount)}}</p>
+                                    <p class="fw-bold">{{ priceFormat($totalProductPrice - $totalDiscount) }}</p>
                                 </section>
 
-                                    <form action="{{route('home.sales-proccess.choose-address-delivery')}}" id="send" method="post">
-                                        @csrf
+                                <form action="{{ route('home.sales-proccess.choose-address-delivery') }}" id="send"
+                                    method="post">
+                                    @csrf
                                     <button type="submit" id="next-level" class="btn btn-danger w-100">ادامه فرآیند
                                         خرید</button>
-                                        </form>
+                                </form>
 
                             </section>
                         </section>
@@ -481,7 +475,30 @@
             addresses.map(function(address) {
                 var id = address.id;
                 var target = `#province-${id}`;
-                var selected = `${target} option:selected`
+                var selected = `${target} option:selected`;
+                var element = $(selected);
+                var url = element.attr('data-url');
+
+                $.ajax({
+                    url: url,
+                    type: "GET",
+                    success: function(response) {
+                        if (response.status) {
+                            let cities = response.cities;
+                            $(`#city-${id}`).empty();
+                            cities.map((city) => {
+                                $(`#city-${id}`).append($('<option/>').val(
+                                    city.id).text(city
+                                    .name))
+                            })
+                        } else {
+                            errorToast('خطا پیش آمده است')
+                        }
+                    },
+                    error: function() {
+                        errorToast('خطا پیش آمده است')
+                    }
+                })
                 $(target).change(function() {
                     var element = $(selected);
                     var url = element.attr('data-url');

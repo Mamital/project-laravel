@@ -35,7 +35,7 @@
             </section>
 
 
-            <section class="row">
+            <section class="row profile-form">
                 <section class="col-6 border-bottom mb-2 py-2">
                     <section class="field-title">نام</section>
                     <section class="field-value overflow-auto">{{ $user->first_name ?? '-' }}</section>
@@ -47,12 +47,12 @@
                 </section>
 
                 <section class="col-6 border-bottom my-2 py-2">
-                    <section class="field-title">شماره تلفن همراه</section>
+                    <section class="field-title">شماره تلفن همراه <a class="btn btn-link btn-sm text-info text-decoration-none mx-1" href="{{route('home.profile.my-number.index')}}"><i class="fa fa-edit px-1"></i></a></section>
                     <section class="field-value overflow-auto">{{ $user->mobile ?? '-' }}</section>
                 </section>
 
                 <section class="col-6 border-bottom my-2 py-2">
-                    <section class="field-title">ایمیل</section>
+                    <section class="field-title">ایمیل <a class="btn btn-link btn-sm text-info text-decoration-none mx-1" href="{{route('home.profile.my-email.index')}}"><i class="fa fa-edit px-1"></i></a></section>
                     <section class="field-value overflow-auto">{{ $user->email ?? '-' }}</section>
                 </section>
 
@@ -74,7 +74,7 @@
                                     aria-label="Close"></button>
                             </section>
                             <section class="modal-body">
-                                <form class="row" method="post" action="{{ route('home.profile.my-profile.update') }}">
+                                <form class="row profile-form" method="post" action="{{ route('home.profile.my-profile.update') }}">
                                     @csrf
                                     @method('PUT')
 
@@ -119,4 +119,15 @@
             </section>
         </section>
     </main>
+@endsection
+@section('script')
+<script>
+    $(document).ready(function () {
+        if (screen.width > 0 && screen.width < 480) {
+        var form = $('.profile-form');
+        console.log(form.children);
+        form.children().removeClass('col-6');
+        }
+    });
+</script>
 @endsection

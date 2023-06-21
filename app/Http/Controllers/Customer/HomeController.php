@@ -37,7 +37,9 @@ class HomeController extends Controller
             $productModel = $productCategory->products();            
         }
         else
-        $productModel = new Product();
+        {
+            $productModel = new Product();
+        }
 
         switch ($request->sort) {
             case '1':

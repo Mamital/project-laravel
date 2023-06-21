@@ -6,19 +6,19 @@
         <section class="row">
 
             @if (session('alert-success'))
-                        <div class="alert alert-success">
-                            {{session('alert-success')}}
-                        </div>
-                    @elseif (session('alert-error'))
-                        <div class="alert alert-danger">
-                            {{session('alert-error')}}
-                        </div>
-                    @elseif (session('alert-info'))
-                        <div class="alert alert-info">
-                            {{session('alert-info')}}
-                        </div>
-                    @endif
-                    
+                <div class="alert alert-success">
+                    {{ session('alert-success') }}
+                </div>
+            @elseif (session('alert-error'))
+                <div class="alert alert-danger">
+                    {{ session('alert-error') }}
+                </div>
+            @elseif (session('alert-info'))
+                <div class="alert alert-info">
+                    {{ session('alert-info') }}
+                </div>
+            @endif
+
             <section class="col-md-8 pe-md-1 ">
                 <section id="slideshow" class="owl-carousel owl-theme">
                     @foreach ($topBannerSliders as $topBannerSlider)
@@ -31,8 +31,8 @@
                     @endforeach
                 </section>
             </section>
-            <section class="col-md-4 ps-md-1 mt-2 mt-md-0">
-                <section class="mb-2"><a href="//{{ $topBannerUp->url }}" class="d-block"><img class="w-100 rounded-2"
+            <section class="col-md-4 ps-md-1 mt-2 mt-md-0" id="sideBaner">
+                <section class="mb-2"><a href="{{ $topBannerUp->url }}" class="d-block"><img class="w-100 rounded-2"
                             src="{{ asset($topBannerUp->image) }}" alt=""></a></section>
                 <section class="mb-2"><a href="{{ url($topBannerBottom->url) }}" class="d-block"><img
                             class="w-100 rounded-2" src="{{ asset($topBannerBottom->image) }}" alt=""></a>
@@ -57,7 +57,7 @@
                                     <span>پربازدیدترین کالاها</span>
                                 </h2>
                                 <section class="content-header-link">
-                                    <a href="{{route('home.products')}}">مشاهده همه</a>
+                                    <a href="{{ route('home.products') }}">مشاهده همه</a>
                                 </section>
                             </section>
                         </section>
@@ -69,7 +69,7 @@
                                         <section class="lazyload-item-wrapper">
                                             <section class="product">
                                                 {{-- <section class="product-add-to-cart"><a href="#" data-bs-toggle="tooltip" data-bs-placement="left" title="افزودن به سبد خرید"><i class="fa fa-cart-plus"></i></a></section> --}}
-                                                @guest
+                                                {{-- @guest
                                                     <section class="product-add-to-favorite">
                                                         <button class="btn btn-light btn-sm text-decoration-none"
                                                             data-bs-toggle="tooltip" data-bs-placement="left"
@@ -99,9 +99,9 @@
                                                                 title="افزودن به علاقه مندی">
                                                                 <i class="fa fa-heart"></i>
                                                             </button>
-                                                        </section>
-                                                    @endif
-                                                @endauth
+                                                        </section> --}}
+                                                {{-- @endif --}}
+                                                {{-- @endauth --}}
                                                 <a class="product-link"
                                                     href="{{ route('home.product.index', $mostVisitedProduct) }}">
                                                     <section class="product-image">
@@ -148,8 +148,8 @@
         <section class="container-xxl">
             <!-- two column-->
             <section class="row py-4">
-                @foreach ($middleBanners as $middleBanner)
-                    <section class="col-12 col-md-6 mt-2 mt-md-0">
+                @foreach ($middleBanners as $key => $middleBanner)
+                    <section class="col-12 col-md-6 mt-2 mt-md-0" id="middle-baner-{{ $key }}">
                         <a href="{{ $middleBanner->url }}">
                             <img class="d-block rounded-2 w-100" src="{{ asset($middleBanner->image) }}"
                                 alt="{{ asset($middleBanner->title) }}">
@@ -168,7 +168,7 @@
         <section class="container-xxl">
             <section class="row">
                 <section class="col">
-                    <section class="content-wrapper bg-white p-3 rounded-2">
+                    <section class="content-wrapper bg-white p-3 rounded-2" id="suggest-products">
                         <!-- start vontent header -->
                         <section class="content-header">
                             <section class="d-flex justify-content-between align-items-center">
@@ -176,7 +176,7 @@
                                     <span>پیشنهاد آمازون به شما</span>
                                 </h2>
                                 <section class="content-header-link">
-                                    <a href="{{route('home.products')}}">مشاهده همه</a>
+                                    <a href="{{ route('home.products') }}">مشاهده همه</a>
                                 </section>
                             </section>
                         </section>
@@ -188,7 +188,7 @@
                                         <section class="lazyload-item-wrapper">
                                             <section class="product">
                                                 {{-- <section class="product-add-to-cart"><a href="#" data-bs-toggle="tooltip" data-bs-placement="left" title="افزودن به سبد خرید"><i class="fa fa-cart-plus"></i></a></section> --}}
-                                                @guest
+                                                {{-- @guest
                                                     <section class="product-add-to-favorite">
                                                         <button class="btn btn-light btn-sm text-decoration-none"
                                                             data-bs-toggle="tooltip" data-bs-placement="left"
@@ -220,7 +220,7 @@
                                                             </button>
                                                         </section>
                                                     @endif
-                                                @endauth
+                                                @endauth --}}
                                                 <a class="product-link"
                                                     href="{{ route('home.product.index', $offerProduct) }}">
                                                     <section class="product-image">
@@ -263,7 +263,7 @@
 
     <!-- start ads section -->
     @isset($bottomBanner->image)
-        <section class="mb-3">
+        <section class="mb-3" id="bottom-brand">
             <section class="container-xxl">
                 <!-- one column -->
                 <section class="row py-4">
@@ -315,9 +315,8 @@
     </section>
     <!-- end brand part-->
 
-    <section class="position-fixed p-4 flex-row-reverse"
-        style="right: 0; top: 3rem; width: 26rem; max-width: 80%;">
-        <div class="toast" role="alert" aria-live="assertive" aria-atomic="true">
+    {{-- <section class="position-fixed p-4 flex-row-reverse" style="left: 0; top: 3rem; width: 26rem; max-width: 80%;">
+        <div class="toast d-none" role="alert" aria-live="assertive" aria-atomic="true">
             <div class="toast-header">
                 <strong class="me-auto">فروشگاه</strong>
                 <button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Close"></button>
@@ -331,30 +330,47 @@
                     </a>
                 </strong>
             </div>
-        </section>
-        
-    @endsection
-    @section('script')
-        <script>
-            $('.product-add-to-favorite button').click(function() {
-                var url = $(this).attr('data-url');
-                var element = $(this);
-                $.ajax({
-                    url: url,
-                    success: function(result) {
-                        if (result.status == 1) {
-                            $(element).children().first().addClass('text-danger');
-                            $(element).attr('data-original-title', 'حذف از علاقه مندی ها');
-                            $(element).attr('data-bs-original-title', 'حذف از علاقه مندی ها');
-                        } else if (result.status == 2) {
-                            $(element).children().first().removeClass('text-danger')
-                            $(element).attr('data-original-title', 'افزودن از علاقه مندی ها');
-                            $(element).attr('data-bs-original-title', 'افزودن از علاقه مندی ها');
-                        } else if (result.status == 3) {
-                            $('.toast').toast('show');
-                        }
+    </section> --}}
+@endsection
+@section('script')
+    {{-- <script>
+        $('.product-add-to-favorite button').click(function() {
+            var url = $(this).attr('data-url');
+            var element = $(this);
+            $.ajax({
+                url: url,
+                success: function(result) {
+                    if (result.status == 1) {
+                        $(element).children().first().addClass('text-danger');
+                        $(element).attr('data-original-title', 'حذف از علاقه مندی ها');
+                        $(element).attr('data-bs-original-title', 'حذف از علاقه مندی ها');
+                    } else if (result.status == 2) {
+                        $(element).children().first().removeClass('text-danger')
+                        $(element).attr('data-original-title', 'افزودن از علاقه مندی ها');
+                        $(element).attr('data-bs-original-title', 'افزودن از علاقه مندی ها');
+                    } else if (result.status == 3) {
+                        $('.toast').removeClass('d-none');
+                        $('.toast').toast('show');
+                        setTimeout(function () {
+                            $('.toast').addClass('d-none');
+                        }, 10000);
                     }
-                })
+                }
             })
-        </script>
-    @endsection
+        })
+    </script> --}}
+
+    <script>
+        $(document).ready(function() {
+                if (screen.width > 0 && screen.width < 480) {
+                    var sideBaner = $('#sideBaner');
+                    sideBaner.addClass('d-none');
+                    // var middleBaner = $('#middle-baner-1');
+                    // var suggest_products = $('#suggest-products');
+                    // middleBaner.appendTo(suggest_products);
+                    var bottom_brand = $('#bottom-brand');
+                    bottom_brand.addClass('d-none');
+                }
+            });
+    </script>
+@endsection

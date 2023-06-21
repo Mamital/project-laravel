@@ -24,7 +24,11 @@
                         <div class="alert alert-danger">
                             {{session('alert-error')}}
                         </div>
-                    @endif
+                    @elseif (session('alert-info'))
+                    <div class="alert alert-info">
+                        {{ session('alert-info') }}
+                    </div>
+                @endif
                 @yield('customer.layouts.sidebar')
 
                 @yield('content')
