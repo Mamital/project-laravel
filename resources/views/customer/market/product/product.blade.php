@@ -414,7 +414,7 @@
                                                         data-bs-toggle="tooltip" data-bs-placement="left"
                                                         title="افزودن به سبد خرید"><i class="fa fa-cart-plus"></i></a>
                                                 </section> --}}
-                                                    @guest
+                                                    {{-- @guest
                                                         <section class="product-add-to-favorite">
                                                             <button class="btn btn-light btn-sm text-decoration-none"
                                                                 data-bs-toggle="tooltip" data-bs-placement="left"
@@ -446,7 +446,7 @@
                                                                 </button>
                                                             </section>
                                                         @endif
-                                                    @endauth
+                                                    @endauth --}}
                                                     <a class="product-link"
                                                         href="{{ route('home.product.index', $reletedProduct) }}">
                                                         <section class="product-image">
@@ -459,12 +459,22 @@
                                                             <h3>{{ Str::limit($reletedProduct->name, 20) }}</h3>
                                                         </section>
                                                         <section class="product-price-wrapper">
-                                                            {{-- <section class="product-discount">
-                                                            <span class="product-old-price">6,895,000 </span>
-                                                            <span class="product-discount-amount">10%</span>
-                                                        </section> --}}
+                                                            @if ($reletedProduct->activeAmazingSales())
+                                                            <section class="product-discount">
+                                                                <span
+                                                                    class="product-old-price">{{ priceFormat($reletedProduct->price) }}
+                                                                </span>
+                                                                <span
+                                                                    class="product-discount-amount">{{ persian($reletedProduct->activeAmazingSales()->percentage) }} %</span>
+                                                            </section>
                                                             <section class="product-price">
-                                                                {{ priceFormat($reletedProduct->price) }}</section>
+                                                                {{ priceFormat($reletedProduct->price - $reletedProduct->amazingSaleDiscount()) }}
+                                                            </section>
+                                                        @else
+                                                            <section class="product-price">
+                                                                {{ priceFormat($reletedProduct->price) }}
+                                                            </section>
+                                                        @endif
                                                         </section>
                                                         <section class="product-colors">
                                                             @foreach ($reletedProduct->colors as $color)
@@ -495,7 +505,7 @@
                 <section class="col">
                     <section class="content-wrapper bg-white p-3 rounded-2">
                         <!-- start content header -->
-                        <section id="introduction-features-comments" class="introduction-features-comments">
+                        <section id="introduction-features-comments" class="introduction-features-comments" id="introduction">
                             <section class="content-header">
                                 <section class="d-flex justify-content-between align-items-center">
                                     <h2 class="content-header-title">
@@ -549,7 +559,7 @@
                                     @foreach ($product->values as $value)
                                         <tr>
                                             <td>{{ $value->attribute->name }}</td>
-                                            <td>{{ json_decode($value->value)->value }} {{ $value->attribute->unit }}</td>
+                                            <td>{{ persian($value->value) }} {{ $value->attribute->unit ?? '' }}</td>
                                         </tr>
                                     @endforeach
                                     @foreach ($product->metas as $meta)
@@ -686,10 +696,10 @@
                                 </section>
                             </section>
 
-                            <section class="product-comments mb-4 p-4 d-flex justify-content-around align-items-center">
+                            <section class="product-comments mb-3 d-flex justify-content-around align-items-center flex-wrap">
                                 @auth
                                     @if (auth()->user()->userProductPurchase()->contains($product->id))
-                                        <div class="container d-inline-block" style="width: 50%">
+                                        <div class="container d-inline-block" style="width: 50%" id="star-rating">
                                             <h5 class="text-danger">
                                                 امتیاز خود را به این محصول انتخاب نمایید
                                             </h5>
@@ -765,14 +775,14 @@
     <!-- end description, features and comments -->
 
     <section class="position-fixed p-4 flex-row-reverse" style="right: 0; top: 3rem; width: 26rem; max-width: 80%;">
-        <div class="toast" role="alert" aria-live="assertive" aria-atomic="true">
+        <div class="toast d-none" role="alert" aria-live="assertive" aria-atomic="true">
             <div class="toast-header">
                 <strong class="me-auto">فروشگاه</strong>
                 <button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Close"></button>
             </div>
             <div class="toast-body">
                 <strong class="ml-auto">
-                    برای افزودن کالا به لیست علاقه مندی ها باید ابتدا وارد حساب کاربری خود شوید
+                    برای افزودن کالا به لیست علاقه مندی ها یا مقایسه ها باید ابتدا وارد حساب کاربری خود شوید
                     <br>
                     <a href="{{ route('auth.customer.login-register-form') }}" class="text-dark">
                         ثبت نام / ورود
@@ -861,7 +871,11 @@
                         $(element).attr('data-original-title', 'افزودن از علاقه مندی ها');
                         $(element).attr('data-bs-original-title', 'افزودن از علاقه مندی ها');
                     } else if (result.status == 3) {
+                         $('.toast').removeClass('d-none');
                         $('.toast').toast('show');
+                        setTimeout(function () {
+                            $('.toast').addClass('d-none');
+                        }, 10000);
                     }
                 }
             })
@@ -905,6 +919,20 @@
                     s.removeClass("stick");
                 }
             });
+            if (screen.width > 0 && screen.width < 480) {
+                var content = $('#introduction-features-comments');
+                content.addClass('d-none');
+                var chart= $('#rating-chart');
+                chart.css({'width': '100%'});
+                var star_rating = $('#star-rating');
+                star_rating.css({
+                    'width': '100%',
+                });
+                star_rating.children().css({'font-size': '13px'});
+                console.log(star_rating.children())
+
+                
+            }
         });
         //end product introduction, features and comment
     </script>

@@ -29,7 +29,7 @@
                         <a href="{{ route('admin.market.baner.index') }}">بنر ها</a>
                     @endcan
                     @can('read-product')
-                        <a href="{{ route('admin.market.property.index') }}">فرم کالا</a>
+                        <a href="{{ route('admin.market.property.category.index') }}">فرم کالا</a>
                     @endcan
                     @can('read-brand')
                         <a href="{{ route('admin.market.brand.index') }}">برندها</a>

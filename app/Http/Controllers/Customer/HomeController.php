@@ -20,7 +20,7 @@ class HomeController extends Controller
         $middleBanners = Baner::where('position', 3)->where('status', 1)->take(2)->get();
         $bottomBanner = Baner::where('position', 4)->where('status', 1)->first();
         $brands = Brand::all();
-        $mostVisitedProducts = Product::latest()->where('status', 1)->take(5)->get();
+        $mostVisitedProducts = Product::inRandomOrder()->where('status', 1)->take(10)->get();
         $offerProducts = Product::latest()->where('status', 1)->take(5)->get();
 
         return view('customer.home', compact(['topBannerSliders', 'topBannerUp', 'topBannerBottom', 'middleBanners', 'bottomBanner', 'brands', 'mostVisitedProducts', 'offerProducts']));
@@ -37,7 +37,9 @@ class HomeController extends Controller
             $productModel = $productCategory->products();            
         }
         else
-        $productModel = new Product();
+        {
+            $productModel = new Product();
+        }
 
         switch ($request->sort) {
             case '1':

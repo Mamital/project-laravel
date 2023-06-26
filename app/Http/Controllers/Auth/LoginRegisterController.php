@@ -99,7 +99,7 @@ class LoginRegisterController extends Controller
             $emailService = new EmailService();
             $emailService->setDetails($details);
             $emailService->setTo($user->email);
-            $emailService->setFrom('noreplay@example.com', 'example');
+            $emailService->setFrom('noreplay@example.com', 'فروشگاه آمازون');
             $emailService->setsubject('احراز هویت');
 
             $messageService =new MessageService($emailService);
@@ -191,7 +191,7 @@ class LoginRegisterController extends Controller
             $emailService = new EmailService();
             $emailService->setDetails($details);
             $emailService->setTo($user->email);
-            $emailService->setFrom('noreplay@example.com', 'example');
+            $emailService->setFrom('noreplay@example.com', 'فروشگاه آمازون');
             $emailService->setsubject('احراز هویت');
 
             $messageService = new MessageService($emailService);

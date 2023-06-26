@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Controllers\admin\notify;
+namespace App\Http\Controllers\Admin\Notify;
 
 use App\Models\Notify\SMS;
 use Illuminate\Http\Request;

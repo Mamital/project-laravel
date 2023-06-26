@@ -2,12 +2,13 @@
 
 namespace App\Http\Controllers\Admin\Market;
 
-use App\Http\Controllers\Controller;
-use App\Http\Requests\Admin\Market\CategoryValueRequest;
-use App\Models\Market\CategoryValue;
+use Illuminate\Http\Request;
 use App\Models\Market\Product;
 use App\Models\Market\Property;
-use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
+use App\Http\Controllers\Controller;
+use App\Models\Market\CategoryValue;
+use App\Http\Requests\Admin\Market\CategoryValueRequest;
 
 class CategoryValueController extends Controller
 {
@@ -16,10 +17,11 @@ class CategoryValueController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index(Property $property)
+    public function index(Product $product)
     {
-        $values = CategoryValue::where('category_attribute_id', $property->id)->get();
-        return view('admin.market.property.value.index', compact(['values', 'property']));
+        $properties = $product->category->properties;
+        $values = $product->values;        
+        return view('admin.market.product.property', compact(['properties', 'product']));
     }
 
     /**
@@ -39,13 +41,24 @@ class CategoryValueController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(CategoryValueRequest $request, Property $property)
+    public function store(Request $request, Product $product)
     {
         $inputs = $request->all();
-        $inputs['value'] = json_encode(['value' => $request->value , 'price_increase' => $request->price_increase]);
-        $inputs['category_attribute_id'] = $property->id;
-        $result = CategoryValue::create($inputs);
-        return redirect()->route('admin.market.value.index', $property->id)->with('swal-success', 'مقدار جدید با موفقیت ثبت شد');
+        DB::transaction(function () use ($request, $product) {
+            $metas = array_combine($request->meta_key, $request->meta_value);
+            foreach ($metas as $key => $value) {
+                if ($value) {
+                    CategoryValue::updateOrCreate([
+                        'type' => 0,
+                        'value' => $value,
+                        'category_attribute_id' => $key,
+                        'product_id' => $product->id,
+                    ]);
+                }
+            }
+        });
+
+        return redirect()->route('admin.market.product.index')->with('swal-success', 'مقادیر با موفقیت ثبت شدند');
     }
 
     /**

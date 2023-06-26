@@ -565,6 +565,7 @@ body {
 
 .content-header-title {
     font-size: 1rem;
+    line-height: 3;
     font-weight: bold;
 }
 

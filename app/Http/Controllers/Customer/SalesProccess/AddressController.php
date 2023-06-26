@@ -26,7 +26,7 @@ class AddressController extends Controller
         $addresses = Address::where('user_id', $user->id)->get();
         $deliveries = Delivery::where('status', 1)->get();
         if (empty(CartItem::where('user_id', $user->id)->count())) {
-            return redirect()->route('home.sales-proccess.profile-completion');
+            return redirect()->route('home')->with('alert-info', 'سبد خرید شما خالی میباشد');
         }
 
         return view('customer.sales-proccess.address', compact('cartItems', 'addresses', 'provinces', 'deliveries'));
@@ -34,7 +34,7 @@ class AddressController extends Controller
 
     public function getCities(Province $province)
     {
-        $cities = City::where('province_id', $province->id)->get();
+        $cities = $province->cities;
         if ($cities != null) {
             return response()->json(['status' => 1, 'cities' => $cities]);
         } else {
@@ -61,6 +61,7 @@ class AddressController extends Controller
     public function updateAddress(Address $address, UpdateAddress $request)
     {
         $inputs = $request->all();
+        // dd($inputs);
         $postalCode = convertArabicToEnglish($request->postal_code);
         $postalCode = convertPersianToEnglish($postalCode);
 

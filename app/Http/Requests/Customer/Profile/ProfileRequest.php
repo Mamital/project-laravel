@@ -27,11 +27,11 @@ class ProfileRequest extends FormRequest
         $national_code = auth()->user()->national_code;
         $email = auth()->user()->email;
         return [
-            'first_name' => 'sometimes|required',
-            'last_name' => 'sometimes|required',
+            'first_name' => 'sometimes|nullable',
+            'last_name' => 'sometimes|nullable',
             'email' => "sometimes|nullable|unique:users,email,{$email},email|email",
-            'national_code' => ["sometimes", "required", new NationalCode(),"unique:users,national_code,{$national_code},national_code"],
-            'mobile' => 'sometimes|required|unique:users,mobile|min:10|max:13'
+            'national_code' => ["sometimes", "nullable", new NationalCode(),"unique:users,national_code,{$national_code},national_code"],
+            'mobile' => 'sometimes|nullable|unique:users,mobile|min:10|max:13'
         ];
     }
 }

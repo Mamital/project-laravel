@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Controllers\admin\setting;
+namespace App\Http\Controllers\Admin\Setting;
 
 use Illuminate\Http\Request;
 use App\Models\Setting\Setting;

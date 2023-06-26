@@ -1,11 +1,15 @@
 <?php
 
-namespace App\Http\Controllers\admin\notify;
+namespace App\Http\Controllers\Admin\Notify;
 
 use App\Models\Notify\Email;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use App\Http\Services\Message\MessageService;
 use App\Http\Requests\Admin\Notify\EmailRequest;
+use App\Http\Services\Message\Email\EmailService;
+use App\Jobs\SendMailToUsers;
+use App\Models\User;
 
 class EmailController extends Controller
 {
@@ -18,7 +22,6 @@ class EmailController extends Controller
     {
         $emails = Email::orderBy('created_at', 'desc')->simplePaginate(15);
         return view('admin.notify.email.index', compact('emails'));
-
     }
 
     /**
@@ -29,7 +32,6 @@ class EmailController extends Controller
     public function create()
     {
         return view('admin.notify.email.create');
-
     }
 
     /**
@@ -68,7 +70,6 @@ class EmailController extends Controller
     public function edit(Email $email)
     {
         return view('admin.notify.email.edit', compact('email'));
-
     }
 
     /**
@@ -101,23 +102,25 @@ class EmailController extends Controller
     }
 
 
-    public function status(Email $email){
+    public function status(Email $email)
+    {
 
         $email->status = $email->status == 0 ? 1 : 0;
         $result = $email->save();
-        if($result){
-                if($email->status == 0){
-                    return response()->json(['status' => true, 'checked' => false]);
-                }
-                else{
-                    return response()->json(['status' => true, 'checked' => true]);
-                }
-        }
-        else{
+        if ($result) {
+            if ($email->status == 0) {
+                return response()->json(['status' => true, 'checked' => false]);
+            } else {
+                return response()->json(['status' => true, 'checked' => true]);
+            }
+        } else {
             return response()->json(['status' => false]);
         }
-
     }
 
-
+    public function send(Email $email)
+    {
+        SendMailToUsers::dispatch($email);
+        return back()->with('swal-success', 'ایمیل با موفقیت ارسال شد');
+    }
 }

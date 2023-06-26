@@ -13,7 +13,8 @@ class CartController extends Controller
 {
     public function cart()
     {
-        $cartItems = CartItem::where('user_id', Auth::user()->id)->get();
+        $user = Auth::user();
+        $cartItems = CartItem::where('user_id', $user->id)->get();
         $reletedProducts = Product::all();        
         if(empty($cartItems->first()))
         {
@@ -23,7 +24,9 @@ class CartController extends Controller
     }
     public function updateCart(Request $request)
     {
-        if (Auth::check()) {
+        $user = Auth::user();
+        if ($user->first_name && $user->last_name && $user->mobile){
+            if ($user->first_name && $user->last_name && $user->mobile)
             $inputs = $request->all();
             $cartItems = CartItem::where('user_id', Auth::user()->id)->get();
             foreach ($cartItems as $cartItem) {
@@ -33,12 +36,11 @@ class CartController extends Controller
             }
             return redirect()->route('home.sales-proccess.address-and-delivery');
         } else {
-            return redirect()->route('auth.customer.login-register-form');
+            return redirect()->route('home.profile.my-profile')->with('alert-info', 'لطفا نام، نام خانوادگی و شماره موبایل خود را تکمیل کنید');
         }
     }
     public function addToCart(Product $product, Request $request)
     {
-        if (Auth::check()) {
             $request->validate([
                 'color' => 'nullable|exists:product_colors,id',
                 'guarantee' => 'nullable|exists:guarantees,id',
@@ -74,9 +76,6 @@ class CartController extends Controller
             $inputs['user_id'] = Auth::user()->id;
             CartItem::create($inputs);
             return back()->with('alert-success', 'محصول مورد نظر با موفقیت به سبد خرید اضافه شد');
-        } else {
-            return redirect()->route('auth.customer.login-register-form');
-        }
     }
     public function removeFromCart(CartItem $cartItem)
     {

@@ -3,7 +3,7 @@
         <section class="container-xxl my-4">
             <section class="row">
                 <section class="col">
-                    <section class="footer-shop-features d-md-flex justify-content-md-around align-items-md-center">
+                    <section class="footer-shop-features d-flex justify-content-around align-items-center flex-wrap">
 
                         <section class="footer-shop-features-item">
                             <img src="{{asset('customer-assets/images/footer/1.png')}}" alt="">
@@ -34,7 +34,7 @@
                 </section>
             </section>
             <section class="row">
-                <section class="col-md">
+                <section class="col-md footer-column">
                     <section><a class="text-decoration-none text-muted d-inline-block my-2" href="#">شرایط و قوانین</a></section>
                     <section><a class="text-decoration-none text-muted d-inline-block my-2" href="#">درباره ما</a></section>
                     <section><a class="text-decoration-none text-muted d-inline-block my-2" href="#">تماس با ما</a></section>
@@ -42,7 +42,7 @@
                     <section><a class="text-decoration-none text-muted d-inline-block my-2" href="#">سوالات متداول</a></section>
                 </section>
 
-                <section class="col-md">
+                <section class="col-md footer-column">
                     <section><a class="text-decoration-none text-muted d-inline-block my-2" href="#">شرایط و قوانین</a></section>
                     <section><a class="text-decoration-none text-muted d-inline-block my-2" href="#">درباره ما</a></section>
                     <section><a class="text-decoration-none text-muted d-inline-block my-2" href="#">تماس با ما</a></section>
@@ -50,7 +50,7 @@
                     <section><a class="text-decoration-none text-muted d-inline-block my-2" href="#">سوالات متداول</a></section>
                 </section>
 
-                <section class="col-md">
+                <section class="col-md footer-column">
                     <section><a class="text-decoration-none text-muted d-inline-block my-2" href="#">شرایط و قوانین</a></section>
                     <section><a class="text-decoration-none text-muted d-inline-block my-2" href="#">درباره ما</a></section>
                     <section><a class="text-decoration-none text-muted d-inline-block my-2" href="#">تماس با ما</a></section>
@@ -65,8 +65,6 @@
                             <a href="#" class="text-muted text-decoration-none me-5"><i class="fab fa-instagram"></i></a>
                             <a href="#" class="text-muted text-decoration-none me-5"><i class="fab fa-telegram"></i></a>
                             <a href="#" class="text-muted text-decoration-none me-5"><i class="fab fa-whatsapp"></i></a>
-                            <a href="#" class="text-muted text-decoration-none me-5"><i class="fab fa-twitter"></i></a>
-                            <a href="#" class="text-muted text-decoration-none me-5"><i class="fab fa-linkedin"></i></a>
                         </section>
                     </section>
                 </section>

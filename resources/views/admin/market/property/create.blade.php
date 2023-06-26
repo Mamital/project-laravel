@@ -26,11 +26,11 @@
             </section>
 
             <section class="d-flex justify-content-between align-items-center mt-4 mb-3 border-bottom pb-2">
-                <a href="{{ route('admin.market.property.index') }}" class="btn btn-info btn-sm">بازگشت</a>
+                <a href="{{ route('admin.market.property.index', $productCategory) }}" class="btn btn-info btn-sm">بازگشت</a>
             </section>
 
             <section>
-                <form action="{{route('admin.market.property.store')}}" method="POST">
+                <form action="{{route('admin.market.property.store', $productCategory)}}" method="POST">
                     @csrf
                     <section class="row">
 
@@ -62,25 +62,6 @@
                             @enderror
                         </section>
 
-                        <section class="col-12">
-                            <div class="form-group">
-                                <label for="">انتخاب دسته</label>
-                                <select name="category_id" id="" class="form-control form-control-sm">
-                                    <option value="">دسته را انتخاب کنید</option>
-                                    @foreach ($categories as $category)
-                                    <option value="{{ $category->id }}" @if(old('category_id') == $category->id) selected @endif>{{ $category->name }}</option>
-                                    @endforeach
-
-                                </select>
-                            </div>
-                            @error('category_id')
-                            <span class="alert_required bg-danger text-white p-1 rounded" role="alert">
-                                <strong>
-                                    {{ $message }}
-                                </strong>
-                            </span>
-                        @enderror
-                        </section>
                         <section class="col-12">
                             <button class="btn btn-primary btn-sm">ثبت</button>
                         </section>

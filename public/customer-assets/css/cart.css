@@ -14,7 +14,7 @@
 .cart-img {
     overflow: hidden;
     width: 10rem;
-    height: 10rem;
+    /* height: 10rem; */
     margin: auto 2rem;
 }
 
