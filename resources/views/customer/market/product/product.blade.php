@@ -414,15 +414,29 @@
                                                         data-bs-toggle="tooltip" data-bs-placement="left"
                                                         title="افزودن به سبد خرید"><i class="fa fa-cart-plus"></i></a>
                                                 </section> --}}
+
                                                     {{-- @guest
+
                                                         <section class="product-add-to-favorite">
-                                                            <button class="btn btn-light btn-sm text-decoration-none"
+                                                            <button
+                                                                class="add-to-favorite btn btn-light btn-sm text-decoration-none"
+                                                                data-bs-toggle="tooltip" data-bs-placement="left"
+                                                                data-url="{{ route('home.product.add-favorite', $reletedProduct) }}"
+                                                                title="حذف از علاقه مندی">
+                                                                <i class="fa fa-heart text-danger"></i>
+                                                            </button>
+                                                        </section>
+                                                    @else
+                                                        <section class="product-add-to-favorite">
+                                                            <button
+                                                                class="add-to-favorite btn btn-light btn-sm text-decoration-none"
                                                                 data-bs-toggle="tooltip" data-bs-placement="left"
                                                                 data-url="{{ route('home.product.add-favorite', $reletedProduct) }}"
                                                                 title="افزودن به علاقه مندی">
                                                                 <i class="fa fa-heart"></i>
                                                             </button>
                                                         </section>
+
                                                     @endguest
                                                     @auth
                                                         @if ($reletedProduct->users->contains(auth()->user()->id))
@@ -471,6 +485,7 @@
                                                                 {{ priceFormat($reletedProduct->price - $reletedProduct->amazingSaleDiscount()) }}
                                                             </section>
                                                         @else
+
                                                             <section class="product-price">
                                                                 {{ priceFormat($reletedProduct->price) }}
                                                             </section>
@@ -696,10 +711,12 @@
                                 </section>
                             </section>
 
+
                             <section class="product-comments mb-3 d-flex justify-content-around align-items-center flex-wrap">
                                 @auth
                                     @if (auth()->user()->userProductPurchase()->contains($product->id))
                                         <div class="container d-inline-block" style="width: 50%" id="star-rating">
+
                                             <h5 class="text-danger">
                                                 امتیاز خود را به این محصول انتخاب نمایید
                                             </h5>

@@ -106,6 +106,7 @@
                 @if (request()->search)
                     <span class="d-inline-block border p-1 rounded bg-light">نتیجه جستجو برای :<span
                             class="badge bg-info text-dark">"{{ request()->search }}"</span>
+
                         <a
                             href="{{ route('home.products', ['search' => null, 'sort' => 1, 'min_price' => request()->min_price, 'max_price' => request()->max_price, 'brands' => request()->brands, request()->productCategory ?? null]) }}"><i
                                 class="fa fa-close red-color"></i></a>
@@ -117,11 +118,13 @@
                         <a
                             href="{{ route('home.products', ['search' => request()->search, 'sort' => 1, 'min_price' => request()->min_price, 'max_price' => request()->max_price, 'brands' => null, request()->productCategory ?? null]) }}"><i
                                 class="fa fa-close red-color"></i></a>
+
                     </span>
                 @endif
                 @if (request()->productCategory)
                     <span class="d-inline-block border p-1 rounded bg-light">دسته : <span
                             class="badge bg-info text-dark">"{{ request()->productCategory->name }}"</span>
+
                         <a
                             href="{{ route('home.products', ['search' => request()->search, 'sort' => 1, 'min_price' => request()->min_price, 'max_price' => request()->max_price, 'brands' => request()->brands, (request()->productCategory = null)]) }}"><i
                                 class="fa fa-close red-color"></i></a>
@@ -130,6 +133,7 @@
                 @if (request()->min_price)
                     <span class="d-inline-block border p-1 rounded bg-light">قیمت از : <span
                             class="badge bg-info text-dark"> {{ request()->min_price }} تومان</span>
+
                         <a
                             href="{{ route('home.products', ['search' => request()->search, 'sort' => 1, 'min_price' => null, 'max_price' => request()->max_price, 'brands' => request()->brands, request()->productCategory ?? null]) }}"><i
                                 class="fa fa-close red-color"></i></a>
@@ -138,10 +142,11 @@
                 @if (request()->max_price)
                     <span class="d-inline-block border p-1 rounded bg-light">قیمت تا : <span
                             class="badge bg-info text-dark"> {{ request()->max_price }} تومان</span>
+
                         <a
                             href="{{ route('home.products', ['search' => request()->search, 'sort' => 1, 'min_price' => request()->min_price, 'max_price' => null, 'brands' => request()->brands, request()->productCategory ?? null]) }}"><i
                                 class="fa fa-close red-color"></i></a>
-                    </span>
+                    </span>            
                 @endif
             </section>
             <section class="sort ">
@@ -173,7 +178,9 @@
                             <section class="product-add-to-favorite"><a href="#" data-bs-toggle="tooltip"
                                     data-bs-placement="left" title="افزودن به علاقه مندی"><i class="fa fa-heart"></i></a>
                             </section> --}}
+
                             <a class="product-link" href="{{ route('home.product.index', $product->slug) }}">
+
                                 <section class="product-image">
                                     <img class="" src="{{ asset($product->image['indexArray']['medium']) }}"
                                         alt="{{ $product->slug }}">

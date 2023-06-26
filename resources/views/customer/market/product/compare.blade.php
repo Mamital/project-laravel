@@ -41,7 +41,9 @@
                             <td style="text-align: center">
                                 @foreach ($property->values as $value)
                                     @if ($value->product_id == $product->id)
+
                                         {{ $value->value }} {{ $value->attribute->unit }}
+
                                     @endif
                                 @endforeach
                             </td>
@@ -49,7 +51,10 @@
                     </tr>
                 @endforeach
             @endif
+
             @if($product->metas->count())
+
+
             <tr>
                 <td style="width: 8rem">سایر مشخصات</td>
                 @foreach ($products as $product)
@@ -60,7 +65,9 @@
                     </td>
                 @endforeach
             </tr>
+
             @endif
+
         </table>
     @else
         <h2 style="text-align: center" class="m-5">محصولی برای مقایسه انتخاب نشده است</h2>

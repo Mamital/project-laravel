@@ -34,6 +34,7 @@
                 </section>
             </section>
             <section class="col-md-4 ps-md-1 mt-2 mt-md-0" id="sideBaner">
+
                 <section class="mb-2"><a href="{{ $topBannerUp->url ?? '#' }}" class="d-block"><img
                             class="w-100 rounded-2" src="{{ asset($topBannerUp->image ?? '#') }}" alt=""></a>
                 </section>
