@@ -414,18 +414,9 @@
                                                         data-bs-toggle="tooltip" data-bs-placement="left"
                                                         title="افزودن به سبد خرید"><i class="fa fa-cart-plus"></i></a>
                                                 </section> --}}
-                                                @guest
-                                                    <section class="product-add-to-favorite">
-                                                        <button class="btn btn-light btn-sm text-decoration-none"
-                                                            data-bs-toggle="tooltip" data-bs-placement="left"
-                                                            data-url="{{ route('home.product.add-favorite', $reletedProduct) }}"
-                                                            title="افزودن به علاقه مندی">
-                                                            <i class="fa fa-heart"></i>
-                                                        </button>
-                                                    </section>
-                                                @endguest
-                                                @auth
-                                                    @if ($reletedProduct->users->contains(auth()->user()->id))
+
+                                                    {{-- @guest
+
                                                         <section class="product-add-to-favorite">
                                                             <button
                                                                 class="add-to-favorite btn btn-light btn-sm text-decoration-none"
@@ -445,26 +436,60 @@
                                                                 <i class="fa fa-heart"></i>
                                                             </button>
                                                         </section>
-                                                    @endif
-                                                @endauth
-                                                <a class="product-link"
-                                                    href="{{ route('home.product.index', $reletedProduct) }}">
-                                                    <section class="product-image">
-                                                        <img class=""
-                                                            src="{{ asset($reletedProduct->image['indexArray'][$reletedProduct->image['currentImage']]) }}"
-                                                            alt="{{ $reletedProduct->slug }}">
-                                                    </section>
-                                                    <section class="product-colors"></section>
-                                                    <section class="product-name">
-                                                        <h3>{{ Str::limit($reletedProduct->name, 20) }}</h3>
-                                                    </section>
-                                                    <section class="product-price-wrapper">
-                                                        {{-- <section class="product-discount">
-                                                            <span class="product-old-price">6,895,000 </span>
-                                                            <span class="product-discount-amount">10%</span>
-                                                        </section> --}}
+
+                                                    @endguest
+                                                    @auth
+                                                        @if ($reletedProduct->users->contains(auth()->user()->id))
+                                                            <section class="product-add-to-favorite">
+                                                                <button
+                                                                    class="add-to-favorite btn btn-light btn-sm text-decoration-none"
+                                                                    data-bs-toggle="tooltip" data-bs-placement="left"
+                                                                    data-url="{{ route('home.product.add-favorite', $reletedProduct) }}"
+                                                                    title="حذف از علاقه مندی">
+                                                                    <i class="fa fa-heart text-danger"></i>
+                                                                </button>
+                                                            </section>
+                                                        @else
+                                                            <section class="product-add-to-favorite">
+                                                                <button
+                                                                    class="add-to-favorite btn btn-light btn-sm text-decoration-none"
+                                                                    data-bs-toggle="tooltip" data-bs-placement="left"
+                                                                    data-url="{{ route('home.product.add-favorite', $reletedProduct) }}"
+                                                                    title="افزودن به علاقه مندی">
+                                                                    <i class="fa fa-heart"></i>
+                                                                </button>
+                                                            </section>
+                                                        @endif
+                                                    @endauth --}}
+                                                    <a class="product-link"
+                                                        href="{{ route('home.product.index', $reletedProduct) }}">
+                                                        <section class="product-image">
+                                                            <img class=""
+                                                                src="{{ asset($reletedProduct->image['indexArray'][$reletedProduct->image['currentImage']]) }}"
+                                                                alt="{{ $reletedProduct->slug }}">
+                                                        </section>
+                                                        <section class="product-colors"></section>
+                                                        <section class="product-name">
+                                                            <h3>{{ Str::limit($reletedProduct->name, 20) }}</h3>
+                                                        </section>
+                                                        <section class="product-price-wrapper">
+                                                            @if ($reletedProduct->activeAmazingSales())
+                                                            <section class="product-discount">
+                                                                <span
+                                                                    class="product-old-price">{{ priceFormat($reletedProduct->price) }}
+                                                                </span>
+                                                                <span
+                                                                    class="product-discount-amount">{{ persian($reletedProduct->activeAmazingSales()->percentage) }} %</span>
+                                                            </section>
                                                             <section class="product-price">
-                                                                {{ priceFormat($reletedProduct->price) }}</section>
+                                                                {{ priceFormat($reletedProduct->price - $reletedProduct->amazingSaleDiscount()) }}
+                                                            </section>
+                                                        @else
+
+                                                            <section class="product-price">
+                                                                {{ priceFormat($reletedProduct->price) }}
+                                                            </section>
+                                                        @endif
                                                         </section>
                                                         <section class="product-colors">
                                                             @foreach ($reletedProduct->colors as $color)
@@ -549,7 +574,7 @@
                                     @foreach ($product->values as $value)
                                         <tr>
                                             <td>{{ $value->attribute->name }}</td>
-                                            <td>{{ json_decode($value->value)->value }} {{ $value->attribute->unit }}</td>
+                                            <td>{{ persian($value->value) }} {{ $value->attribute->unit ?? '' }}</td>
                                         </tr>
                                     @endforeach
                                     @foreach ($product->metas as $meta)
@@ -686,10 +711,12 @@
                                 </section>
                             </section>
 
-                            <section class="product-comments mb-4 p-4">
+
+                            <section class="product-comments mb-3 d-flex justify-content-around align-items-center flex-wrap">
                                 @auth
                                     @if (auth()->user()->userProductPurchase()->contains($product->id))
-                                        <div class="container">
+                                        <div class="container d-inline-block" style="width: 50%" id="star-rating">
+
                                             <h5 class="text-danger">
                                                 امتیاز خود را به این محصول انتخاب نمایید
                                             </h5>

@@ -16,10 +16,15 @@ class PropertyController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function category()
     {
-        $categories = Property::all();
-        return view('admin.market.property.index', compact('categories'));
+        $categories = ProductCategory::whereNotNull('parent_id')->get();
+        return view('admin.market.property.category', compact('categories'));
+    }
+    public function index(ProductCategory $productCategory)
+    {
+        $properties = $productCategory->properties;
+        return view('admin.market.property.index', compact('properties', 'productCategory'));
     }
 
     /**
@@ -27,10 +32,9 @@ class PropertyController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function create()
+    public function create(ProductCategory $productCategory)
     {
-        $categories = ProductCategory::all();
-        return view('admin.market.property.create', compact('categories'));
+        return view('admin.market.property.create', compact('productCategory'));
     }
 
     /**
@@ -39,10 +43,15 @@ class PropertyController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(CategoryAttributeRequest $request)
+    public function store(CategoryAttributeRequest $request, ProductCategory $productCategory)
     {
-        $result = Property::create($request->all());
-        return redirect()->route('admin.market.property.index')->with('swal-success', 'فرم جدید با موفقیت ثبت شد');
+        $inputs = $request->all();
+        $result = Property::create([
+            'name' => $inputs['name'],
+            'unit' => $inputs['unit'],
+            'category_id' => $productCategory->id
+        ]);
+        return redirect()->route('admin.market.property.index', $productCategory)->with('swal-success', 'فرم جدید با موفقیت ثبت شد');
     }
 
     /**
@@ -62,10 +71,9 @@ class PropertyController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function edit(Property $property)
+    public function edit(ProductCategory $productCategory, Property $property)
     {
-        $categories = ProductCategory::all();
-        return view('admin.market.property.edit', compact(['property', 'categories']));
+        return view('admin.market.property.edit', compact(['property', 'productCategory']));
     }
 
     /**
@@ -75,11 +83,15 @@ class PropertyController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(CategoryAttributeRequest $request, Property $property)
+    public function update(CategoryAttributeRequest $request, ProductCategory $productCategory, Property $property)
     {
         $inputs = $request->all();
-        $result = $property->update($inputs);
-        return redirect()->route('admin.market.property.index')->with('swal-success', 'فرم جدید با موفقیت ویرایش شد');
+        $result = $property->update([
+            'name' => $inputs['name'],
+            'unit' => $inputs['unit'],
+            'category_id' => $productCategory->id
+        ]);
+        return redirect()->route('admin.market.property.index', $productCategory)->with('swal-success', 'فرم جدید با موفقیت ویرایش شد');
     }
 
     /**
@@ -88,9 +100,9 @@ class PropertyController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Property $property)
+    public function destroy(ProductCategory $productCategory, Property $property)
     {
         $property->delete();
-        return redirect()->route('admin.market.property.index')->with('swal-success', 'فرم جدید با موفقیت حذف شد');
+        return redirect()->route('admin.market.property.index', $productCategory)->with('swal-success', 'فرم جدید با موفقیت حذف شد');
     }
 }

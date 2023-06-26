@@ -25,10 +25,12 @@
 
             @forelse ($products as $product)
                 <section class="cart-item d-flex py-3">
-                    <section class="cart-img align-self-start flex-shrink-1"><img
-                            src="{{ asset($product->image['indexArray']['medium']) }}" alt=""></section>
+                    <section class="cart-img align-self-start flex-shrink-1">
+                        <a href="{{route('home.product.index', $product->slug)}}"><img src="{{ asset($product->image['indexArray']['medium']) }}" alt=""> </a> </section>
                     <section class="align-self-start w-100">
-                        <p class="fw-bold"> {{ Str::substr($product->name, 0, 17) }} ... </p>
+
+                        <p class="fw-bold"> {{ $product->name }} </p>
+
                         <section class="d-flex align-items-start flex-column">
                             <a class="text-decoration-none cart-delete p-2"
                                 href="{{ route('home.profile.my-favorite.delete', $product) }}"><i

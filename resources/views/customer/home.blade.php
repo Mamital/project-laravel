@@ -21,21 +21,25 @@
 
             <section class="col-md-8 pe-md-1 ">
                 <section id="slideshow" class="owl-carousel owl-theme">
-                    @foreach ($topBannerSliders as $topBannerSlider)
-                        <section class="item">
-                            <a class="w-100 d-block h-auto text-decoration-none" href="{{ $topBannerSlider->url }}">
-                                <img class="w-100 rounded-2 d-block h-auto" src="{{ asset($topBannerSlider->image) }}"
-                                    alt="">
-                            </a>
-                        </section>
-                    @endforeach
+                    @if ($topBannerSliders)
+                        @foreach ($topBannerSliders as $topBannerSlider)
+                            <section class="item">
+                                <a class="w-100 d-block h-auto text-decoration-none" href="{{ $topBannerSlider->url }}">
+                                    <img class="w-100 rounded-2 d-block h-auto" src="{{ asset($topBannerSlider->image) }}"
+                                        alt="">
+                                </a>
+                            </section>
+                        @endforeach
+                    @endif
                 </section>
             </section>
             <section class="col-md-4 ps-md-1 mt-2 mt-md-0" id="sideBaner">
-                <section class="mb-2"><a href="{{ $topBannerUp->url }}" class="d-block"><img class="w-100 rounded-2"
-                            src="{{ asset($topBannerUp->image) }}" alt=""></a></section>
-                <section class="mb-2"><a href="{{ url($topBannerBottom->url) }}" class="d-block"><img
-                            class="w-100 rounded-2" src="{{ asset($topBannerBottom->image) }}" alt=""></a>
+
+                <section class="mb-2"><a href="{{ $topBannerUp->url ?? '#' }}" class="d-block"><img
+                            class="w-100 rounded-2" src="{{ asset($topBannerUp->image ?? '#') }}" alt=""></a>
+                </section>
+                <section class="mb-2"><a href="{{ url($topBannerBottom->url ?? '#') }}" class="d-block"><img
+                            class="w-100 rounded-2" src="{{ asset($topBannerBottom->image ?? '#') }}" alt=""></a>
                 </section>
             </section>
         </section>
@@ -114,13 +118,25 @@
                                                         <h3>{{ Str::limit($mostVisitedProduct->name, 20) }}</h3>
                                                     </section>
                                                     <section class="product-price-wrapper">
-                                                        {{-- <section class="product-discount">
-                                                            <span class="product-old-price">6,895,000 </span>
-                                                            <span class="product-discount-amount">10%</span>
-                                                        </section> --}}
-                                                        <section class="product-price">
-                                                            {{ priceFormat($mostVisitedProduct->price) }}</section>
+                                                        @if ($mostVisitedProduct->activeAmazingSales())
+                                                            <section class="product-discount">
+                                                                <span
+                                                                    class="product-old-price">{{ priceFormat($mostVisitedProduct->price) }}
+                                                                </span>
+                                                                <span
+                                                                    class="product-discount-amount">{{ persian($mostVisitedProduct->activeAmazingSales()->percentage) }} %</span>
+                                                            </section>
+                                                            <section class="product-price">
+                                                                {{ priceFormat($mostVisitedProduct->price - $mostVisitedProduct->amazingSaleDiscount()) }}
+                                                            </section>
+                                                        @else
+                                                            <section class="product-price">
+                                                                {{ priceFormat($mostVisitedProduct->price) }}
+                                                            </section>
+                                                        @endif
                                                     </section>
+
+
                                                     <section class="product-colors">
                                                         @foreach ($mostVisitedProduct->colors as $color)
                                                             <section class="product-colors-item"
@@ -233,12 +249,22 @@
                                                         <h3>{{ Str::limit($offerProduct->name, 20) }}</h3>
                                                     </section>
                                                     <section class="product-price-wrapper">
-                                                        {{-- <section class="product-discount">
-                                                            <span class="product-old-price">6,895,000 </span>
-                                                            <span class="product-discount-amount">10%</span>
-                                                        </section> --}}
-                                                        <section class="product-price">
-                                                            {{ priceFormat($offerProduct->price) }}</section>
+                                                        @if ($mostVisitedProduct->activeAmazingSales())
+                                                            <section class="product-discount">
+                                                                <span
+                                                                    class="product-old-price">{{ priceFormat($mostVisitedProduct->price) }}
+                                                                </span>
+                                                                <span
+                                                                    class="product-discount-amount">{{ persian($mostVisitedProduct->activeAmazingSales()->percentage) }} %</span>
+                                                            </section>
+                                                            <section class="product-price">
+                                                                {{ priceFormat($mostVisitedProduct->price - $mostVisitedProduct->amazingSaleDiscount()) }}
+                                                            </section>
+                                                        @else
+                                                            <section class="product-price">
+                                                                {{ priceFormat($mostVisitedProduct->price) }}
+                                                            </section>
+                                                        @endif
                                                     </section>
                                                     <section class="product-colors">
                                                         @foreach ($offerProduct->colors as $color)
@@ -362,15 +388,15 @@
 
     <script>
         $(document).ready(function() {
-                if (screen.width > 0 && screen.width < 480) {
-                    var sideBaner = $('#sideBaner');
-                    sideBaner.addClass('d-none');
-                    // var middleBaner = $('#middle-baner-1');
-                    // var suggest_products = $('#suggest-products');
-                    // middleBaner.appendTo(suggest_products);
-                    var bottom_brand = $('#bottom-brand');
-                    bottom_brand.addClass('d-none');
-                }
-            });
+            if (screen.width > 0 && screen.width < 480) {
+                var sideBaner = $('#sideBaner');
+                sideBaner.addClass('d-none');
+                // var middleBaner = $('#middle-baner-1');
+                // var suggest_products = $('#suggest-products');
+                // middleBaner.appendTo(suggest_products);
+                var bottom_brand = $('#bottom-brand');
+                bottom_brand.addClass('d-none');
+            }
+        });
     </script>
 @endsection

@@ -34,7 +34,7 @@ class AddressController extends Controller
 
     public function getCities(Province $province)
     {
-        $cities = City::where('province_id', $province->id)->get();
+        $cities = $province->cities;
         if ($cities != null) {
             return response()->json(['status' => 1, 'cities' => $cities]);
         } else {

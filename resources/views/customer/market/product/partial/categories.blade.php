@@ -6,5 +6,7 @@
             <i class="fa fa-angle-left"></i>
         @endif
     </span>
+    @if ($category->children->count() > 0)
     @include('customer.market.product.partial.sub-categories', ['categories' => $category->children])
+    @endif
 @endforeach

@@ -24,9 +24,8 @@ class CategoryAttributeRequest extends FormRequest
     public function rules()
     {
         return [
-            'name' => 'required|max:120|min:2|regex:/^[ا-یa-zA-Z0-9\-۰-۹ء-ي., ]+$/u',
-            'unit' => 'required|max:120|min:2|regex:/^[ا-یa-zA-Z0-9\-۰-۹ء-ي., ]+$/u',
-            'category_id' => 'required|exists:product_categories,id',
+            'name' => 'required|max:120|regex:/^[ا-یa-zA-Z0-9\-۰-۹ء-ي., ]+$/u',
+            'unit' => 'max:300|nullable|regex:/^[ا-یa-zA-Z0-9\-۰-۹ء-ي., ]+$/u',
         ];
     }
 }

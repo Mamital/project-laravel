@@ -4,20 +4,20 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 use App\Http\Middleware\AdminMiddleware;
 use App\Http\Controllers\Customer\HomeController;
-use App\Http\Controllers\admin\user\RoleController;
-use App\Http\Controllers\admin\notify\SMSController;
+use App\Http\Controllers\Admin\User\RoleController;
+use App\Http\Controllers\Admin\Notify\SMSController;
 use App\Http\Controllers\Admin\Content\FAQController;
 use App\Http\Controllers\Admin\Content\MenuController;
-use App\Http\Controllers\admin\content\PageController;
-use App\Http\Controllers\admin\content\PostController;
+use App\Http\Controllers\Admin\Content\PageController;
+use App\Http\Controllers\Admin\Content\PostController;
 use App\Http\Controllers\Admin\Market\BanerController;
 use App\Http\Controllers\Admin\Market\BrandController;
 use App\Http\Controllers\Admin\Market\OrderController;
 use App\Http\Controllers\Admin\Market\StoreController;
 use App\Http\Controllers\Admin\NotificationController;
-use App\Http\Controllers\admin\notify\EmailController;
+use App\Http\Controllers\Admin\Notify\EmailController;
 use App\Http\Controllers\Auth\LoginRegisterController;
-use App\Http\Controllers\admin\ticket\TicketController;
+use App\Http\Controllers\Admin\Ticket\TicketController;
 use App\Http\Controllers\Admin\User\CustomerController;
 use App\Http\Controllers\Admin\AdminDashboardController;
 use App\Http\Controllers\Admin\Market\CommentController;
@@ -29,8 +29,8 @@ use App\Http\Controllers\Admin\Market\CategoryController;
 use App\Http\Controllers\Admin\Market\DeliveryController;
 use App\Http\Controllers\Admin\Market\DiscountController;
 use App\Http\Controllers\Admin\Market\PropertyController;
-use App\Http\Controllers\admin\setting\SettingController;
-use App\Http\Controllers\admin\user\PermissionController;
+use App\Http\Controllers\Admin\Setting\SettingController;
+use App\Http\Controllers\Admin\User\PermissionController;
 use App\Http\Controllers\Admin\Market\GuaranteeController;
 use App\Http\Controllers\Admin\Notify\EmailFileController;
 use App\Http\Controllers\Admin\Ticket\TicketAdminController;
@@ -230,22 +230,18 @@ Route::middleware('admin')->prefix('admin')->namespace('Admin')->group(function 
 
         //property
         Route::prefix('property')->group(function () {
-            Route::get('/', [PropertyController::class, 'index'])->name('admin.market.property.index')->middleware('can:edit-product');
-            Route::get('/create', [PropertyController::class, 'create'])->name('admin.market.property.create')->middleware('can:edit-product');
-            Route::post('/store', [PropertyController::class, 'store'])->name('admin.market.property.store')->middleware('can:edit-product');
-            Route::get('/edit/{property}', [PropertyController::class, 'edit'])->name('admin.market.property.edit')->middleware('can:edit-product');
-            Route::put('/update/{property}', [PropertyController::class, 'update'])->name('admin.market.property.update')->middleware('can:edit-product');
-            Route::delete('/destroy/{property}', [PropertyController::class, 'destroy'])->name('admin.market.property.destroy')->middleware('can:edit-product');
+            Route::get('/category', [PropertyController::class, 'category'])->name('admin.market.property.category.index')->middleware('can:edit-product');
+            Route::get('/{productCategory}', [PropertyController::class, 'index'])->name('admin.market.property.index')->middleware('can:edit-product');
+            Route::get('/create/{productCategory}', [PropertyController::class, 'create'])->name('admin.market.property.create')->middleware('can:edit-product');
+            Route::post('/store/{productCategory}', [PropertyController::class, 'store'])->name('admin.market.property.store')->middleware('can:edit-product');
+            Route::get('/edit/{productCategory}/{property}', [PropertyController::class, 'edit'])->name('admin.market.property.edit')->middleware('can:edit-product');
+            Route::put('/update/{productCategory}/{property}', [PropertyController::class, 'update'])->name('admin.market.property.update')->middleware('can:edit-product');
+            Route::delete('/destroy/{productCategory}/{property}', [PropertyController::class, 'destroy'])->name('admin.market.property.destroy')->middleware('can:edit-product');
 
             Route::prefix('value')->group(function () {
                 //value
-                Route::get('/{property}', [CategoryValueController::class, 'index'])->name('admin.market.value.index')->middleware('can:edit-product');
-                Route::get('/create/{property}', [CategoryValueController::class, 'create'])->name('admin.market.value.create')->middleware('can:edit-product');
-                Route::post('/store/{property}', [CategoryValueController::class, 'store'])->name('admin.market.value.store')->middleware('can:edit-product');
-                Route::get('/edit/{property}/{categoryValue}', [CategoryValueController::class, 'edit'])->name('admin.market.value.edit')->middleware('can:edit-product');
-                Route::put('/update/{property}/{categoryValue}', [CategoryValueController::class, 'update'])->name('admin.market.value.update')->middleware('can:edit-product');
-                Route::delete('/destroy/{property}/{categoryValue}', [CategoryValueController::class, 'destroy'])->name('admin.market.value.destroy')->middleware('can:edit-product');
-                Route::get('/status/{categoryValue}', [CategoryValueController::class, 'status'])->name('admin.market.value.status')->middleware('can:edit-product');
+                Route::get('/{product}', [CategoryValueController::class, 'index'])->name('admin.market.value.index')->middleware('can:edit-product');
+                Route::post('/store/{product}', [CategoryValueController::class, 'store'])->name('admin.market.value.store')->middleware('can:edit-product');
             });
         });
 
@@ -390,6 +386,7 @@ Route::middleware('admin')->prefix('admin')->namespace('Admin')->group(function 
             Route::post('/store', [EmailController::class, 'store'])->name('admin.notify.email.store')->middleware('can:create-email');
             Route::get('/edit/{email}', [EmailController::class, 'edit'])->name('admin.notify.email.edit')->middleware('can:edit-email');
             Route::put('/update/{email}', [EmailController::class, 'update'])->name('admin.notify.email.update')->middleware('can:edit-email');
+            Route::get('/send/{email}', [EmailController::class, 'send'])->name('admin.notify.email.send')->middleware('can:edit-email');
             Route::delete('/destroy/{email}', [EmailController::class, 'destroy'])->name('admin.notify.email.destroy')->middleware('can:delete-email');
             Route::get('/status/{email}', [EmailController::class, 'status'])->name('admin.notify.email.status')->middleware('can:edit-email');
         });
@@ -499,24 +496,18 @@ Route::middleware('auth')->namespace('SalesProccess')->group(function () {
     Route::post('/add-to-cart/{product:slug}', [CartController::class, 'addToCart'])->name('home.sales-proccess.add-to-cart');
     Route::get('/remove-from-cart/{cartItem}', [CartController::class, 'removeFromCart'])->name('home.sales-proccess.remove-from-cart');
 
-    Route::middleware('profile.completion')->group(function () {
-        //address
-        Route::get('/address-and-delivery', [AddressController::class, 'addressAndDelivery'])->name('home.sales-proccess.address-and-delivery');
-        Route::post('/add-address', [AddressController::class, 'addAddress'])->name('home.sales-proccess.add-address');
-        Route::post('/update-address/{address}', [AddressController::class, 'updateAddress'])->name('home.sales-proccess.update-address');
-        Route::get('/get-cities/{province}', [AddressController::class, 'getCities'])->name('home.sales-proccess.get-cities');
-        Route::post('/choose-address-delivery', [AddressController::class, 'chooseAddressDelivery'])->name('home.sales-proccess.choose-address-delivery');
+    //address
+    Route::get('/address-and-delivery', [AddressController::class, 'addressAndDelivery'])->name('home.sales-proccess.address-and-delivery');
+    Route::post('/add-address', [AddressController::class, 'addAddress'])->name('home.sales-proccess.add-address');
+    Route::post('/update-address/{address}', [AddressController::class, 'updateAddress'])->name('home.sales-proccess.update-address');
+    Route::get('/get-cities/{province}', [AddressController::class, 'getCities'])->name('home.sales-proccess.get-cities');
+    Route::post('/choose-address-delivery', [AddressController::class, 'chooseAddressDelivery'])->name('home.sales-proccess.choose-address-delivery');
 
-        //payment
-        Route::get('/payment', [CustomerPaymentController::class, 'payment'])->name('home.sales-proccess.payment');
-        Route::post('/copan-discount', [CustomerPaymentController::class, 'copanDiscount'])->name('home.sales-proccess.copan-discount');
-        Route::post('/payment-submit', [CustomerPaymentController::class, 'paymentSubmit'])->name('home.sales-proccess.payment-submit');
-        Route::any('/payment-callback/{order}/{onlinePayment}', [CustomerPaymentController::class, 'paymentCallback'])->name('home.sales-proccess.payment-callback');
-    });
-
-    //profile completion
-    Route::post('/profile-completion', [ProfileCompletionController::class, 'update'])->name('home.sales-proccess.profile-update');
-    Route::get('/profile-completion', [ProfileCompletionController::class, 'profileCompletion'])->name('home.sales-proccess.profile-completion');
+    //payment
+    Route::get('/payment', [CustomerPaymentController::class, 'payment'])->name('home.sales-proccess.payment');
+    Route::post('/copan-discount', [CustomerPaymentController::class, 'copanDiscount'])->name('home.sales-proccess.copan-discount');
+    Route::post('/payment-submit', [CustomerPaymentController::class, 'paymentSubmit'])->name('home.sales-proccess.payment-submit');
+    Route::any('/payment-callback/{order}/{onlinePayment}', [CustomerPaymentController::class, 'paymentCallback'])->name('home.sales-proccess.payment-callback');
 });
 
 Route::prefix('profile')->group(

@@ -3,6 +3,7 @@
 namespace Database\Seeders;
 
 use App\Models\User\Permission;
+use App\Models\User\Role;
 use Illuminate\Database\Seeder;
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 
@@ -68,6 +69,10 @@ class PermissionSeeder extends Seeder
         ];
 
         $permissions = [];
+        $superAdmin = Role::create([
+            'name' => 'super-admin',
+            'description' => 'سوپر ادمین'
+        ]);
 
         foreach ($permissionsNames as $permissionsName => $description) {
             $per = [
@@ -84,6 +89,8 @@ class PermissionSeeder extends Seeder
 
         foreach ($permissions as $permission => $description) {
             $permission = Permission::create(['name' => $permission, 'status' => 1, 'description' => $description]);
+            $superAdmin->permissions()->attach($permission->id);
         }
+        
     }
 }

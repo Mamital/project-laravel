@@ -20,12 +20,13 @@
         <section class="main-body-container">
             <section class="main-body-container-header">
                 <h5>
-                 فرم کالا
+                 فرم کالا دسته : {{$productCategory->name}}
                 </h5>
             </section>
 
+            <a href="{{ route('admin.market.property.category.index') }}" class="btn btn-info btn-sm mt-3">بازگشت</a>
             <section class="d-flex justify-content-between align-items-center mt-4 mb-3 border-bottom pb-2">
-                <a href="{{ route('admin.market.property.create') }}" class="btn btn-info btn-sm">ایجاد فرم جدید</a>
+                <a href="{{ route('admin.market.property.create', $productCategory) }}" class="btn btn-info btn-sm">ایجاد فرم جدید</a>
                 <div class="max-width-16-rem">
                     <input type="text" class="form-control form-control-sm form-text" placeholder="جستجو">
                 </div>
@@ -37,23 +38,20 @@
                         <tr>
                             <th>#</th>
                             <th>نام فرم</th>
-                            <th>دسته بندی فرم</th>
                             <th>واحد انداز ه گیری فرم</th>
                             <th class="max-width-16-rem text-center"><i class="fa fa-cogs"></i> تنظیمات</th>
                         </tr>
                     </thead>
                     <tbody>
-                        @foreach ($categories as $category)
+                        @foreach ($properties as $property)
                         
                         <tr>
                             <th>{{$loop->iteration}}</th>
-                            <td>{{$category->name}}	</td>
-                            <td>{{$category->category->name}}</td>
-                            <td>{{$category->unit}}</td>
+                            <td>{{$property->name}}	</td>
+                            <td>{{$property->unit}}</td>
                             <td class="width-22-rem text-left">
-                                <a href="{{route('admin.market.value.index', $category->id)}}" class="btn btn-warning btn-sm"><i class="fa fa-edit"></i> ویژگی ها</a>
-                                <a href="{{route('admin.market.property.edit', $category->id)}}" class="btn btn-primary btn-sm"><i class="fa fa-edit"></i> ویرایش</a>
-                                 <form class="d-inline" action="{{ route('admin.market.property.destroy', $category->id) }}" method="post">
+                                <a href="{{route('admin.market.property.edit',[$productCategory ,$property->id])}}" class="btn btn-primary btn-sm"><i class="fa fa-edit"></i> ویرایش</a>
+                                 <form class="d-inline" action="{{ route('admin.market.property.destroy', [$productCategory ,$property->id]) }}" method="post">
                                     @csrf
                                     {{ method_field('delete') }}
                                 <button class="btn btn-danger btn-sm delete" type="submit"><i class="fa fa-trash-alt"></i> حذف</button>

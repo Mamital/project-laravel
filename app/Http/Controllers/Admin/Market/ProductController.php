@@ -65,11 +65,13 @@ class ProductController extends Controller
 
             $metas = array_combine($request->meta_key, $request->meta_value);
             foreach ($metas as $key => $value) {
-                ProductMeta::create([
-                    'meta_key' => $key,
-                    'meta_value' => $value,
-                    'product_id' => $product->id,
-                ]);
+                if ($value) {
+                    ProductMeta::create([
+                        'meta_key' => $key,
+                        'meta_value' => $value,
+                        'product_id' => $product->id,
+                    ]);
+                }
             }
         });
         return redirect()->route('admin.market.product.index')->with('swal-success', 'پست  جدید شما با موفقیت ثبت شد');
