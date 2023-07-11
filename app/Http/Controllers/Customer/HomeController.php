@@ -13,7 +13,7 @@ use Illuminate\Support\Facades\Auth;
 class HomeController extends Controller
 {
     public function home()
-    {        
+    {
         $topBannerSliders = Baner::where('position', 0)->where('status', 1)->get();
         $topBannerUp = Baner::where('position', 1)->where('status', 1)->first();
         $topBannerBottom = Baner::where('position', 2)->where('status', 1)->first();
@@ -34,7 +34,7 @@ class HomeController extends Controller
         $categories = ProductCategory::where('parent_id', null)->get();
         $productModel = null;
         if($productCategory){
-            $productModel = $productCategory->products();            
+            $productModel = $productCategory->products();
         }
         else
         {
@@ -96,7 +96,7 @@ class HomeController extends Controller
             foreach ($selected_brands_array as $brand) {
                 array_push($selected_brands, $brand->persian_name);
             }
-        }        
+        }
         $products = $products->paginate();
         $products->appends($request->query());
         return view('customer.market.product.products', compact('products', 'brands', 'selected_brands', 'categories', 'productCategory'));

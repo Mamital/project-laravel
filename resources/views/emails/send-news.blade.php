@@ -194,9 +194,9 @@
                                                         style="padding: 32px; text-align: center; color: #5f5f5f; font-size: 12px; font-family: Tahoma, Geneva, sans-serif; word-break: break-word; direction: rtl; box-sizing: border-box;">
                                                         <p class="text-center"
                                                             style="text-align: center; margin: 0px; padding: 0px;">
-                                                            <span style="color: #ffffff">
+                                                            <span style="color: #ffffff;">
                                                                 <br>
-                                                                {!! $details['body'] !!}
+                                                                {{ $details['body'] }}
                                                             </span>
                                                         </p>
                                                     </td>

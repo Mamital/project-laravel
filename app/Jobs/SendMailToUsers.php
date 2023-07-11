@@ -37,10 +37,20 @@ class SendMailToUsers implements ShouldQueue
     {
         $users = User::whereNotNull('email')->get();
         foreach ($users as $user) {
-            $details = [
-                'title' => $this->email->subject,
-                'body' => $this->email->body
-            ];
+            if($this->email->files->count() > 0)
+            {
+                $details = [
+                    'title' => $this->email->subject,
+                    'body' => $this->email->body,
+                    'files' => $this->email->files,
+                ];
+            }else{
+                $details = [
+                    'title' => $this->email->subject,
+                    'body' => $this->email->body,
+                    'files' => ''
+                ];
+            }
             $emailService = new EmailService();
             $emailService->setDetails($details);
             $emailService->setTo($user->email);

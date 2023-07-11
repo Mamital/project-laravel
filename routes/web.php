@@ -54,6 +54,7 @@ use App\Http\Controllers\Customer\Profile\TicketController as CustomerTicketCont
 use App\Http\Controllers\Customer\Market\ProductController as CustomerProductController;
 use App\Http\Controllers\Customer\Profile\AddressController as CustomerAddressController;
 use App\Http\Controllers\Customer\SalesProccess\PaymentController as CustomerPaymentController;
+use Illuminate\Support\Facades\Http;
 
 /*
 |--------------------------------------------------------------------------
